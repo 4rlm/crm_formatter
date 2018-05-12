@@ -1,12 +1,16 @@
-require 'crm_formatter/translator'
+require 'crm_formatter/formatter'
+# require "crm_formatter/formatter"
 
 module CRMFormatter
-  def self.hi(language)
-    translator = Translator.new(language)
-    translator.hi
-  end
 
-  def self.bye(target)
-    "Good bye. See ya, #{target}"
-  end
+  # def self.hi(language = 'english')
+  #   # puts "HI HI HI!  Hello #{language}"
+  #   translator = Translator.new(language)
+  # end
+  #
+  # def self.bye
+  #   "Good bye. See ya."
+  # end
+
+
 end
