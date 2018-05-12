@@ -1,3 +1,5 @@
+require 'crm_formatter/translator'
+
 class CRMFormatter
   def self.hi(language)
     translator = Translator.new(language)
@@ -8,5 +10,3 @@ class CRMFormatter
     "Good bye. See ya, #{target}"
   end
 end
-
-require 'crm_formatter/translator'
