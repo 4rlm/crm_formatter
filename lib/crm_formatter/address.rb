@@ -1,8 +1,14 @@
 module CRMFormatter
-  class Formatter
-    def greeter
+  class Address
+
+    def state
       "Hello World!!!"
     end
+
+    def self.self_state
+      "Hello World!!!"
+    end
+
   end
 end
 

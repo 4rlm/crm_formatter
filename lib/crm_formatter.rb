@@ -1,4 +1,4 @@
-require 'crm_formatter/formatter'
+require 'crm_formatter/address'
 # require "crm_formatter/formatter"
 
 module CRMFormatter
