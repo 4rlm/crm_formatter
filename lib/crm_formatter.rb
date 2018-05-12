@@ -1,6 +1,6 @@
 require 'crm_formatter/translator'
 
-class CRMFormatter
+module CRMFormatter
   def self.hi(language)
     translator = Translator.new(language)
     translator.hi
