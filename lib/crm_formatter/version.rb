@@ -1,3 +1,3 @@
 module CRMFormatter
-  VERSION = "1.0.2-rc.1"
+  VERSION = "1.0.3-rc.1"
 end
