@@ -2,16 +2,16 @@ module CRMFormatter
   class Web
 
       def initialize(args={})
-        @url_red_flags = args.fetch(:url_red_flags, [])
-        @link_red_flags = args.fetch(:link_red_flags, [])
-        @href_red_flags = args.fetch(:href_red_flags, [])
-        @ext_red_flags = args.fetch(:ext_red_flags, [])
+        @url_flags = args.fetch(:url_flags, [])
+        @link_flags = args.fetch(:link_flags, [])
+        @href_flags = args.fetch(:href_flags, [])
+        @extension_flags = args.fetch(:ext_flags, [])
         @length_min = args.fetch(:length_min, 2)
         @length_max = args.fetch(:length_max, 100)
       end
 
       def format_url(url)
-        url_hsh = {full_url: url, valid_url: nil, change: nil }
+        url_hsh = {url_path: url, formatted_url: nil, url_edit: false }
         if url.present?
           begin
             url = url&.split('|')&.first
@@ -34,8 +34,8 @@ module CRMFormatter
             if uri.present?
               host_parts = uri.host&.split(".")
 
-              if @ext_red_flags.any?
-                bad_host_sts = host_parts&.map { |part| TRUE if @ext_red_flags.any? {|ext| part == ext } }&.compact&.first
+              if @ext_flags.any?
+                bad_host_sts = host_parts&.map { |part| TRUE if @ext_flags.any? {|ext| part == ext } }&.compact&.first
                 return url_hsh if bad_host_sts
               end
 
@@ -44,9 +44,9 @@ module CRMFormatter
               url = "#{scheme}://#{host}" if host.present? && scheme.present?
               url = "http://#{url}" if url[0..3] != "http"
               url = url.gsub("//", "//www.") if !url.include?("www.")
-              return url_hsh if @url_red_flags.any? { |bad_text| url&.include?(bad_text) }
-              url_hsh[:valid_url] = convert_to_scheme_host(url) if url.present?
-              url_hsh[:change] = url_hsh[:valid_url] != url_hsh[:full_url]
+              return url_hsh if @url_flags.any? { |bad_text| url&.include?(bad_text) }
+              url_hsh[:formatted_url] = convert_to_scheme_host(url) if url.present?
+              url_hsh[:url_edit] = url_hsh[:formatted_url] != url_hsh[:url_path]
             end
           rescue
             return url_hsh
@@ -77,11 +77,11 @@ module CRMFormatter
       end
 
 
-      def extract_link(full_url)
-        url_hsh = format_url(full_url)
-        url = url_hsh[:valid_url]
-        link = full_url
-        link_hsh = {full_url: full_url, url: url, link: nil }
+      def extract_link(url_path)
+        url_hsh = format_url(url_path)
+        url = url_hsh[:formatted_url]
+        link = url_path
+        link_hsh = {url_path: url_path, url: url, link: nil }
         if url.present? && link.present? && link.length > @length_min
           url = strip_down_url(url)
           link = strip_down_url(link)
@@ -111,8 +111,8 @@ module CRMFormatter
         link_hsh = {link: link, valid_link: nil, flags: nil }
         if link.present?
           invalid_chars = ['(', ')', '[', ']', '{', '}', '*', '@', '^', '$', '%', '+', '!', '<', '>', '~', ',', "'"]
-          @link_red_flags += invalid_chars
-          flags = @link_red_flags.select { |red| link&.include?(red) }
+          @link_flags += invalid_chars
+          flags = @link_flags.select { |red| link&.include?(red) }
           flags << "below #{@length_min}" if link.length < @length_min
           flags << "over #{@length_max}" if link.length > @length_max
           flags = flags.flatten.compact
@@ -128,7 +128,7 @@ module CRMFormatter
         href_hsh = {href: href, valid_href: nil, flags: nil }
         if href.present?
           symbs = ['{', '}', '*', '@', '^', '$', '%', '+', '!', '<', '>', '~']
-          @href_red_flags += symbs
+          @href_flags += symbs
           href = href.split('|').join(' ')
           href = href.split('/').join(' ')
           href&.gsub!("(", ' ')
@@ -145,7 +145,7 @@ module CRMFormatter
           href = href&.downcase
           href = href&.strip
 
-          flags << @href_red_flags.select { |red| href&.include?(red) }
+          flags << @href_flags.select { |red| href&.include?(red) }
           flags = flags.flatten.compact.uniq
           href_hsh[:valid_href] = href unless flags.any?
           href_hsh[:flags] = flags.join(', ')

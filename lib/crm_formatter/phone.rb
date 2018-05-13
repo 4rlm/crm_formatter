@@ -5,13 +5,13 @@ module CRMFormatter
 
     # Call: Formatter.new.validate_phone(phone)
     def validate_phone(phone)
-      phone_hsh = { phone: phone, valid_phone: nil, change: nil }
+      phone_hsh = { phone: phone, valid_phone: nil, phone_edit: false }
       if phone.present?
         phone = phone&.gsub(/\s/, ' ')&.strip
         reg = Regexp.new("[(]?[0-9]{3}[ ]?[)-.]?[ ]?[0-9]{3}[ ]?[-. ][ ]?[0-9]{4}")
         return phone_hsh if phone.first == "0" || phone.include?("(0") || !reg.match(phone)
         phone_hsh[:valid_phone] = format_phone(phone)
-        phone_hsh[:change] = phone_hsh[:phone] != phone_hsh[:valid_phone]
+        phone_hsh[:phone_edit] = phone_hsh[:phone] != phone_hsh[:valid_phone]
       end
       phone_hsh
     end
