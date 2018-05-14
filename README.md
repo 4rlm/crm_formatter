@@ -189,9 +189,9 @@ def self.run_webs
 
   href_flags = %w(? .com .jpg @ * after anounc apply approved blog book business buy call care career cash charit cheap check click)
 
-  ext_flags = %w(au ca edu es gov in ru uk us)
+  extension_flags = %w(au ca edu es gov in ru uk us)
 
-  args = { url_flags: url_flags, link_flags: link_flags, href_flags: href_flags, ext_flags: ext_flags }
+  args = { url_flags: url_flags, link_flags: link_flags, href_flags: href_flags, extension_flags: extension_flags }
   web = CRMFormatter::Web.new(args)
 
   urls = Accounts.where.not(url: nil).pluck(:url)
