@@ -1,0 +1,109 @@
+==== FIRST CREATE APP TO TEST GEM ====
+-----------------------------------
+rails new gem_tester
+cd gem_tester
+rails g scaffold Article
+rails g controller Home index
+-----------------------------------
+get 'home/index'
+root 'home#index'
+-----------------------------------
+
+
+==== CREATE BASIC GEM ====
+-----------------------------------
+create crm_formatter.gemspec
+-----------------------------------
+mkdir bin lib test lib/crm_formatter
+-----------------------------------
+touch Rakefile
+touch lib/crm_formatter.rb
+touch lib/crm_formatter/version.rb
+touch lib/crm_formatter/translator.rb
+touch bin/crm_formatter
+touch test/test_crm_formatter.rb
+-----------------------------------
+$ git init .
+$ ls -la
+$ rm .DS_Store
+$ git status
+$ git add .
+$ git commit -m "Initial Commit"
+$ git log
+$ git status
+$ git ls-files -z
+---- Create Repo on GitHub, then push.
+-----------------------------------
+$ gem build crm_formatter.gemspec
+  Successfully built RubyGem
+  Name: crm_formatter
+  Version: 1.0.5.pre.rc.1
+  File: crm_formatter-1.0.5.pre.rc.1.gem
+-----------------------------------
+$ gem install crm_formatter-1.0.5.pre.rc.1.gem
+  Successfully installed crm_formatter-1.0.5.pre.rc.1
+  Parsing documentation for crm_formatter-1.0.5.pre.rc.1
+  Installing ri documentation for crm_formatter-1.0.5.pre.rc.1
+  Done installing documentation for crm_formatter after 0 seconds
+  1 gem installed
+  -----------------------------------
+$ irb
+  >> require 'crm_formatter'
+  => true
+  >> CRMFormatter.hi 'english'
+  => "hello world"
+  -----------------------------------
+$ curl -u adamjbooth https://rubygems.org/api/v1/api_key.yaml > ~/.gem/credentials; chmod 0600 ~/.gem/credentials
+  Enter host password for user 'adamjbooth': RG<usual>rg
+  -----------------------------------
+$ gem push crm_formatter-1.0.5.pre.rc.1.gem
+  Pushing gem to https://rubygems.org...
+  Successfully registered gem: crm_formatter (1.0.4.pre.rc.1)
+  -----------------------------------
+
+
+============= after each change: =======================
+gem build crm_formatter.gemspec
+gem install crm_formatter-1.0.3.pre.rc.1.gem
+irb
+require 'crm_formatter'
+CRMFormatter.hi('english')
+
+Translator.new.greeter
+
+CRMFormatter
+=========================
+
+CRMFormatter::Address.new
+CRMFormatter::Address.new.state
+CRMFormatter::Address.self_state
+
+/Users/Adam/Desktop/gems/crm_formatter/lib/crm_formatter.rb
+====================================================================
+
+
+require '/Users/Adam/Desktop/gems/crm_formatter/lib/crm_formatter/address.rb'
+crm_phone = CRMFormatter::Phone.new
+crm_phone.validate_phone("229-954-6172")
+
+=> [{:phone=>"229-954-6172", :valid_phone=>"(229) 954-6172", :change=>true},
+ {:phone=>"4.142285305606521", :valid_phone=>nil, :change=>nil},
+ {:phone=>"23870 Addie Green", :valid_phone=>nil, :change=>nil},
+ {:phone=>"73408-0942", :valid_phone=>nil, :change=>nil},
+ {:phone=>"8853 Hank Course", :valid_phone=>nil, :change=>nil},
+ {:phone=>"910-202-3756 x827", :valid_phone=>"(910) 202-3756", :change=>true},
+ {:phone=>"119-305-4317", :valid_phone=>"119-305-4317", :change=>false},
+ {:phone=>"197-294-8073 x2164", :valid_phone=>"(972) 948-0732", :change=>true},
+ {:phone=>"53.866282605787006", :valid_phone=>nil, :change=>nil},
+ {:phone=>"91783", :valid_phone=>nil, :change=>nil}]
+
+
+
+
+
+
+address = CRMFormatter::Address.new
+address.state
+
+address = CRMFormatter::Address.new.state
+address.gh
