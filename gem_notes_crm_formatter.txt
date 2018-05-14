@@ -1,3 +1,17 @@
+
+
+========= TO DO =========
+1. Red Flags: Change to 'OA'
+2. Change Meth from 'remove' to 'compare_oa'
+3. Zip can be integer?
+4. Copy formatted results for README.
+5. Continue and finish README.
+6. Test Changes locally before pushing.
+7. Push.
+=========================
+
+
+
 ==== FIRST CREATE APP TO TEST GEM ====
 -----------------------------------
 rails new gem_tester
