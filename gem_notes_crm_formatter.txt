@@ -38,9 +38,9 @@ $ gem build crm_formatter.gemspec
   Successfully built RubyGem
   Name: crm_formatter
   Version: 1.0.5.pre.rc.1
-  File: crm_formatter-1.0.5.pre.rc.1.gem
+  File: crm_formatter-1.0.6.pre.rc.1.gem
 -----------------------------------
-$ gem install crm_formatter-1.0.5.pre.rc.1.gem
+$ gem install crm_formatter-1.0.6.pre.rc.1.gem
   Successfully installed crm_formatter-1.0.5.pre.rc.1
   Parsing documentation for crm_formatter-1.0.5.pre.rc.1
   Installing ri documentation for crm_formatter-1.0.5.pre.rc.1
@@ -56,7 +56,7 @@ $ irb
 $ curl -u adamjbooth https://rubygems.org/api/v1/api_key.yaml > ~/.gem/credentials; chmod 0600 ~/.gem/credentials
   Enter host password for user 'adamjbooth': RG<usual>rg
   -----------------------------------
-$ gem push crm_formatter-1.0.5.pre.rc.1.gem
+$ gem push crm_formatter-1.0.6.pre.rc.1.gem
   Pushing gem to https://rubygems.org...
   Successfully registered gem: crm_formatter (1.0.4.pre.rc.1)
   -----------------------------------

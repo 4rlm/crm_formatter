@@ -45,8 +45,9 @@ They were however, designed for an app that Harvests business data for sales and
 ```
   addr_formatter = CRMFormatter::Address.new
 
-  addr_formatter.get_full_address(full_address_hsh)
   full_address_hsh = {street: street, city: city, state: state, zip: zip}
+  
+  addr_formatter.get_full_address(full_address_hsh)
 
   addr_formatter.format_street(street)
 
