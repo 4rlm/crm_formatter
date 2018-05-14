@@ -1,9 +1,16 @@
-# CRMFormatter
 
-Reformat and Normalize CRM Contact Data, Addresses, Phones, Emails and URLs.  
-Please note, that this gem is a rapid work in process.  It is from a collection of modules currently being used on a production app, but decided to open them up.  The tests have not yet been written for the gem and there will still be changes in the near future.  Documentation is limited, but is coming.  Here are some basic points below to help you get started.
+# **CRM Formatter**
+
+#### Reformat and Normalize CRM Contact Data, such as Addresses, Phones and URLs.
+
+**CRM Formatter** was originally designed to curate high-volume enterprise-scale asynchronous web scraping via Nokogiri, Mechanize, and Delayed_job.  Web Scraping *aka Web Harvesting / Data Mining* is notoriously unreliable *sticky* work with endless edge-cases to overcome.  Accurately, yet efficiently curating such data is a constant and evolving task, and will continue to be the core functionality of **CRM Formatter**.
+However, it also plays an integral role in routine functions of apps, like formatting, normalizing, and even scrubbing existing databases, and submitted form data before saving to the database; via model callbacks, such as `before_validation` or `before_save`.
+
+###### The **CRM Formatter** Gem is currently in `--pre` versioning, aka **beta mode** with frequent updates. Formal tests in the gem environment are still on the way.
+However, **CRM Formatter** has been developed continuously for several years and is a reliable and integral part of a production CRM data verification app.  The process of isolating the various modules into a consolidated open source gem has just recently begun, so documentation is still limited, but is frequently being added and refined.
 
 ## Getting Started
+**CRM Formatter** is compatible with Rails 4.2 and 5.0, 5.1 and 5.2 on Ruby 2.2 and later.
 
 In your Gemfile add:
 
@@ -17,43 +24,87 @@ Or to install locally:
 gem install crm_formatter --pre
 ```
 
-### Prerequisites
+## Usage
 
-CRMFormatter is optimized for Rails 5.2 and Ruby 2.5, but has worked well in older versions too.
+##### Usage is organized into three sections, Overview, Methods and Examples.
 
-### Architecture
+### I. Overview
 
-CRMFormatter is the top level Module wrapper comprising of 3 Classes, Address, Phone and Web.  There is also a Helpers Module for shared tasks.
+#### 1. Access and Integration
+##### Using **CRM Formatter** in your app is very simple, and could be accessed from your app's concerns, controllers, helpers, lib, models, or services, but depends on the scope, location, and size of your application and server.    
+  * Simple form submission validations: model callback typically ideal.
+  * Database normalizing tasks: wrapper method in concerns, helpers, or lib typically ideal.
+  * Long running processes like web scraping or high volume APIs calls, like Google Linkedin, or Twitter: the lib or services might be ideal (multithreaded asynchronously even better)
+
+#### 2. Hash Response
+##### Formatted data will always be returned as a hash datatype the following key-value pairs:
+  * The originally submitted data as the first pair.
+  * Formatted data in the remaining pairs.
+  * A T/F boolean indicator pair regarding if the original and formatted data are different.
+
+#### 3. Optional Arguments *OA*
+##### A class can be instantiated with optional arguments *OA*.
+  * OA accepts data in the hash datatype, aka 'keyword-args'.
+  * Available Web OA: url_flags, link_flags, href_flags, extension_flags, length_min, length_max
+  * 'Flag' is for 'Red Flags', or a list of criteria to compare with.  
+  * For example, you might want to know which URLs contain 'twitter', 'facebook', or 'linkedin' either to focus on developing a list of business social media links, or perhaps you want to use such a list to better avoid such links.
+  * *OA is currently only available for the Web class.*
+  * *Address OA & Phone OA will be available in a future release.*
+
+### II. Methods
+##### CRM Formatter**'s top level module is `CRMFormatter` and contains the following three classes:
+1. Address:  `CRMFormatter::Address.new`
+2. Phone:  `CRMFormatter::Address.new`
+3. Web:  `CRMFormatter::Address.new`
+
+###### Then assign the above to a variable name of your choosing.
+`addr_formatter = CRMFormatter::Address.new`
+`@addr_formatter = CRMFormatter::Address.new`
+
+###### Web accepts optional arguments *OA* as a Hash (with Key-Value pairs)
+Without OA: Instantiate normally if not using OA.
+`web_formatter = CRMFormatter::Web.new`
+
+With OA: Follow the steps to use Web OA:
+1. Available Web OA and the required Key-Value naming and datatypes.  
+* Only list the OA K-V Pairs you're using.  No need to list empty values.  It's not all or nothing. These are empty to illustrate the expected datatypes.
+
+Available:
+`oa_args = { url_flags: [], link_flags: [], href_flags: [], extension_flags: [], length_min: integer, length_max: integer }`
 
 
-### Usage
+Example:
+```
+oa_args = { url_flags: %w(approv insur invest loan quick rent repair),
+            link_flags: %w(buy call cash cheap click gas insta),
+            href_flags: %w(after anounc apply approved blog buy call click),
+            extension_flags: %w(au ca edu es gov in ru uk us),
+            length_min: 0,
+            length_max: 30
+          }
 
-CRMFormatter could be used anywhere in an app for various reasons.  Most commonly from an app's helper methods, controllers or model.  If you wanted to ensure all new data is properly formatted before saving, methods could be accessed from the model via before_save, callbacks, or validations.  In addition to CRMFormatter formatting CRM data, it also provides detailed reports on what if anything has changed and it always preserves the original data submitted.  Here are a few examples below of how it could be used.
+@web_formatter = CRMFormatter::Web.new(oa_args)
+```
 
-The gem can be used both en mass to clean up an entire database, or fully-integrated into an app's regular environment.
-They were however, designed for an app that Harvests business data for sales and marketing teams, so they work perfectly with NokoGiri and Mechanize!
 
-** These are just examples below, not strict usage guides ...
 
-### Usage by Class & Methods
-The examples at the bottom of the page are rather verbose, so first, here is a list of methods available to you.
 
-# Address
+#### 1. Address Methods
 
-'get_full_address' takes a hash of address parts then runs each through their respective formatters, then also adds an additional feature of combining them into a long full address string, and indicates if there were any changes from the original version and newly formatted.
+'get_full_address()' takes a hash of address parts then runs each through their respective formatters, then also adds an additional feature of combining them into a long full address string, and indicates if there were any changes from the original version and newly formatted.
 
 ```
   addr_formatter = CRMFormatter::Address.new
 
-  full_address_hsh = {street: street, city: city, state: state, zip: zip}
+  full_address_hash = {street: street, city: city, state: state, zip: zip}
 
-  addr_formatter.get_full_address(full_address_hsh)
+  addr_formatter.get_full_address(full_address_hash)
 
-  addr_formatter.format_street(street)
+  addr_formatter.format_street(street_string)
 
-  addr_formatter.format_city(city)
+  addr_formatter.format_city(city_string)
 
-  addr_formatter.format_state(state)
+  addr_formatter.format_state(state_string)
 
   addr_formatter.format_zip(zip)
 
@@ -64,7 +115,7 @@ The examples at the bottom of the page are rather verbose, so first, here is a l
 
 ```
 
-# Phone
+#### Phone Methods
 
 Subtle but important distinction between 'format_phone' which simply puts a phone in any format, like 555-123-4567 into normalized (555) 123-4567, and 'validate_phone' which also uses 'format_phone' to normalize its output, but is mainly tasked with determining if the phone number seem legitimate. If you know for sure that it is a phone number, but just want to normalize then first try format_phone.  If you are doing web scraping or throwing in strings of text mixed with phones, then validate_phone might work better.
 
@@ -77,7 +128,7 @@ Subtle but important distinction between 'format_phone' which simply puts a phon
 
 ```
 
-# Web
+#### Web Methods
 
 
 
@@ -96,15 +147,13 @@ Subtle but important distinction between 'format_phone' which simply puts a phon
 
 ```
 
-** Data will always be returned as hashes, with your original, modified, and details about what has changed.
 
-** You may pass optional arguments at initialization to provide lists of data to match against, for example a list of words that if in a URL, it would automatically report as junk (but still keeping your original in tact.)
+### III. Examples
+Some of the examples are excessively verbose to help illustrate the datatypes and processes.  Here are a few guidelines and tips:
+** These are just examples below, not strict usage guides ...
 
-** Typically, you will want to create your own method as a wrapper for the Gem methods, like below...
 
-** The examples below are rather verbose, so you can make them much more compact of course.
-
-## Address
+#### 1. Address Examples
 
 ```
 def self.run_adrs
@@ -128,7 +177,7 @@ end
 
 
 
-## Phone
+#### 2. Phone Examples
 
 In the phone example, format_all_phone_in_my_db could be a custom wrapper method, which when called by Rails C or from a front end GUI process, could grab all phones in db meeting certain criteria to be scrubbed. The results will always be in hash format, such as below.... phone_hash  
 
@@ -148,7 +197,7 @@ phone_hash = { phone: 555-123-4567, valid_phone: (555) 123-4567, phone_edit: tru
 ```
 
 
-## Web
+#### 3. Web Examples
 
 In the example below, you might write a wrapper method named anything you like, such as 'format_a_url' and 'clean_many_websites' to pass in urls to be formatted.
 
@@ -168,10 +217,6 @@ In the example below, you might write a wrapper method named anything you like, 
   end
 ```
 
-
-### Additional Usage Examples
-
-### Webs
 
 Another example below.
 
@@ -203,7 +248,7 @@ end
 
 ```
 
-### Fully Integrated into an App Example
+##### Fully Integrated into an App Example
 
 ** The gem is currently being used within another app in the following way...
 
