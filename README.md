@@ -36,17 +36,17 @@ They were however, designed for an app that Harvests business data for sales and
 ** These are just examples below, not strict usage guides ...
 
 ### Usage by Class & Methods
-* The examples at the bottom of the page are rather verbose, so first, here is a list of methods available to you.
+The examples at the bottom of the page are rather verbose, so first, here is a list of methods available to you.
 
 # Address
 
-* 'get_full_address' takes a hash of address parts then runs each through their respective formatters, then also adds an additional feature of combining them into a long full address string, and indicates if there were any changes from the original version and newly formatted.
+'get_full_address' takes a hash of address parts then runs each through their respective formatters, then also adds an additional feature of combining them into a long full address string, and indicates if there were any changes from the original version and newly formatted.
 
 ```
   addr_formatter = CRMFormatter::Address.new
 
   full_address_hsh = {street: street, city: city, state: state, zip: zip}
-  
+
   addr_formatter.get_full_address(full_address_hsh)
 
   addr_formatter.format_street(street)
@@ -66,7 +66,7 @@ They were however, designed for an app that Harvests business data for sales and
 
 # Phone
 
-* Subtle but important distinction between 'format_phone' which simply puts a phone in any format, like 555-123-4567 into normalized (555) 123-4567, and 'validate_phone' which also uses 'format_phone' to normalize its output, but is mainly tasked with determining if the phone number seem legitimate. If you know for sure that it is a phone number, but just want to normalize then first try format_phone.  If you are doing web scraping or throwing in strings of text mixed with phones, then validate_phone might work better.
+Subtle but important distinction between 'format_phone' which simply puts a phone in any format, like 555-123-4567 into normalized (555) 123-4567, and 'validate_phone' which also uses 'format_phone' to normalize its output, but is mainly tasked with determining if the phone number seem legitimate. If you know for sure that it is a phone number, but just want to normalize then first try format_phone.  If you are doing web scraping or throwing in strings of text mixed with phones, then validate_phone might work better.
 
 ```
   ph_formatter = CRMFormatter::Phone.new
@@ -96,22 +96,15 @@ They were however, designed for an app that Harvests business data for sales and
 
 ```
 
+** Data will always be returned as hashes, with your original, modified, and details about what has changed.
 
+** You may pass optional arguments at initialization to provide lists of data to match against, for example a list of words that if in a URL, it would automatically report as junk (but still keeping your original in tact.)
 
+** Typically, you will want to create your own method as a wrapper for the Gem methods, like below...
 
-
-
-
-
-
-
-* Data will always be returned as hashes, with your original, modified, and details about what has changed.
-* You may pass optional arguments at initialization to provide lists of data to match against, for example a list of words that if in a URL, it would automatically report as junk (but still keeping your original in tact.)
-
-Typically, you will want to create your own method as a wrapper for the Gem methods, like below...
+** The examples below are rather verbose, so you can make them much more compact of course.
 
 ## Address
-** The examples below are rather verbose, so you can make them much more compact of course.
 
 ```
 def self.run_adrs
@@ -179,7 +172,8 @@ In the example below, you might write a wrapper method named anything you like, 
 ### Additional Usage Examples
 
 ### Webs
-* Another example below.
+
+Another example below.
 
 ```
 def self.run_webs
@@ -210,13 +204,16 @@ end
 ```
 
 ### Fully Integrated into an App Example
+
 ** The gem is currently being used within another app in the following way...
 
 ```
   @web_formatter.convert_to_scheme_host(url)
   @web_formatter.format_url(url)
 ```
- The two methods above, which are many available to you in the gem are being used below.
+
+** The two methods above, which are many available to you in the gem are being used below.
+
 ```
   curl_result[:response_code] = result&.response_code.to_s
   web_hsh = @web_formatter.format_url(result&.last_effective_url)
@@ -227,7 +224,7 @@ end
 
 ```
 
-# Above is an isolated sliver of the larger environment shown below...
+** Above is an isolated sliver of the larger environment shown below...
 
 ```
   def start_curl(url, timeout)
@@ -274,8 +271,7 @@ end
   end
 ```
 
-
-### Another Example from a Production Environment...
+** Another Example from a Production Environment...
 
 ```
   def format_url(url)
