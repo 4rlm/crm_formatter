@@ -8,7 +8,7 @@ Please note, that this gem is a rapid work in process.  It is from a collection 
 In your Gemfile add:
 
 ```
-gem 'crm_formatter', '~> 1.0.5.pre.rc.1'
+gem 'crm_formatter', '~> 1.0.6.pre.rc.1'
 ```
 
 Or to install locally:
