@@ -5,7 +5,7 @@ module CRMFormatter
         @url_flags = args.fetch(:url_flags, [])
         @link_flags = args.fetch(:link_flags, [])
         @href_flags = args.fetch(:href_flags, [])
-        @extension_flags = args.fetch(:ext_flags, [])
+        @extension_flags = args.fetch(:extension_flags, [])
         @length_min = args.fetch(:length_min, 2)
         @length_max = args.fetch(:length_max, 100)
       end
@@ -28,14 +28,15 @@ module CRMFormatter
             url = url[0..-2] if url[-1] == '/'
 
             symbs = ['(', ')', '[', ']', '{', '}', '*', '@', '^', '$', '+', '!', '<', '>', '~', ',', "'"]
+
             return url_hsh if symbs.any? {|symb| url&.include?(symb) }
 
             uri = URI(url)
             if uri.present?
               host_parts = uri.host&.split(".")
 
-              if @ext_flags.any?
-                bad_host_sts = host_parts&.map { |part| TRUE if @ext_flags.any? {|ext| part == ext } }&.compact&.first
+              if @extension_flags.any?
+                bad_host_sts = host_parts&.map { |part| TRUE if @extension_flags.any? {|ext| part == ext } }&.compact&.first
                 return url_hsh if bad_host_sts
               end
 
@@ -44,7 +45,9 @@ module CRMFormatter
               url = "#{scheme}://#{host}" if host.present? && scheme.present?
               url = "http://#{url}" if url[0..3] != "http"
               url = url.gsub("//", "//www.") if !url.include?("www.")
+
               return url_hsh if @url_flags.any? { |bad_text| url&.include?(bad_text) }
+
               url_hsh[:formatted_url] = convert_to_scheme_host(url) if url.present?
               url_hsh[:url_edit] = url_hsh[:formatted_url] != url_hsh[:url_path]
             end
