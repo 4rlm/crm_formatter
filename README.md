@@ -44,9 +44,9 @@ gem install crm_formatter --pre
 
 #### 3. Optional Arguments *OA*
 ##### A class can be instantiated with optional arguments *OA*.
-  * OA accepts data in the hash datatype, aka 'keyword-args'.
-  * Available Web OA: url_flags, link_flags, href_flags, extension_flags, length_min, length_max
-  * 'Flag' is for 'Red Flags', or a list of criteria to compare with.  
+  * OA house the criteria by which you'd like to scrub your data.  
+  * Each is either 'Pos' or 'Neg', for more accurate reporting of your scrubbing results.
+  * List of available Web OA is below, and each accepts data in the hash datatype, aka 'keyword-args'.
   * For example, you might want to know which URLs contain 'twitter', 'facebook', or 'linkedin' either to focus on developing a list of business social media links, or perhaps you want to use such a list to better avoid such links.
   * *OA is currently only available for the Web class.*
   * *Address OA & Phone OA will be available in a future release.*
@@ -69,29 +69,41 @@ With OA: Follow the steps to use Web OA:
 1. Available Web OA and the required Key-Value naming and datatypes.  
 * Only list the OA K-V Pairs you're using.  No need to list empty values.  It's not all or nothing. These are empty to illustrate the expected datatypes.
 
-Available:
-`oa_args = { url_flags: [], link_flags: [], href_flags: [], extension_flags: [], length_min: integer, length_max: integer }`
-
-
-Example:
+Below is how the OA are received in the Web class at initialization.
+**3. Web Examples at the very bottom has a very detailed example including how OA can be used.**
 ```
-oa_args = { url_flags: %w(approv insur invest loan quick rent repair),
-            link_flags: %w(buy call cash cheap click gas insta),
-            href_flags: %w(after anounc apply approved blog buy call click),
-            extension_flags: %w(au ca edu es gov in ru uk us),
-            length_min: 0,
-            length_max: 30
+def initialize(args={})
+  @empty_oa = args.empty?
+  @pos_urls = args.fetch(:pos_urls, [])
+  @neg_urls = args.fetch(:neg_urls, [])
+  @pos_links = args.fetch(:pos_links, [])
+  @neg_links = args.fetch(:neg_links, [])
+  @pos_hrefs = args.fetch(:pos_hrefs, [])
+  @neg_hrefs = args.fetch(:neg_hrefs, [])
+  @pos_exts = args.fetch(:pos_exts, [])
+  @neg_exts = args.fetch(:neg_exts, [])
+  @min_length = args.fetch(:min_length, 2)
+  @max_length = args.fetch(:max_length, 100)
+end
+```
+
+Example: Below is the syntax for how to use OA.
+There are both Positive and Negative.  They work the same and could just be included in the same array if you prefer.  But they are intended to help you scrub data against negative criteria and for positive criteria.
+```
+oa_args = { neg_urls: %w(approv insur invest loan quick rent repair),
+            neg_links: %w(buy call cash cheap click gas insta),
+            neg_hrefs: %w(after anounc apply approved blog buy call click),
+            neg_exts: %w(au ca edu es gov in ru uk us),
+            min_length: 0,
+            max_length: 30
           }
 
 @web_formatter = CRMFormatter::Web.new(oa_args)
 ```
 
-
-
-
 #### 1. Address Methods
 
-'get_full_address()' takes a hash of address parts then runs each through their respective formatters, then also adds an additional feature of combining them into a long full address string, and indicates if there were any changes from the original version and newly formatted.
+`get_full_address()` takes a hash of address parts then runs each through their respective formatters, then also adds an additional feature of combining them into a long full address string, and indicates if there were any changes from the original version and newly formatted.
 
 ```
   addr_formatter = CRMFormatter::Address.new
@@ -112,7 +124,6 @@ oa_args = { url_flags: %w(approv insur invest loan quick rent repair),
 
   addr_formatter.compare_versions(original, formatted)
 
-
 ```
 
 #### Phone Methods
@@ -130,8 +141,6 @@ Subtle but important distinction between 'format_phone' which simply puts a phon
 
 #### Web Methods
 
-
-
 ```
   web_formatter = CRMFormatter::Web.new
 
@@ -147,11 +156,10 @@ Subtle but important distinction between 'format_phone' which simply puts a phon
 
 ```
 
-
 ### III. Examples
 Some of the examples are excessively verbose to help illustrate the datatypes and processes.  Here are a few guidelines and tips:
-** These are just examples below, not strict usage guides ...
-
+**3. Web Examples at the very bottom is the most detailed and recent.  It might be a good place to start.**
+*These are just examples below, not strict usage guides ...*
 
 #### 1. Address Examples
 
@@ -175,8 +183,6 @@ end
 
 ```
 
-
-
 #### 2. Phone Examples
 
 In the phone example, format_all_phone_in_my_db could be a custom wrapper method, which when called by Rails C or from a front end GUI process, could grab all phones in db meeting certain criteria to be scrubbed. The results will always be in hash format, such as below.... phone_hash  
@@ -196,137 +202,97 @@ end
 phone_hash = { phone: 555-123-4567, valid_phone: (555) 123-4567, phone_edit: true }
 ```
 
-
 #### 3. Web Examples
 
-In the example below, you might write a wrapper method named anything you like, such as 'format_a_url' and 'clean_many_websites' to pass in urls to be formatted.
+The steps below will show you an option for how you could integrate larger processes in your app.  
+1. Create a wrapper method you can call from an action or Rails C.  In this example, a new class was also created in Lib for that purpose, as there could be related methods to create.
+* These examples only include `CRMFormatter::Web.new.format_url(url)` method.  There are several additional methods available to you.  Documentation is on the way, but in the mean time, try out the below example, then play around with the others too.   
 
 ```
-  @web = CRMFormatter::Web.new
+# /app/lib/start_crm.rb
 
-  def format_a_url(url)
-    hsh = @web.format_url(url)
-  end
+class StartCrm
 
-  def clean_many_websites(array_of_urls)
+  ##Rails C: StartCrm.run_webs
+  def self.run_webs
+    oa_args = get_args
+    web = CRMFormatter::Web.new(oa_args)
 
-    hashes = array_of_urls.map do |url|
-                @web.format_url(url)
-              end
-
-  end
-```
-
-
-Another example below.
-
-```
-def self.run_webs
-
-  url_flags = %w(approv avis budget business collis eat enterprise facebook financ food google gourmet hertz hotel hyatt insur invest loan lube mobility motel motorola parts quick rent repair restaur rv ryder service softwar travel twitter webhost yellowpages yelp youtube)
-
-  link_flags = %w(: .biz .co .edu .gov .jpg .net // anounc book business buy bye call cash cheap click collis cont distrib download drop event face feature feed financ find fleet form gas generat graphic hello home hospi hour hours http info insta)
-
-  href_flags = %w(? .com .jpg @ * after anounc apply approved blog book business buy call care career cash charit cheap check click)
-
-  extension_flags = %w(au ca edu es gov in ru uk us)
-
-  args = { url_flags: url_flags, link_flags: link_flags, href_flags: href_flags, extension_flags: extension_flags }
-  web = CRMFormatter::Web.new(args)
-
-  urls = Accounts.where.not(url: nil).pluck(:url)
-
-  validated_url_hashes = urls.map { |url| web.format_url(url) }
-  valid_urls = validated_url_hashes.map { |hsh| hsh[:valid_url] }.compact
-  extracted_link_hashes = urls.map { |url| web.extract_link(url) }
-  links = extracted_link_hashes.map { |hsh| hsh[:link] }.compact
-  validated_link_hashes = links.map { |link| web.remove_invalid_links(link) }
-  hrefs = ["Hot Inventory", "Join Our Sale!", "Don't Wait till Later", "Apply Today!", "No Cash Down!"]
-  validated_href_hashes = hrefs.map { |href| web.remove_invalid_hrefs(href) }
-
-end
-
-```
-
-##### Fully Integrated into an App Example
-
-** The gem is currently being used within another app in the following way...
-
-```
-  @web_formatter.convert_to_scheme_host(url)
-  @web_formatter.format_url(url)
-```
-
-** The two methods above, which are many available to you in the gem are being used below.
-
-```
-  curl_result[:response_code] = result&.response_code.to_s
-  web_hsh = @web_formatter.format_url(result&.last_effective_url)
-
-  if web_hsh[:formatted_url].present?
-    curl_result[:verified_url] = @web_formatter.convert_to_scheme_host(web_hsh[:formatted_url])
-  end
-
-```
-
-** Above is an isolated sliver of the larger environment shown below...
-
-```
-  def start_curl(url, timeout)
-
-    curl_result = { verified_url: nil, response_code: nil, curl_err: nil }
-    if url.present?
-      result = nil
-
-      begin # Curl Exception Handling
-        begin # Timeout Exception Handling
-          Timeout.timeout(timeout) do
-            puts "\n\n=== WAITING FOR CURL RESPONSE ==="
-            result = Curl::Easy.perform(url) do |curl|
-              curl.follow_location = true
-              curl.useragent = "curb"
-              curl.connect_timeout = timeout
-              curl.enable_cookies = true
-              curl.head = true #testing - new
-            end # result
-
-            curl_result[:response_code] = result&.response_code.to_s
-            web_hsh = @web_formatter.format_url(result&.last_effective_url)
-
-            if web_hsh[:formatted_url].present?
-              curl_result[:verified_url] = @web_formatter.convert_to_scheme_host(web_hsh[:formatted_url])
-            end
-          end
-
-        rescue Timeout::Error # Timeout Exception Handling
-          curl_result[:curl_err] = "Error: Timeout"
-        end
-
-      rescue LoadError => e  # Curl Exception Handling
-        curl_err = error_parser("Error: #{$!.message}")
-        # CheckInt.new.check_int if curl_err.include?('TCP')
-        curl_result[:curl_err] = curl_err
-      end
-    else ## If no url present?
-      curl_result[:curl_err] = 'URL Nil'
+    formatted_url_hashes = get_urls.map do |url|
+      url_hash = web.format_url(url)
     end
 
-    print_result(curl_result)
-    curl_result
-  end
-```
-
-** Another Example from a Production Environment...
-
-```
-  def format_url(url)
-    url_hash = @web_formatter.format_url(url)
-    url_hash.merge!({ verified_url: nil, url_redirected: false, response_code: nil, url_sts: nil, url_date: Time.now, wx_date: nil, timeout: nil })
-    url_hash = evaluate_formatted_url(url_hash)
+    formatted_url_hashes
   end
 
+end
 ```
+2. Make sure to modify your application config file to recognize your new class.
 
+```
+#/app/config/application.rb
+
+config.eager_load_paths << Rails.root.join('lib/**')
+config.eager_load_paths += Dir["#{config.root}/lib/**/"]
+```
+3. Create your db query or put together a list of URLs to process, along with any OA to include.  The below example is very verbose, but designed to be helpful. In reality, you might have various criteria saved in the db rather than writing it out.
+In this example, we have auto dealer URLs.  In this process, we're focusing on franchise dealers.
+```
+def self.get_args
+  neg_urls = %w(approv avis budget collis eat enterprise facebook financ food google gourmet hertz hotel hyatt insur invest loan lube mobility motel motorola parts quick rent repair restaur rv ryder service softwar travel twitter webhost yellowpages yelp youtube)
+
+  pos_urls = ["acura", "alfa romeo", "aston martin", "audi", "bmw", "bentley", "bugatti", "buick", "cdjr", "cadillac", "chevrolet", "chrysler", "dodge", "ferrari", "fiat", "ford", "gmc", "group", "group", "honda", "hummer", "hyundai", "infiniti", "isuzu", "jaguar", "jeep", "kia", "lamborghini", "lexus", "lincoln", "lotus", "mini", "maserati", "mazda", "mclaren", "mercedes-benz", "mitsubishi", "nissan", "porsche", "ram", "rolls-royce", "saab", "scion", "smart", "subaru", "suzuki", "toyota", "volkswagen", "volvo"]
+
+  neg_exts = %w(au ca edu es gov in ru uk us)
+  oa_args = {neg_urls: neg_urls, pos_urls: pos_urls, neg_exts: neg_exts}
+end
+
+def self.get_urls
+  urls = ["https://www.stevXXXXXXmitsubishiserviceandpartscenter.com", "https://www.perXXXXXXchryslerjeepcenterville.com", "http://www.peXXXXXXchryslerjeepcenterville.com", "http://www.colXXXXXXchryslerdodgejeepram.com"]
+end
+```
+4. Run your class and wrapper method in Rails C.  By creating the wrapper method, you have set up the entire process to run like a runner.  In reality, you might have several different criteria accessible from a GUI or even running in Cron Jobs.
+
+`2.5.1 :001 > StartCrm.run_webs`
+
+5. Results are always in a Hash, like below.  The URLs are slightly obfuscated out of respect (it's not a bug).  These are examples from a large DB that runs on a loop 24/7 and gets to each organization about once a week, so it's already pretty well up to date, so there aren't any big changes below, but there are still a few things to point out.
+
+* `:is_reformatted` indicates T/F if url_path and `:formatted_url` differ.  If False, then it means they are the same, or the `:url_path` had significant errors which prevented it from being formatted, thus `:formatted_url` would be nil in such a case.  The reality is that you might have some URLs that are so far off that, that they can't be reliably reformatted, so better to only let them pass if we are confident that they are reliable.
+
+* `:url_path` is the url originally submitted by the client.  It can include directory links on the end too, '/careers/, '/about-us/', etc.
+
+* `:formatted_url` is the formatted version of `:url_path`.  It will be stripped of additional paths, '/deals/', '/staff/', etc.  Also, often times people ommit 'http://:' and 'www' in CRMs.  This can sometimes cause errors for users or Mechanized Web Scrapers.  So, those will always be included to ensure consistency.  In our production app we follow up the formatting with url redirect following, which our configurations require the entire path, so it will always be included.  The redirect following gem is already being worked on and will be released as an additional gem shortly.
+
+* `:neg` is an array of all the errors and negative, undesirable criteria to scrub against.  If you include the criteria in OA `neg_urls:`, like above, it will automatically scrub and report.  Regardless, any errors will also be included in there.  So, if the url was not ultimately formatted, there will be details regarding why in `:neg`.
+
+* `:pos` is the opposite, which highlights positive criteria you might be looking for.  It too is available in OA via `pos_urls:`, like above.
+
+```
+[ {:is_reformatted=>false,
+    :url_path=>"https://www.steXXXXXXmitsubishiserviceandpartscenter.com",
+    :formatted_url=>"https://www.steXXXXXXmitsubishiserviceandpartscenter.com",
+    :neg=>["neg_urls: parts, rv, service"],
+    :pos=>["pos_urls: mitsubishi"]},
+
+   {:is_reformatted=>false,
+    :url_path=>"https://www.perXXXXXXchryslerjeepcenterville.com",
+    :formatted_url=>"https://www.perXXXXXXchryslerjeepcenterville.com",
+    :neg=>["neg_urls: rv"],
+    :pos=>["pos_urls: chrysler, jeep"]},
+
+   {:is_reformatted=>false,
+    :url_path=>"http://www.pXXXXXXchryslerjeepcenterville.com",
+    :formatted_url=>"http://www.XXXXXXechryslerjeepcenterville.com",
+    :neg=>["neg_urls: rv"],
+    :pos=>["pos_urls: chrysler, jeep"]},
+
+   {:is_reformatted=>false,
+    :url_path=>"http://www.colXXXXXXchryslerdodgejeepram.com",
+    :formatted_url=>"http://www.colXXXXXXchryslerdodgejeepram.com",
+    :neg=>["neg_urls: rv"],
+    :pos=>["pos_urls: chrysler, dodge, jeep, ram"]}
+  ]
+```
 
 
 ## Author

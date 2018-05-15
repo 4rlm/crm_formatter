@@ -1,5 +1,20 @@
 
 
+========= Quick Reference =========
+* delete current gem build record.
+* up count gemspec version
+$ gem build crm_formatter.gemspec
+* Uninstall Locally
+  $ gem list
+  $ gem uninstall crm_formatter
+$ gem install crm_formatter-1.0.6.pre.rc.1.gem
+* Test Locally
+  * Edit Gem Tester App Gemfile 
+
+* git add / commit / push
+$ gem push crm_formatter-1.0.6.pre.rc.1.gem
+
+
 ========= TO DO =========
 1. Red Flags: Change to 'OA'
 2. Change Meth from 'remove' to 'compare_oa'
