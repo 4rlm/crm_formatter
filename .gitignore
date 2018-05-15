@@ -11,3 +11,5 @@ crm_formatter-*.gem
 .DS_Store
 .idea/
 .txt
+.csv
+!extensions.csv
