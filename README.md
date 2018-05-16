@@ -2,18 +2,18 @@
 # CRM Formatter
 #### Efficiently Reformat, Normalize, and Scrub CRM Contact Data, such as Addresses, Phones and URLs.
 
-CRM Formatter is perfect for curating high-volume enterprise-scale web scraping, and integrates well with Nokogiri, Mechanize, and asynchronous jobs via Delayed_job or SideKick, to name a few.  Web Scraping and Harvesting often gathers a lot of junk to sift through; presenting unexpected Edge-Cases around each corner.  CRM Formatter has been developed and refined during the past few years to focus on improving that task.
+CRM Formatter is perfect for curating high-volume enterprise-scale web scraping, and integrates well with Nokogiri, Mechanize, and asynchronous jobs via Delayed_job or SideKick, to name a few.  Web Scraping and Harvesting often gathers a lot of junk to sift through; presenting unexpected edge cases around each corner.  CRM Formatter has been developed and refined during the past few years to focus on improving that task.
 
 It's also perfect for processing API data, Web Forms, and routine DB normalizing and scrubbing processes.  Not only does it reformat Address, Phone, and Web data, it can also accept lists to scrub against, then providing detailed reports about how each piece of data compares with your criteria lists.
 
-The CRM Formatter Gem is currently in '--pre versioning', or 'beta mode' as the process of reorganizing these proprietary, production environment processes from their native app environment into this newly created open source gem.  Formal tests in the gem environment are still on the way, as is the documentation.  But the processes themselves have been very reliable and an integral part of a very large app dedicated to such services.  Please feel free to give it a try!  Hopefully it will provide you and your organization some relief!
+The CRM Formatter Gem is currently in '--pre versioning', or 'beta mode' as the process of reorganizing these proprietary, production environment processes from their native app environment into this newly created open source gem.  Formal tests in the gem environment are still on the way, as is the documentation.  But the processes themselves have been very reliable and an integral part of a very large app dedicated to such services.  
 
 ## Getting Started
 CRM Formatter is compatible with Rails 4.2 and 5.0, 5.1 and 5.2 on Ruby 2.2 and later.
 
 In your Gemfile add:
 ```
-gem 'crm_formatter', '~> 1.0.7.pre.rc.1'
+gem 'crm_formatter', '~> 1.0.8.pre.rc.1'
 ```
 Or to install locally:
 ```
@@ -22,14 +22,8 @@ gem install crm_formatter --pre
 ## Usage
 Using CRM Formatter in your app is very simple, and could be accessed from your app's concerns, , helpers, lib, models, or services, but depends on the scope, location, and size of your application and server. For simple form submission validations the model callback is typically ideal.  For database normalizing tasks the concerns, helpers, or lib is typically ideal.  For long running processes like web scraping or high volume APIs calls, like Google Linkedin, or Twitter  the lib or services might be ideal (asynchronous multithreaded even better)
 
-### II. Classes & Methods
-The top level module is named CRMFormatter, which contains three classes, accessible in the following way:
-```
-CRMFormatter::Address.new
-CRMFormatter::Phone.new
-CRMFormatter::Web.new
-```
-Assign the above to local or instant variables like below.  You can name them anything you like.
+### Class Names
+CRMFormatter contains three classes, which can be accessed like below with local or instance variables; you can name them anything you like.
 ```
 adr_formatter = CRMFormatter::Address.new
 @adr_formatter = CRMFormatter::Address.new
@@ -40,8 +34,92 @@ ph_formatter = CRMFormatter::Phone.new
 web_formatter = CRMFormatter::Web.new
 @web_formatter = CRMFormatter::Web.new
 ```
+
+### Available Methods in Each Class
+
+## Address Methods
+These are the methods available to you.  You can use them a la cart, for example if you just wanted to format all your states, or you could combine the entire address into `get_full_address()` which will run each of the related methods for you.  It also adds an additional hash pair containing the full address as a single string.  There is also an indicator pair to report if there were any changes from the original version to the newly formatted.
+```
+  addr_formatter = CRMFormatter::Address.new
+  full_address_hash = {street: street, city: city, state: state, zip: zip}
+  addr_formatter.get_full_address(full_address_hash)
+  addr_formatter.format_street(street_string)
+  addr_formatter.format_city(city_string)
+  addr_formatter.format_state(state_string)
+  addr_formatter.format_zip(zip)
+  addr_formatter.format_full_address(adr = {})
+  addr_formatter.compare_versions(original, formatted)
+```
+
+#### Phone Methods
+Phone only has two methods, with a subtle but important distinction between them.  For simply formatting a known phone, use `format_phone` to convert to the normalized (555) 123-4567 format.  Use `validate_phone` if either your phone data has a bunch of text and special characters to remove, or if you aren't even sure that it is a phone, as it will help determine if the phone number seem legitimate.  If so, it then passes it along to `format_phone`.
+```
+  ph_formatter = CRMFormatter::Phone.new
+  ph_formatter.validate_phone(phone)
+  ph_formatter.format_phone(phone)
+```
+
+#### Web Methods
+The examples on this README are from `format_url` method.  The others are for web scraping, which will be documented in the near future.
+```
+  web_formatter = CRMFormatter::Web.new
+  web_formatter.format_url(url)
+  web_formatter.extract_link(url_path)
+  web_formatter.remove_invalid_links(link)
+  web_formatter.remove_invalid_hrefs(href)
+  web_formatter.convert_to_scheme_host(url)
+```
+
+## Examples
+#### Below are two examples using the Web `format_url(url)` method:
+
+### Example 1: 6 Example URLs Submitted:
+Custom Method to Query URLs
+```
+def self.get_urls
+  urls = %w(website.com website.business.site website website.fake website.fake.com website.com.fake)
+end
+```
+Custom Wrapper Method
+```
+def self.run_webs
+  web = CRMFormatter::Web.new
+  formatted_url_hashes = get_urls.map do |url|
+    url_hash = web.format_url(url)
+  end
+end
+```
+Results as Hash: 3/6 Reformatted due to invalid or no url extensions. 3 Reformatted and Normalized with `http://www.`  
+URL Extensions, **.com, .net, .fake** cross referenced with official IANA list.
+```
+[ {:is_reformatted=>true, :url_path=>"website.com", :formatted_url=>"http://www.website.com", :neg=>[], :pos=>[]},
+  {:is_reformatted=>false, :url_path=>"website.business.site", :formatted_url=>nil, :neg=>["error: ext.valid > 1 [business, site]"], :pos=>[]}, {:is_reformatted=>false, :url_path=>"website", :formatted_url=>nil, :neg=>["error: ext.none"], :pos=>[]},
+  {:is_reformatted=>false, :url_path=>"website.fake", :formatted_url=>nil, :neg=>["error: ext.invalid [fake]"], :pos=>[]},
+  {:is_reformatted=>true, :url_path=>"website.fake.com", :formatted_url=>"http://www.website.com", :neg=>[], :pos=>[]},
+  {:is_reformatted=>true, :url_path=>"website.com.fake", :formatted_url=>"http://www.website.com", :neg=>[], :pos=>[]}
+]
+```
+
+### Example 2: 6 Real URLs with Scrubbing Feature, but same configuration as above:
+**Intentionally partially obfuscated**
+```
+urls = %w(approvXXXutosales.org autXXXartfinance.com leXXXummitautorepair.net melXXXtoyota.com norXXXastacura.com XXXmazda.com)
+```
+These results list 'neg' and 'pos', which are the criteria I was scrubbing against.  I wanted to find the URLs of franchise auto dealers and exclude ancillary URLs.
+```
+[{:is_reformatted=>true, :url_path=>"approvXXXutosales.org", :formatted_url=>"http://www.approvXXXutosales.org", :neg=>["neg_urls: approv"], :pos=>[]},
+ {:is_reformatted=>true, :url_path=>"autXXXartfinance.com", :formatted_url=>"http://www.autXXXartfinance.com", :neg=>["neg_urls: financ"], :pos=>["pos_urls: smart"]},
+ {:is_reformatted=>true, :url_path=>"leXXXummitautorepair.net", :formatted_url=>"http://www.leXXXummitautorepair.net", :neg=>["neg_urls: repair"], :pos=>[]},
+ {:is_reformatted=>true, :url_path=>"melXXXtoyota.com", :formatted_url=>"http://www.melXXXtoyota.com", :neg=>[], :pos=>["pos_urls: toyota"]},
+ {:is_reformatted=>true, :url_path=>"norXXXastacura.com", :formatted_url=>"http://www.norXXXastacura.com", :neg=>[], :pos=>["pos_urls: acura"]},
+ {:is_reformatted=>true, :url_path=>"XXXmazda.com", :formatted_url=>"http://www.XXXmazda.com", :neg=>[], :pos=>["pos_urls: mazda"]}
+ ]
+```
+
+## Quick Setup Guide
+
 #### Create a Wrapper with a custom Class and Method(s)
-If you only need the gem for formatting form data, you could just create a callback method in your model, but to scrub a database or process API and Harvested data, you'll want a dedicated process so you can manage the queue, criteria, and results.  If you don't already have one, this example will show you how. Concerns, Helpers and Models might be fine for smaller tasks, but for heavier tasks Lib and Services are ideal, but depends on your specifications.
+This is just one of several ways to configure.  If you only need the gem for formatting form data, you could just create a callback method in your model, but to scrub a database or process API and Harvested data, you'll want a dedicated process so you can manage the queue, criteria, and results.  If you don't already have one, this example will show you how. Concerns, Helpers and Models might be fine for smaller tasks, but for heavier tasks Lib and Services are ideal, but depends on your specifications.
 ```
 # /app/lib/start_crm.rb
 ```
@@ -145,39 +223,7 @@ oa_args = { neg_urls: %w(approv insur invest loan quick rent repair),
 @web_formatter = CRMFormatter::Web.new(oa_args)
 ```
 
-## Address Methods
-These are the methods available to you.  You can use them a la cart, for example if you just wanted to format all your states, or you could combine the entire address into `get_full_address()` which will run each of the related methods for you.  It also adds an additional hash pair containing the full address as a single string.  There is also an indicator pair to report if there were any changes from the original version to the newly formatted.
-```
-  addr_formatter = CRMFormatter::Address.new
-  full_address_hash = {street: street, city: city, state: state, zip: zip}
-  addr_formatter.get_full_address(full_address_hash)
-  addr_formatter.format_street(street_string)
-  addr_formatter.format_city(city_string)
-  addr_formatter.format_state(state_string)
-  addr_formatter.format_zip(zip)
-  addr_formatter.format_full_address(adr = {})
-  addr_formatter.compare_versions(original, formatted)
-```
-
-#### Phone Methods
-Phone only has two methods, with a subtle but important distinction between them.  For simply formatting a known phone, use `format_phone` to convert to the normalized (555) 123-4567 format.  Use `validate_phone` if either your phone data has a bunch of text and special characters to remove, or if you aren't even sure that it is a phone, as it will help determine if the phone number seem legitimate.  If so, it then passes it along to `format_phone`.
-```
-  ph_formatter = CRMFormatter::Phone.new
-  ph_formatter.validate_phone(phone)
-  ph_formatter.format_phone(phone)
-```
-
-#### Web Methods
-```
-  web_formatter = CRMFormatter::Web.new
-  web_formatter.format_url(url)
-  web_formatter.extract_link(url_path)
-  web_formatter.remove_invalid_links(link)
-  web_formatter.remove_invalid_hrefs(href)
-  web_formatter.convert_to_scheme_host(url)
-```
-
-### III. Examples
+### III. Detailed Examples
 Some of the examples are excessively verbose to help illustrate the datatypes and processes.  Here are a few guidelines and tips:
 
 *These are just examples, not strict usage guides ...*
