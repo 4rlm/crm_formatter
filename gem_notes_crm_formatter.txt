@@ -7,12 +7,12 @@ $ gem build crm_formatter.gemspec
 * Uninstall Locally
   $ gem list
   $ gem uninstall crm_formatter
-$ gem install crm_formatter-1.0.6.pre.rc.1.gem
+$ gem install crm_formatter-1.0.7.pre.rc.1.gem
 * Test Locally
-  * Edit Gem Tester App Gemfile 
+  * Edit Gem Tester App Gemfile
 
 * git add / commit / push
-$ gem push crm_formatter-1.0.6.pre.rc.1.gem
+$ gem push crm_formatter-1.0.7.pre.rc.1.gem
 
 
 ========= TO DO =========
