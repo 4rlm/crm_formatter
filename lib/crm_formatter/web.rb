@@ -1,5 +1,5 @@
 require 'csv'
-# require 'helper'
+require 'helper'
 
 module CRMFormatter
   class Web
