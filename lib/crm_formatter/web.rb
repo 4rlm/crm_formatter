@@ -1,9 +1,9 @@
 require 'csv'
-# require 'tools'
+require 'tools'
 
 module CRMFormatter
   class Web
-    # include Tools
+    include Tools
 
     def initialize(args={})
       @empty_oa = args.empty?
