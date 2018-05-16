@@ -1,6 +1,6 @@
 
 # CRM Formatter
-### Efficiently Reformat, Normalize, and Scrub CRM Contact Data, such as Addresses, Phones and URLs.
+#### Efficiently Reformat, Normalize, and Scrub CRM Contact Data, such as Addresses, Phones and URLs.
 
 CRM Formatter is perfect for curating high-volume enterprise-scale web scraping, and integrates well with Nokogiri, Mechanize, and asynchronous jobs via Delayed_job or SideKick, to name a few.  Web Scraping and Harvesting often gathers a lot of junk to sift through; presenting unexpected Edge-Cases around each corner.  CRM Formatter has been developed and refined during the past few years to focus on improving that task.
 
