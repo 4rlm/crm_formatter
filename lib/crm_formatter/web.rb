@@ -1,4 +1,4 @@
-require 'csv'
+scrub_oarequire 'csv'
 
 module CRMFormatter
   class Web
@@ -77,8 +77,8 @@ module CRMFormatter
         url = nil if url.present? && banned_symbols.any? {|symb| url&.include?(symb) }
 
         if url.present?
-          url_hash = compare_criteria(url_hash, url, 'pos_urls', 'include') if !@empty_oa
-          url_hash = compare_criteria(url_hash, url, 'neg_urls', 'include') if !@empty_oa
+          url_hash = scrub_oa(url_hash, url, 'pos_urls', 'include') if !@empty_oa
+          url_hash = scrub_oa(url_hash, url, 'neg_urls', 'include') if !@empty_oa
         else
           url_hash[:neg] << "error: syntax"
           url_hash[:formatted_url] = url
@@ -100,8 +100,8 @@ module CRMFormatter
         uri = URI(url)
         host_parts = uri.host&.split(".")
 
-        url_hash = compare_criteria(url_hash, host_parts, 'pos_exts', 'equal') if !@empty_oa
-        url_hash = compare_criteria(url_hash, host_parts, 'neg_exts', 'equal') if !@empty_oa
+        url_hash = scrub_oa(url_hash, host_parts, 'pos_exts', 'equal') if !@empty_oa
+        url_hash = scrub_oa(url_hash, host_parts, 'neg_exts', 'equal') if !@empty_oa
 
         host = uri.host
         scheme = uri.scheme
@@ -148,11 +148,11 @@ module CRMFormatter
     end
 
 
-    ## This process, compare_criteria only runs if client OA args were passed at initialization.
+    ## This process, scrub_oa only runs if client OA args were passed at initialization.
     ## Results listed in url_hash[:neg]/[:pos], and don't impact or hinder final formatted url.
     ## Simply adds more details about user's preferences and criteria for the url are.
 
-    def compare_criteria(hash, target, list_name, include_or_equal)
+    def scrub_oa(hash, target, list_name, include_or_equal)
       unless @empty_oa
         if list_name.present?
           criteria_list = instance_variable_get("@#{list_name}")
@@ -186,7 +186,7 @@ module CRMFormatter
 
         end
       end
-      
+
       hash
     end
 
