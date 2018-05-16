@@ -5,5 +5,6 @@ require 'crm_formatter/helper'
 require 'crm_formatter/version'
 
 module CRMFormatter
+  include Helper
 
 end
