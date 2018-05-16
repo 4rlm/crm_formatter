@@ -114,7 +114,7 @@ CRM Formatter returns data as a hash, which includes your original unaltered dat
 
 #### Optional Arguments OA
 A class can be instantiated with optional arguments 'OA', to load your criteria to scrub against. Only list the OA K-V Pairs you're using.  No need to list empty values.  It's not all or nothing. These are empty to illustrate the expected datatypes.
-### OA is currently only available for the Web class, but will soon be available in the Address & Phone classes.
+**OA is currently only available for the Web class, but will soon be available in the Address & Phone classes.**
 
 Below is how the OA are received in the Web class at initialization.
 ```
@@ -179,8 +179,8 @@ Phone only has two methods, with a subtle but important distinction between them
 
 ### III. Examples
 Some of the examples are excessively verbose to help illustrate the datatypes and processes.  Here are a few guidelines and tips:
-**3. Web Examples at the very bottom is the most detailed and recent.  It might be a good place to start.**
-*These are just examples below, not strict usage guides ...*
+
+*These are just examples, not strict usage guides ...*
 
 #### 1. Address Examples
 ```
