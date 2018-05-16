@@ -3,7 +3,7 @@ require 'tools'
 
 module CRMFormatter
   class Web
-    include Tools
+    include CRMFormatter::Tools
 
     def initialize(args={})
       @empty_oa = args.empty?

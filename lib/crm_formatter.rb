@@ -5,6 +5,6 @@ require 'crm_formatter/tools'
 require 'crm_formatter/version'
 
 module CRMFormatter
-  include Tools
+  # include Tools
 
 end
