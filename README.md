@@ -1,7 +1,6 @@
 
 # CRM Formatter
-
-##### Efficiently Reformat, Normalize, and Scrub CRM Contact Data, such as Addresses, Phones and URLs.
+### Efficiently Reformat, Normalize, and Scrub CRM Contact Data, such as Addresses, Phones and URLs.
 
 CRM Formatter is perfect for curating high-volume enterprise-scale web scraping, and integrates well with Nokogiri, Mechanize, and asynchronous jobs via Delayed_job or SideKick, to name a few.  Web Scraping and Harvesting often gathers a lot of junk to sift through; presenting unexpected Edge-Cases around each corner.  CRM Formatter has been developed and refined during the past few years to focus on improving that task.
 
@@ -13,33 +12,24 @@ The CRM Formatter Gem is currently in '--pre versioning', or 'beta mode' as the 
 CRM Formatter is compatible with Rails 4.2 and 5.0, 5.1 and 5.2 on Ruby 2.2 and later.
 
 In your Gemfile add:
-
 ```
 gem 'crm_formatter', '~> 1.0.7.pre.rc.1'
 ```
-
 Or to install locally:
-
 ```
 gem install crm_formatter --pre
 ```
-
 ## Usage
 Using CRM Formatter in your app is very simple, and could be accessed from your app's concerns, , helpers, lib, models, or services, but depends on the scope, location, and size of your application and server. For simple form submission validations the model callback is typically ideal.  For database normalizing tasks the concerns, helpers, or lib is typically ideal.  For long running processes like web scraping or high volume APIs calls, like Google Linkedin, or Twitter  the lib or services might be ideal (asynchronous multithreaded even better)
 
-
 ### II. Classes & Methods
 The top level module is named CRMFormatter, which contains three classes, accessible in the following way:
-
 ```
 CRMFormatter::Address.new
 CRMFormatter::Phone.new
 CRMFormatter::Web.new
 ```
-
-#### Assign to Variables
 Assign the above to local or instant variables like below.  You can name them anything you like.
-
 ```
 adr_formatter = CRMFormatter::Address.new
 @adr_formatter = CRMFormatter::Address.new
@@ -50,14 +40,11 @@ ph_formatter = CRMFormatter::Phone.new
 web_formatter = CRMFormatter::Web.new
 @web_formatter = CRMFormatter::Web.new
 ```
-
 #### Create a Wrapper with a custom Class and Method(s)
 If you only need the gem for formatting form data, you could just create a callback method in your model, but to scrub a database or process API and Harvested data, you'll want a dedicated process so you can manage the queue, criteria, and results.  If you don't already have one, this example will show you how. Concerns, Helpers and Models might be fine for smaller tasks, but for heavier tasks Lib and Services are ideal, but depends on your specifications.
-
 ```
 # /app/lib/start_crm.rb
 ```
-
 ```
 class StartCrm
   def initialize
@@ -71,26 +58,20 @@ class StartCrm
   end
 end
 ```
-#### Application Config
 You may need to edit your application config file to recognize your new class.
-
 ```
 #/app/config/application.rb
 
 config.eager_load_paths << Rails.root.join('lib/**')
 config.eager_load_paths += Dir["#{config.root}/lib/**/"]
 ```
-
 #### Run in Rails Console
 In this example, we'll run it in Rails Console like below, but you could also create a Rake Task and integrate it with a scheduled Cron Job.  You could also run the process through your contoller actions in a GUI. If accessing through the front end, you might want to do it asynchronously with gems like Delayed_job or SideKick so you can free-up your controllers and prevent your front end from freezing while waiting for the job to complete; if running very large tasks.
-
 ```
 2.5.1 :001 > StartCrm.new.run_webs
 ```
-
 #### Instance vs Class Methods in your Wrapper
 In the above example, `run_webs` is an instance method, but a class method `self.run_webs` could work well too, like the example below.  At lease in the early stages, this is a little easier if you keep running it in Rails C, because not requiring initializing means less to type to call it.  Next you could setup your class with various methods to assist your process, like so:
-
 ```
 class StartCrm
   def self.run_webs
@@ -121,7 +102,6 @@ end
 
 #### Data Response in a Hash
 CRM Formatter returns data as a hash, which includes your original unaltered data you submitted, the formatted data, a T/F boolean indicator regarding if the original and formatted data are different, and for some methods, negs and pos regarding your criteria to scrub against.  In the above example, the returned data from each submitted url would resemble the one below.
-
 ```
 # format_url method returns data like below this example...
 # url_hash = {:is_reformatted=>false,
@@ -137,7 +117,6 @@ A class can be instantiated with optional arguments 'OA', to load your criteria 
 ### OA is currently only available for the Web class, but will soon be available in the Address & Phone classes.
 
 Below is how the OA are received in the Web class at initialization.
-
 ```
 def initialize(args={})
   @empty_oa = args.empty?
@@ -155,7 +134,6 @@ end
 ```
 
 Below is the syntax for how to use OA. Positive and Negative options available, and essentially function the same, but allow additional options for scrubbing data.
-
 ```
 oa_args = { neg_urls: %w(approv insur invest loan quick rent repair),
             neg_links: %w(buy call cash cheap click gas insta),
@@ -169,7 +147,6 @@ oa_args = { neg_urls: %w(approv insur invest loan quick rent repair),
 
 ## Address Methods
 These are the methods available to you.  You can use them a la cart, for example if you just wanted to format all your states, or you could combine the entire address into `get_full_address()` which will run each of the related methods for you.  It also adds an additional hash pair containing the full address as a single string.  There is also an indicator pair to report if there were any changes from the original version to the newly formatted.
-
 ```
   addr_formatter = CRMFormatter::Address.new
   full_address_hash = {street: street, city: city, state: state, zip: zip}
@@ -184,7 +161,6 @@ These are the methods available to you.  You can use them a la cart, for example
 
 #### Phone Methods
 Phone only has two methods, with a subtle but important distinction between them.  For simply formatting a known phone, use `format_phone` to convert to the normalized (555) 123-4567 format.  Use `validate_phone` if either your phone data has a bunch of text and special characters to remove, or if you aren't even sure that it is a phone, as it will help determine if the phone number seem legitimate.  If so, it then passes it along to `format_phone`.
-
 ```
   ph_formatter = CRMFormatter::Phone.new
   ph_formatter.validate_phone(phone)
@@ -229,7 +205,6 @@ end
 
 #### 2. Phone Examples
 In the phone example, format_all_phone_in_my_db could be a custom wrapper method, which when called by Rails C or from a front end GUI process, could grab all phones in db meeting certain criteria to be scrubbed. The results will always be in hash format, such as below.... phone_hash  
-
 ```
 @crm_phone = CRMFormatter::Phone.new
 
@@ -247,7 +222,6 @@ phone_hash = { phone: 555-123-4567, valid_phone: (555) 123-4567, phone_edit: tru
 
 #### 3. Web Examples
 The steps below will show you an option for how you could integrate larger processes in your app.  Create a wrapper method you can call from an action or Rails C. In this example, a new class was also created in Lib for that purpose, as there could be related methods to create.  
-
 ```
 # /app/lib/start_crm.rb
 
@@ -267,19 +241,15 @@ class StartCrm
 
 end
 ```
-
 Application Config
-
 ```
 #/app/config/application.rb
 
 config.eager_load_paths << Rails.root.join('lib/**')
 config.eager_load_paths += Dir["#{config.root}/lib/**/"]
 ```
-
 Create your db query or put together a list of URLs to process, along with any OA to include.  The below example is very verbose, but designed to be helpful. In reality, you might have various criteria saved in the db rather than writing it out.
 In this example, we have auto dealer URLs.  In this process, we're focusing on franchise dealers.
-
 ```
 def self.get_args
   neg_urls = %w(approv avis budget collis eat enterprise facebook financ food google gourmet hertz hotel hyatt insur invest loan lube mobility motel motorola parts quick rent repair restaur rv ryder service softwar travel twitter webhost yellowpages yelp youtube)
@@ -294,25 +264,11 @@ def self.get_urls
   urls = ["https://www.stevXXXXXXmitsubishiserviceandpartscenter.com", "https://www.perXXXXXXchryslerjeepcenterville.com", "http://www.peXXXXXXchryslerjeepcenterville.com", "http://www.colXXXXXXchryslerdodgejeepram.com"]
 end
 ```
-
 Run your class and wrapper method in Rails C.  By creating the wrapper method, you have set up the entire process to run like a runner.  In reality, you might have several different criteria accessible from a GUI or even running in Cron Jobs.
-
 ```
 2.5.1 :001 > StartCrm.run_webs
 ```
-
-Results are always in a Hash, like below.  The URLs are slightly obfuscated out of respect (it's not a bug).  These are examples from a large DB that runs on a loop 24/7 and gets to each organization about once a week, so it's already pretty well up to date, so there aren't any big changes below, but there are still a few things to point out.
-
-`:is_reformatted` indicates T/F if url_path and `:formatted_url` differ.  If False, then it means they are the same, or the `:url_path` had significant errors which prevented it from being formatted, thus `:formatted_url` would be nil in such a case.  The reality is that you might have some URLs that are so far off that, that they can't be reliably reformatted, so better to only let them pass if we are confident that they are reliable.
-
-`:url_path` is the url originally submitted by the client.  It can include directory links on the end too, '/careers/, '/about-us/', etc.
-
-`:formatted_url` is the formatted version of `:url_path`.  It will be stripped of additional paths, '/deals/', '/staff/', etc.  Also, often times people ommit 'http://:' and 'www' in CRMs.  This can sometimes cause errors for users or Mechanized Web Scrapers.  So, those will always be included to ensure consistency.  In our production app we follow up the formatting with url redirect following, which our configurations require the entire path, so it will always be included.  The redirect following gem is already being worked on and will be released as an additional gem shortly.
-
-`:neg` is an array of all the errors and negative, undesirable criteria to scrub against.  If you include the criteria in OA `neg_urls:`, like above, it will automatically scrub and report.  Regardless, any errors will also be included in there.  So, if the url was not ultimately formatted, there will be details regarding why in `:neg`.
-
-`:pos` is the opposite, which highlights positive criteria you might be looking for.  It too is available in OA via `pos_urls:`, like above.
-
+Results are always in a Hash, like below.  The URLs are slightly obfuscated out of respect (it's not a bug).  These are examples from a large DB that runs on a loop 24/7 and gets to each organization about once a week, so it's already pretty well up to date, so there aren't any big changes below, but there are still a few things to point out below the code example.
 ```
 [ {:is_reformatted=>false,
     :url_path=>"https://www.steXXXXXXmitsubishiserviceandpartscenter.com",
@@ -339,6 +295,15 @@ Results are always in a Hash, like below.  The URLs are slightly obfuscated out 
     :pos=>["pos_urls: chrysler, dodge, jeep, ram"]}
   ]
 ```
+`:is_reformatted` indicates T/F if url_path and `:formatted_url` differ.  If False, then it means they are the same, or the `:url_path` had significant errors which prevented it from being formatted, thus `:formatted_url` would be nil in such a case.  The reality is that you might have some URLs that are so far off that, that they can't be reliably reformatted, so better to only let them pass if we are confident that they are reliable.
+
+`:url_path` is the url originally submitted by the client.  It can include directory links on the end too, '/careers/, '/about-us/', etc.
+
+`:formatted_url` is the formatted version of `:url_path`.  It will be stripped of additional paths, '/deals/', '/staff/', etc.  Also, often times people ommit 'http://:' and 'www' in CRMs.  This can sometimes cause errors for users or Mechanized Web Scrapers.  So, those will always be included to ensure consistency.  In our production app we follow up the formatting with url redirect following, which our configurations require the entire path, so it will always be included.  The redirect following gem is already being worked on and will be released as an additional gem shortly.
+
+`:neg` is an array of all the errors and negative, undesirable criteria to scrub against.  If you include the criteria in OA `neg_urls:`, like above, it will automatically scrub and report.  Regardless, any errors will also be included in there.  So, if the url was not ultimately formatted, there will be details regarding why in `:neg`.
+
+`:pos` is the opposite, which highlights positive criteria you might be looking for.  It too is available in OA via `pos_urls:`, like above.
 
 
 ## Author
