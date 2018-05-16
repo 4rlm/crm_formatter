@@ -1,5 +1,5 @@
 module CRMFormatter
-  module Helper
+  module Tools
 
     ## scrub_oa, is only called if client OA args were passed at initialization.
     ## Results listed in url_hash[:neg]/[:pos], and don't impact or hinder final formatted url.

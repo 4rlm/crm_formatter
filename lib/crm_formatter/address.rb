@@ -38,7 +38,7 @@ module CRMFormatter
 
         if street.present?
           # street = Formatter.new.letter_case_check(street)
-          # street = CRMFormatter::Helper.letter_case_check(street)
+          # street = CRMFormatter::Tools.letter_case_check(street)
           street = " #{street} " # Adds white space, to match below, then strip.
           street&.gsub!(".", " ")
           street&.gsub!(",", " ")

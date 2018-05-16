@@ -1,9 +1,9 @@
 require 'csv'
-require 'helper'
+# require 'tools'
 
 module CRMFormatter
   class Web
-    include Helper
+    # include Tools
 
     def initialize(args={})
       @empty_oa = args.empty?
@@ -18,7 +18,7 @@ module CRMFormatter
       @min_length = args.fetch(:min_length, 2)
       @max_length = args.fetch(:max_length, 100)
     end
-    # hash = @helper.scrub_oa(hash, target, oa_name, include_or_equal)
+    # hash = @tools.scrub_oa(hash, target, oa_name, include_or_equal)
 
     def banned_symbols
       banned_symbols = ["!", "$", "%", "'", "(", ")", "*", "+", ",", "<", ">", "@", "[", "]", "^", "{", "}", "~"]
