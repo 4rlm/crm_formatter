@@ -29,10 +29,6 @@ module CrmFormatter
     # hash = @tools.scrub_oa(hash, target, oa_name, include_or_equal)
 
 
-    def inspect_it
-      @tools.inspect_me
-    end
-
     def banned_symbols
       banned_symbols = ["!", "$", "%", "'", "(", ")", "*", "+", ",", "<", ">", "@", "[", "]", "^", "{", "}", "~"]
     end
@@ -145,10 +141,10 @@ module CrmFormatter
             end
 
             unless @empty_args
-              # url_hash = @tools.scrub_oa(url_hash, matched_exts, 'pos_exts', 'equal')
+              url_hash = @tools.scrub_oa(url_hash, matched_exts, 'pos_exts', 'equal')
               url_hash = @tools.scrub_oa(url_hash, matched_exts, 'neg_exts', 'equal')
-              # url_hash = @tools.scrub_oa(url_hash, url, 'pos_urls', 'include')
-              # url_hash = @tools.scrub_oa(url_hash, url, 'neg_urls', 'include')
+              url_hash = @tools.scrub_oa(url_hash, url, 'pos_urls', 'include')
+              url_hash = @tools.scrub_oa(url_hash, url, 'neg_urls', 'include')
             end
           end
         end
