@@ -18,4 +18,11 @@ RSpec.describe CrmFormatter do
     expect(CrmFormatter::Tools.portray("Not Broccoli")).to eql("Delicious!")
   end
 
+  it 'generates a random title' do
+    title = CrmFormatter.generate_title
+    title_array = title.split
+
+    expect(title_array.length).to eq 3
+  end
+
 end

@@ -9,6 +9,11 @@ module CrmFormatter
         "Delicious!"
       end
     end
+
+    # def self.generate_title
+    #
+    #   title_array = title.split
+    # end
     #####################
 
 
