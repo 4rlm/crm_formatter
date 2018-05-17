@@ -1,7 +1,0 @@
-#!/usr/bin/env ruby
-
-require 'crm_formatter'
-require 'crm_formatter/constants'
-
-# puts CRMFormatter.hi(ARGV[0])
-puts "Running CRMFormatter!!!"

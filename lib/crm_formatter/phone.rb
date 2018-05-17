@@ -1,4 +1,4 @@
-module CRMFormatter
+module CrmFormatter
   class Phone
 
     ## Checks every phone number in table to verify that it meets phone criteria, then calls format_phone method to format Valid results.  Otherwise destroys Invalid phone fields and associations.

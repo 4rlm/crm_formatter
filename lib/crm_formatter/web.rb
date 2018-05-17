@@ -2,16 +2,16 @@ require 'csv'
 # require 'samp'
 
 ##Rails C: StartCrm.run_webs
-module CRMFormatter
+module CrmFormatter
   class Web
     # include Samp
-    # include CRMFormatter::Tools
+    # include CrmFormatter::Tools
     # attr_accessor(:empty_oa, :pos_urls, :neg_urls, :pos_links, :neg_links, :pos_hrefs, :neg_hrefs, :pos_exts, :neg_exts, :min_length, :max_length)
 
     ##Rails C: StartCrm.run_webs
     def initialize(args={})
-      # CRMFormatter::ARGS.merge!(args)
-      @tools = CRMFormatter::Tools.new(args)
+      # CrmFormatter::ARGS.merge!(args)
+      @tools = CrmFormatter::Tools.new(args)
       @empty_args = args.empty?
       # Constants::ARGS
       # ARGS.merge!(args)

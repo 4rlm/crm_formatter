@@ -1,4 +1,4 @@
-module CRMFormatter
+module CrmFormatter
   class Address
 
     def format_full_address(adr = {})
@@ -38,7 +38,7 @@ module CRMFormatter
 
         if street.present?
           # street = Formatter.new.letter_case_check(street)
-          street = CRMFormatter::Tools.new.letter_case_check(street)
+          street = CrmFormatter::Tools.new.letter_case_check(street)
           street = " #{street} " # Adds white space, to match below, then strip.
           street&.gsub!(".", " ")
           street&.gsub!(",", " ")

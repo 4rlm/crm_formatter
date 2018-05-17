@@ -1,6 +1,6 @@
 require_relative "lib/crm_formatter/address.rb"
 
-address = CRMFormatter::Address.new
+address = CrmFormatter::Address.new
 
 system "clear"
 puts "Welcome!"

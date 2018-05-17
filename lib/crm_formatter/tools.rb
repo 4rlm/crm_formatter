@@ -1,5 +1,17 @@
-module CRMFormatter
+module CrmFormatter
   class Tools
+
+    ### Example
+    def self.portray(food)
+      if food.downcase == "broccoli"
+        "Gross!"
+      else
+        "Delicious!"
+      end
+    end
+    #####################
+
+
 
     def initialize(args={})
       @args = args
