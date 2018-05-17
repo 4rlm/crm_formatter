@@ -5,7 +5,7 @@ require 'crm_formatter/web'
 require 'crm_formatter/phone'
 require 'crm_formatter/tools'
 
-CRMFormatter::Constants.constant_mapper
+CRMFormatter::Constants.initialize_constant
 
 module CRMFormatter
   extend Constants
