@@ -1,4 +1,10 @@
+gem uninstall crm_formatter
+gem build crm_formatter.gemspec
+gem install crm_formatter-1.0.8.pre.rc.1.gem
+require 'crm_formatter'
 
+web = CRMFormatter::Web.new
+web.format_url('approvedautosales.org')
 
 ========= Quick Reference =========
 * delete current gem build record.
