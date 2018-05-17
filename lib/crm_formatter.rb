@@ -6,5 +6,6 @@ require 'crm_formatter/version'
 
 module CRMFormatter
   # include Tools
+  SHARED_ARGS = {}
 
 end

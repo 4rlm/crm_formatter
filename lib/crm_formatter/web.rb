@@ -1,22 +1,26 @@
 require 'csv'
-require 'tools'
+# require 'tools'
 
+##Rails C: StartCrm.run_webs
 module CRMFormatter
   class Web
-    include CRMFormatter::Tools
+    # include CRMFormatter::Tools
+    # attr_accessor(:empty_oa, :pos_urls, :neg_urls, :pos_links, :neg_links, :pos_hrefs, :neg_hrefs, :pos_exts, :neg_exts, :min_length, :max_length)
 
+    ##Rails C: StartCrm.run_webs
     def initialize(args={})
-      @empty_oa = args.empty?
-      @pos_urls = args.fetch(:pos_urls, [])
-      @neg_urls = args.fetch(:neg_urls, [])
-      @pos_links = args.fetch(:pos_links, [])
-      @neg_links = args.fetch(:neg_links, [])
-      @pos_hrefs = args.fetch(:pos_hrefs, [])
-      @neg_hrefs = args.fetch(:neg_hrefs, [])
-      @pos_exts = args.fetch(:pos_exts, [])
-      @neg_exts = args.fetch(:neg_exts, [])
+      SHARED_ARGS.merge!(args)
+      # @pos_urls = args.fetch(:pos_urls, [])
+      # @neg_urls = args.fetch(:neg_urls, [])
+      # @pos_links = args.fetch(:pos_links, [])
+      # @neg_links = args.fetch(:neg_links, [])
+      # @pos_hrefs = args.fetch(:pos_hrefs, [])
+      # @neg_hrefs = args.fetch(:neg_hrefs, [])
+      # @pos_exts = args.fetch(:pos_exts, [])
+      # @neg_exts = args.fetch(:neg_exts, [])
       @min_length = args.fetch(:min_length, 2)
       @max_length = args.fetch(:max_length, 100)
+      @tools = CRMFormatter::Tools.new
     end
     # hash = @tools.scrub_oa(hash, target, oa_name, include_or_equal)
 
@@ -131,12 +135,11 @@ module CRMFormatter
               url = url.gsub(".#{inv_ext}", '')
             end
 
-            # Regardless of scrub results, still continue because technically valid ext.
-            if !@empty_oa
-              url_hash = scrub_oa(url_hash, matched_exts, 'pos_exts', 'equal')
-              url_hash = scrub_oa(url_hash, matched_exts, 'neg_exts', 'equal')
-              url_hash = scrub_oa(url_hash, url, 'pos_urls', 'include')
-              url_hash = scrub_oa(url_hash, url, 'neg_urls', 'include')
+            unless SHARED_ARGS.empty?
+              # url_hash = @tools.scrub_oa(url_hash, matched_exts, 'pos_exts', 'equal')
+              url_hash = @tools.scrub_oa(url_hash, matched_exts, 'neg_exts', 'equal')
+              url_hash = @tools.scrub_oa(url_hash, url, 'pos_urls', 'include')
+              url_hash = @tools.scrub_oa(url_hash, url, 'neg_urls', 'include')
             end
           end
         end
