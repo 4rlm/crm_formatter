@@ -1,16 +1,20 @@
 require 'csv'
-# require 'tools'
+# require 'samp'
 
 ##Rails C: StartCrm.run_webs
 module CRMFormatter
   class Web
+    # include Samp
     # include CRMFormatter::Tools
     # attr_accessor(:empty_oa, :pos_urls, :neg_urls, :pos_links, :neg_links, :pos_hrefs, :neg_hrefs, :pos_exts, :neg_exts, :min_length, :max_length)
 
     ##Rails C: StartCrm.run_webs
     def initialize(args={})
-      # Constants::SHARED_ARGS
-      # SHARED_ARGS.merge!(args)
+      # CRMFormatter::ARGS.merge!(args)
+      @tools = CRMFormatter::Tools.new(args)
+      @empty_args = args.empty?
+      # Constants::ARGS
+      # ARGS.merge!(args)
       # @pos_urls = args.fetch(:pos_urls, [])
       # @neg_urls = args.fetch(:neg_urls, [])
       # @pos_links = args.fetch(:pos_links, [])
@@ -21,9 +25,13 @@ module CRMFormatter
       # @neg_exts = args.fetch(:neg_exts, [])
       @min_length = args.fetch(:min_length, 2)
       @max_length = args.fetch(:max_length, 100)
-      @tools = CRMFormatter::Tools.new
     end
     # hash = @tools.scrub_oa(hash, target, oa_name, include_or_equal)
+
+
+    def inspect_it
+      @tools.inspect_me
+    end
 
     def banned_symbols
       banned_symbols = ["!", "$", "%", "'", "(", ")", "*", "+", ",", "<", ">", "@", "[", "]", "^", "{", "}", "~"]
@@ -36,7 +44,7 @@ module CRMFormatter
       url = prep_result[:url]
       url = nil if has_errors(url_hash)
 
-      if url.present?
+      if url&.present?
         url = normalize_url(url)
         ext_result = validate_extension(url_hash, url)
         url_hash = ext_result[:url_hash]
@@ -136,11 +144,11 @@ module CRMFormatter
               url = url.gsub(".#{inv_ext}", '')
             end
 
-            unless SHARED_ARGS.empty?
+            unless @empty_args
               # url_hash = @tools.scrub_oa(url_hash, matched_exts, 'pos_exts', 'equal')
               url_hash = @tools.scrub_oa(url_hash, matched_exts, 'neg_exts', 'equal')
-              url_hash = @tools.scrub_oa(url_hash, url, 'pos_urls', 'include')
-              url_hash = @tools.scrub_oa(url_hash, url, 'neg_urls', 'include')
+              # url_hash = @tools.scrub_oa(url_hash, url, 'pos_urls', 'include')
+              # url_hash = @tools.scrub_oa(url_hash, url, 'neg_urls', 'include')
             end
           end
         end

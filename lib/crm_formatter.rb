@@ -5,13 +5,16 @@ require 'crm_formatter/web'
 require 'crm_formatter/phone'
 require 'crm_formatter/tools'
 
-CRMFormatter::Constants.initialize_constant
 
 module CRMFormatter
-  extend Constants
+  # extend Constants
   # include Tools
-  # SHARED_ARGS = {}
+  ARGS = {}
   SAMP = []
 
 
+
 end
+
+# CRMFormatter::ARGS
+# CRMFormatter::Constants::ARGS

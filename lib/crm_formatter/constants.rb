@@ -1,12 +1,13 @@
 module CRMFormatter
   module Constants
 
-    def self.initialize_constant
-      SHARED_ARGS = {}
-      WOW = 'Exciting!'
-    end
+    # ARGS = {}
 
-    # CRMFormatter::Constants::SHARED_ARGS
+    # def initialize_constant
+    #   ARGS = {}
+    # end
+
+    # CRMFormatter::Constants::ARGS
 
   end
 end

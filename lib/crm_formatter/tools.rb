@@ -1,14 +1,24 @@
 module CRMFormatter
   class Tools
 
+    def initialize(args={})
+      @args = args
+      @empty_args = args.empty?
+    end
+
+    def inspect_me
+      return @args
+    end
+
     ## scrub_oa, is only called if client OA args were passed at initialization.
     ## Results listed in url_hash[:neg]/[:pos], and don't impact or hinder final formatted url.
     ## Simply adds more details about user's preferences and criteria for the url are.
     def scrub_oa(hash, target, oa_name, include_or_equal)
-      if oa_name.present? && !SHARED_ARGS.empty?
-        criteria = SHARED_ARGS[oa_name.to_sym]
+      # if oa_name.present? && !ARGS.empty?
+      if oa_name.present? && !@empty_args
+        criteria = @args[oa_name.to_sym]
 
-        if criteria.present?
+        if criteria.any?
           if target.is_a?(::String)
             tars = target.split(', ')
           else
