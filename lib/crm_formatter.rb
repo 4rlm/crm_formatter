@@ -1,19 +1,27 @@
 require "crm_formatter/version"
-# require "crm_formatter/dictionary"
+require "crm_formatter/dictionary"
 require 'crm_formatter/address'
 require 'crm_formatter/web'
 require 'crm_formatter/phone'
 require 'crm_formatter/tools'
-# require 'rubygems'
-# require 'active_support'
-# require 'activesupport'
 require 'pry'
+
 module CrmFormatter
 
-
   def self.run
-    # neg_exts = %w(au ca edu es gov in ru uk us)
-    web = CrmFormatter::Web.new(get_args)
+    dicts
+    # run_format_url
+  end
+
+  def self.dicts
+    dict = self::Dictionary
+    msg = dict.dict_page
+    binding.pry
+    msg
+  end
+
+  def self.run_format_url
+    web = self::Web.new(get_args)
     urls = get_urls
 
     formatted_url_hashes = urls.map do |url|
