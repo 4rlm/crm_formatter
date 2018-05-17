@@ -14,12 +14,12 @@ Gem::Specification.new do |s|
   s.summary       = %q{Reformat, Normalize, and Scrub CRM Contact Data, Addresses, Phones and URLs}
   s.description   = %q{Reformat, Normalize, and Scrub CRM Contact Data, Addresses, Phones and URLs. Originally developed for proprietary use in an enterprise software suite.  Recently decided to make them open source in a gem.  It's a work in progress as there are additional features being added in near future.  Also creating additonal gems with similar CRM office efficiency objectives.  Please contact me if you have any questions or comments.}
 
-  if s.respond_to?(:metadata)
-    s.metadata["allowed_push_host"] = "rubygems.org"
-  else
-    raise "RubyGems 2.0 or newer is required to protect against " \
-      "public gem pushes."
-  end
+  # if s.respond_to?(:metadata)
+  #   s.metadata["allowed_push_host"] = "rubygems.org"
+  # else
+  #   raise "RubyGems 2.0 or newer is required to protect against " \
+  #     "public gem pushes."
+  # end
 
   s.files         = `git ls-files -z`.split("\x0").reject do |f|
     f.match(%r{^(test|s|features)/})
