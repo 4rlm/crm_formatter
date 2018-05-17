@@ -9,7 +9,8 @@ module CRMFormatter
 
     ##Rails C: StartCrm.run_webs
     def initialize(args={})
-      SHARED_ARGS.merge!(args)
+      # Constants::SHARED_ARGS
+      # SHARED_ARGS.merge!(args)
       # @pos_urls = args.fetch(:pos_urls, [])
       # @neg_urls = args.fetch(:neg_urls, [])
       # @pos_links = args.fetch(:pos_links, [])
