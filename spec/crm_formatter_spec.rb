@@ -1,4 +1,5 @@
 require 'crm_formatter'
+require 'spec_helper'
 
 RSpec.describe CrmFormatter do
   it "has a version number" do
