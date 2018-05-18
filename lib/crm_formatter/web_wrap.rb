@@ -1,59 +1,106 @@
 require 'csv'
 
 module CrmFormatter
-  module WebWrap
+  class WebWrap
 
-    # web_wrap = CrmFormatter::WebWrap.new
-    # web_wrap.hello
-
-    def self.wrap
-      # binding.pry
-      run_format_url
+    def initialize
+      @utf = CrmFormatter::UTF.new
+      @crm_data = []
     end
 
 
-    def self.run_format_url
-      # binding.pry
-      # parse_csv
-
-      parser = CrmFormatter::Parser.new
-      parsed = parser.parse_csv
-      binding.pry
-      # import
-      # web = CrmFormatter::Web.new
-      # url = 'grossingertoyota.com'
-      # url_hsh = web.format_url(url)
-
-      # web = self::Web.new(get_args)
-      # urls = get_urls
-
-      # formatted_url_hashes = urls.map do |url|
-      #   url_hash = web.format_url(url)
-      # end
-      #
-      # formatted_url_hashes
+    def wrap
+      formatted_urls = format_urls
+      binding.pry if formatted_urls.any?
+      formatted_urls
     end
 
 
-    def self.import(args={})
-      # args.respond_to?(:to_s)
-      # arg_info = args.delete_if
-      # arg_info = args.delete_if {|k, v| !v.present? }
-
-      file_path = "./lib/crm_formatter/seeds.csv"
+    def format_urls(args={})
+      import_data(args={}) ## data sent to @crm_data
       binding.pry
 
-      # seeds = CSV.read(file_path).flatten.map do |row|
-      CSV.read(file_path).map do |row|
+      ### @crm_data is clean.  It can now run through formatter.
+      if @crm_data.any?
         binding.pry
-        utf_cleaner(row)
+        web = CrmFormatter::Web.new(get_args)
         binding.pry
+
+        @crm_data.map do |web|
+          url = web[:url]
+          binding.pry
+          url_hsh = web.format_url(url)
+          binding.pry
+        end
+      end
+    end
+
+
+    ## Accepted arg keys & values: either :file_path, :array_of_strings, or :array_of_hashes.
+    def import_data(args={})
+      ## Need to test if permitted args works.
+
+      if args.any?
+        permitted_arg = get_path_hash_url_args(args)
+      else
+        permitted_arg = {file_path: "./lib/crm_formatter/seeds.csv"}
       end
 
+      @crm_data = @utf.validate_data(permitted_arg) if permitted_arg.any?
       binding.pry
-      # seeds.map { |e| binding.pry if e }
-
+      ## Returns nothing.  Sent to @crm_data
     end
+
+
+    ## Returns args that match permitted names and types if arg value not nil.
+    def get_path_hash_url_args(args={})
+      args_hash = args.delete_if {|k,v| !v.present? }
+      allowed_arg_kvs = {file_path: 'string', hashes: 'array', array_of_strings: 'array'}
+      permitted_arg_keys = check_args_name_and_class(allowed_arg_kvs, args_hash)
+      permitted_arg = args_hash.select { |k,v| permitted_arg_keys.include?(k) }
+    end
+
+
+    ## Returns keys of the args with allowed key name and value type if arg value not nil.
+    def check_args_name_and_class(allowed_arg_kvs, args_hash)
+      if allowed_arg_kvs&.any? && args_hash&.any?
+        passed_keys = args_hash.keys & allowed_arg_kvs.keys
+
+        if passed_keys.any?
+          passed_arg_kvs = passed_keys.map do |key|
+            arg_val = args_hash[key]
+            allowed_type = allowed_arg_kvs[key]
+            arg_val.is_a?(allowed_type.classify.constantize) ? key : nil
+          end
+        end
+      end
+      passed_arg_kvs&.any? ? passed_arg_kvs : nil
+    end
+
+
+    def self.get_args
+      neg_urls = %w(approv avis budget collis eat enterprise facebook financ food google gourmet hertz hotel hyatt insur invest loan lube mobility motel motorola parts quick rent repair restaur rv ryder service softwar travel twitter webhost yellowpages yelp youtube)
+
+      pos_urls = ["acura", "alfa romeo", "aston martin", "audi", "bmw", "bentley", "bugatti", "buick", "cdjr", "cadillac", "chevrolet", "chrysler", "dodge", "ferrari", "fiat", "ford", "gmc", "group", "group", "honda", "hummer", "hyundai", "infiniti", "isuzu", "jaguar", "jeep", "kia", "lamborghini", "lexus", "lincoln", "lotus", "mini", "maserati", "mazda", "mclaren", "mercedes-benz", "mitsubishi", "nissan", "porsche", "ram", "rolls-royce", "saab", "scion", "smart", "subaru", "suzuki", "toyota", "volkswagen", "volvo"]
+
+      neg_links = %w(: .biz .co .edu .gov .jpg .net // afri anounc book business buy bye call cash cheap click collis cont distrib download drop event face feature feed financ find fleet form gas generat graphic hello home hospi hour hours http info insta inventory item join login mail mailto mobile movie museu music news none offer part phone policy priva pump rate regist review schedul school service shop site test ticket tire tv twitter watch www yelp youth)
+
+      neg_hrefs = %w(? .com .jpg @ * afri after anounc apply approved blog book business buy call care career cash charit cheap check click collis commerc cont contrib deal distrib download employ event face feature feed financ find fleet form gas generat golf here holiday hospi hour info insta inventory join later light login mail mobile movie museu music news none now oil part pay phone policy priva pump quick quote rate regist review saving schedul service shop sign site speci ticket tire today transla travel truck tv twitter watch youth)
+
+      neg_exts = %w(au ca edu es gov in ru uk us)
+      # oa_args = {neg_urls: neg_urls, pos_urls: pos_urls, neg_exts: neg_exts}
+      oa_args = {neg_exts: neg_exts}
+    end
+
+
+
+
+
+
+
+
+
+
 
 
   #   def self.utf_cleaner(string)
@@ -81,7 +128,7 @@ module CrmFormatter
   #
   #
   #
-  # def self.parse_csv
+  # def self.validate_csv
   #   counter = 0
   #   error_row_numbers = []
   #   clean_csv_hashes = []
