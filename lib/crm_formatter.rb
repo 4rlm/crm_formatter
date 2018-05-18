@@ -2,15 +2,24 @@ require "crm_formatter/version"
 require "crm_formatter/dictionary"
 require 'crm_formatter/address'
 require 'crm_formatter/web'
+require 'crm_formatter/web_wrap'
 require 'crm_formatter/phone'
 require 'crm_formatter/tools'
+require 'crm_formatter/parser'
+
 require 'pry'
 
 module CrmFormatter
 
   def self.run
-    dicts
+    run_web_wrap
+    # dicts
     # run_format_url
+  end
+
+  def self.run_web_wrap
+    web_wrap = self::WebWrap
+    web_wrap.wrap
   end
 
   def self.dicts
@@ -20,18 +29,24 @@ module CrmFormatter
     msg
   end
 
-  def self.run_format_url
-    web = self::Web.new(get_args)
-    urls = get_urls
+  # def self.run_format_url
+  #   web = self::Web.new(get_args)
+  #   urls = get_urls
+  #
+  #   formatted_url_hashes = urls.map do |url|
+  #     url_hash = web.format_url(url)
+  #   end
+  #
+  #
+  #   puts formatted_url_hashes
+  #   binding.pry
+  # end
 
-    formatted_url_hashes = urls.map do |url|
-      url_hash = web.format_url(url)
-    end
 
+    # file_path = "./lib/crm_formatter/extensions.csv"
+    # iana_list = CSV.read(file_path).flatten
+    # matched_exts = iana_list & url_exts
 
-    puts formatted_url_hashes
-    binding.pry
-  end
 
 
   def self.get_args
