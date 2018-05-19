@@ -4,26 +4,45 @@ module CrmFormatter
   class UTF
 
     def initialize
-      @final_results = [{ totals: {}, validations: {}, data_hashes: [] }]
-      @totals = {rows: 0, valid: 0, invalid: 0 }
-      @validations = { removed_non_utf8: 0, removed_carriage_returns: 0, non_utfs: [] }
-      @data_hashes = [] ## Send incoming data here, then just update it through here.
-      ## After completing processes, XXX method will be called, which will shovel 1 - @totals, 2 - @validations, 3 - @data_rows into @final_results
-      @row_id = 0
+      @utfs = [{ stats: {}, dhs: [] }]
+      @stats = {rows: 0, valid: 0, invalid: 0, encoded_text: 0, wchar_text: 0 }
+      @dhs = []  ### dhs is short for dhs
+      # @was_utfs_need_move = { non_utfs: [] }
+      ## Send incoming data here, then just update it through here.
+      ## After completing processes, XXX method will be called, which will shovel 1 - @stats, 2 - @was_utfs_need_move, 3 - @data_rows into @utfs
+      # @row_id = 0
     end
 
 
     def compile_results
+      ### !!! Needs to calculate stats from @dhs regarding valid and invalid hashes, which will be stored inside each hash.
+      ## Run method to iterate @dhs grabbing each :encoding_details for: encoded_text, wchar_text, then count each and assign total count to @was_utfs_need_move
       binding.pry
-      @final_results[:totals] = @totals
-      @final_results[:validations] = @validations
-      @final_results[:data_hashes] = @data_hashes
+
+      ######################################################
+      ### NEED TO FINISH THIS ALGO HERE, THEN MOVE IT TO ITS OWN METHOD, BUT CALL IT FROM IN HERE.
+      encoding_details = @dhs.map do |hsh|
+        binding.pry
+        if hsh[:valid_encoding] == true
+          details = hsh[:encoding_details].split(', ')
+        end
+      end  ## should have nested arrays of encoding_details.  Will need to flatten, then group, then tally.  can use very bottom method for that.
+
+      hsh_by_grp = make_groups_from_array(encoding_details.flatten)
+
+      @was_utfs_need_move[:encoded_text] = encoding_details ## needs some work still
+      @was_utfs_need_move[:wchar_text] = encoding_details ## needs some work still
+
+      @utfs[:stats] = @stats
+      @utfs[:was_utfs_need_move] = @was_utfs_need_move
+      @utfs[:dhs] = @dhs
       binding.pry
+      ######################################################
 
       ### If all saved properly:
       ### 1. Try to query over the data.
-      ### 2. Then return @final_results, so it can be accessed by web_wrap, adr_wrap, or phone_wrap.
-      ### 3. Zero out totals: {}, validations: {}, data_hashes: [] so they can be used again without needing to initialize again.
+      ### 2. Then return @utfs, so it can be accessed by web_wrap, adr_wrap, or phone_wrap.
+      ### 3. Zero out stats: {}, was_utfs_need_move: {}, dhs: [] so they can be used again without needing to initialize again.
 
       ###### PROBABLY DON'T NEED THESE BELOW.  WAIT TILL LATER TO SEE.  ######
       # utf_report = { valid: val_hshs.count,
@@ -33,7 +52,14 @@ module CrmFormatter
       # }
       # utf_results = { utf_report: utf_report, valid_csv_hashes: val_hshs }
 
-      return @final_results
+      return @utfs
+    end
+
+    def make_groups_from_array(tally_arr)
+      binding.pry
+      hsh_by_grp = tally_arr.inject(Hash.new(0)) { |h, e| h[e] += 1 ; h }
+      binding.pry
+      hsh_by_grp
     end
 
 
@@ -41,8 +67,8 @@ module CrmFormatter
     ## First entry point for UTF, then distributes to 3 diff meth options based on arg name and type.
     def validate_data(arg)
       ## Only accepts 1 arg, even though arg.keys / arg.values being used!
-      err_msg = 'Error: Empty args sent to validate_data!'
-      return err_msg unless arg&.values&.present?
+      encoding_details = 'Error: Empty args sent to validate_data!'
+      return encoding_details unless arg&.values&.present?
 
       arg_key = arg.keys.first
       arg_val = arg.values.first
@@ -89,10 +115,6 @@ module CrmFormatter
     end
     ##################################################
 
-    # CSV.parse(line) do |row|
-    #   headers.empty? ? headers = row : val_hshs << row_to_hsh(row, headers)
-    # end
-
 
     ########## VALIDATE HASHES ##########
     def validate_hashes(orig_hashes)
@@ -109,7 +131,7 @@ module CrmFormatter
           key = el.first
           val = el.last
 
-          val2 = validate_encoding(val)
+          val2 = check_utf(val)
           hsh[key] = val2
           err_rows << [row_num, key] if val2 != val
         end
@@ -131,14 +153,15 @@ module CrmFormatter
       binding.pry
       orig_hashes
 
-      puts "dif_count: #{dif_count}"
-      puts "counter: #{counter}"
-      puts "@validations: #{@validations.count}"
-      binding.pry
+      # puts "dif_count: #{dif_count}"
+      # puts "counter: #{counter}"
+      # puts "@was_utfs_need_move: #{@was_utfs_need_move.count}"
+      # binding.pry
 
       # utf_results = compile_results(inval_rows, val_hshs)
       compile_results ## Calls method to handle returns.
     end
+
 
 
     ########## VALIDATE CSV ##########
@@ -146,106 +169,150 @@ module CrmFormatter
       headers, val_hshs, inval_rows = [], [], []
       File.open(file_path).each do |line|
         begin
-          ######### TEMPORARILY TURNED OFF DURING TESTING!!!
-          line = validate_encoding(line)  ######### TEMPORARILY TURNED OFF DURING TESTING!!!
+          line = check_utf(line)
           binding.pry if !line.valid_encoding?
-
+          # @row_id +=1 unless headers.empty?
+          # @row_id +=1
+          # line = result[:text]
+          ### Try to strip :text from result hash, to 'line', then 'merge' 'result' to 'dh'
+          # result = {text: text, row_id: row_id, valid_encoding: false, encoding_details: [] }
+          # result = {:text => :A, :b => :B, :c => :C, :d => :D}
+          # line = result.slice(:text)
           CSV.parse(line) do |row|
-            # headers.empty? ? headers = row : val_hshs << row_to_hsh(row, headers)
+            headers = row if headers.empty?
 
+            if headers.any?
+              @dh = {row_id: @dhs.length +1 }
 
-            if headers.empty?
-              headers = row
-            else
+              binding.pry
               @row_id +=1
+              # dh = {row_id: @row_id, valid_encoding: true, encoding_details: nil }
+              dh.merge!(row_to_hsh(row, headers))
+              #DELETE=> after testing above.
+              # puts dh.inspect
 
-              data_hash = {row_id: @row_id }
-              parsed_hash = row_to_hsh(row, headers)  # Delete this if #3 below works.
+              ## Need to include validation data in each row hash.
               binding.pry
-
-              data_hash = data_hash.merge(parsed_hash) ## 1) try this first.
-              # data_hash.merge!(parsed_hash) ## 2) try this if #1 works.
-              # data_hash.merge!(row_to_hsh(row, headers)) ## 3) try this if above works.  Then remove 'parsed_hash' above.
-
-              binding.pry
-              @data_hashes << data_hash
-              binding.pry
+              @dhs << dh
               # val_hshs << row_to_hsh(row, headers)
             end
-
-            # headers.empty? ? headers = row : @data_hashes << row_to_hsh(row, headers)
-
-
-
+            @dhs << @dh
           end
-
         rescue => er
+          puts er.message
           binding.pry
-          counter = val_hshs.count + inval_rows.count
-          inval_rows << {"#{counter}": "#{er.message}"}
-          next
+          # @row_id = rescue_row_id if rescue_row_id.present?
+          # binding.pry if rescue_row_id.present?
+          ## CONSIDER KEEPING RESCUE HERE BUT HEAVY LIFTING DONE VALIDATE UTF.
+          dh = { row_id: @row_id, valid_encoding: false, encoding_details: er.message, url: nil, act_name: nil, street: nil, city: nil, state: nil, zip: nil, phone: nil }
+          @dhs << dh
+          binding.pry
+          next ## Is next totally needed?  Test without it and see.
         end
       end
 
+      puts @dhs.count
       binding.pry
-      ### utf_results will not be sent as large batch.  Will be sent to @data_hashes in real time.
+      ### utf_results will not be sent as large batch.  Will be sent to @dhs in real time.
       # utf_results = compile_results(inval_rows, val_hshs)
       compile_results ## Calls method to handle returns.
     end
 
 
-    # # getter
-    #     ['row_id', 'type_id', 'status'].each do |key|
-    #       define_method key do
-    #         data_hash[key]
-    #       end
-    #     end
-    #
-    #
-    # # setter
-    #     ['row_id', 'type_id', 'status'].each do |key|
-    #       define_method key do |val|
-    #         data_hash[key] = val
-    #       end
-    #     end
-    #     # data_hash.row_id
-    #     # data_hash.row_id = 'gh'
+
+    def check_utf(text)
+      # result = {text: text, valid_encoding: false, encoding_details: [] }
+      # result[:encoding_details] << 'encoded_text'
+      # result[:encoding_details] << 'encoded_text'
+      # result[:encoding_details] << 'wchar_text'
+      # result[:valid_encoding] = false
+      # result[:encoding_details] << "#{er.message}"
+      # non_utf_texts <<<< !! REPLACED BY was_utfs_need_move:
+      # @was_utfs_need_move[:non_utfs] << {row_id: @row_id, non_utf_text: text}
+      # @was_utfs_need_move[:non_utfs] << {row_id: @row_id, non_utf_text: text}
+
+      begin
+        if !text.valid_encoding?
+          text = text.chars.select(&:valid_encoding?).join
+          text.gsub!('_', '')
+          text = text.delete("^\u{0000}-\u{007F}")
+        else
+          encoded_text = text.delete("^\u{0000}-\u{007F}")
+          if encoded_text != text
+            text = encoded_text
+          end
+        end
+
+        wchar_text = text&.gsub(/\s+/, ' ')&.strip ## Removes carriage returns and new lines.
+        if wchar_text != text
+          text = wchar_text
+        end
+      rescue=>e
+        puts er.message
+        binding.pry
+      end
+
+      binding.pry
+     text
+    end
+
 
 
 
     ########################################
     ### UTF ENCODING! ###
+    #
+    # def check_utf(text)
+    #   binding.pry
+    #   result = {text: text, valid_encoding: false, encoding_details: [] }
+    #   # non_utf_texts <<<< !! REPLACED BY was_utfs_need_move:
+    #
+    #   begin
+    #     ### CONSIDER RETURNING HASH FROM HERE, IN check_utf
+    #     if !text.valid_encoding?
+    #       result[:encoding_details] << 'encoded_text'
+    #       @was_utfs_need_move[:non_utfs] << {row_id: @row_id, non_utf_text: text}
+    #       text = text.chars.select(&:valid_encoding?).join
+    #       text.gsub!('_', '')
+    #       text = text.delete("^\u{0000}-\u{007F}")
+    #     else
+    #       encoded_text = text.delete("^\u{0000}-\u{007F}")
+    #       if encoded_text != text
+    #         result[:encoding_details] << 'encoded_text'
+    #         @was_utfs_need_move[:non_utfs] << {row_id: @row_id, non_utf_text: text}
+    #         text = encoded_text
+    #       end
+    #     end
+    #
+    #     wchar_text = text&.gsub(/\s+/, ' ')&.strip ## Removes carriage returns and new lines.
+    #     if wchar_text != text
+    #       result[:encoding_details] << 'wchar_text'
+    #       text = wchar_text
+    #     end
+    #   rescue=>e
+    #     ### CONSIDER RETURNING HASH FROM HERE, IN check_utf
+    #     puts er.message
+    #     result[:valid_encoding] = false
+    #     result[:encoding_details] << "#{er.message}"
+    #     binding.pry
+    #   end
+    #
+    # binding.pry
+    #  text
+    # end
 
-    def validate_encoding(text)
-      # non_utf_texts <<<< !! REPLACED BY validations:
-
-      if !text.valid_encoding?
-        @validations[:non_utfs] << {row_id: @row_id, non_utf_text: text}
-        @validations[:removed_non_utf8] +=1
-        text = text.chars.select(&:valid_encoding?).join
-        text.gsub!('_', '')
-        # text.gsub!('ˌ', '') ### Keep this for future. If needed.
-        text = text.delete("^\u{0000}-\u{007F}")
-      else
-        removed_non_utf8 = text.delete("^\u{0000}-\u{007F}")
-        if removed_non_utf8 != text
-          @validations[:non_utfs] << {row_id: @row_id, non_utf_text: text}
-          @validations[:removed_non_utf8] +=1
-          text = removed_non_utf8
-        end
-      end
-
-      removed_carriage_returns = text&.gsub(/\s+/, ' ')&.strip ## Removes carriage returns and new lines.
-      if removed_carriage_returns != text
-        @validations[:removed_carriage_returns] +=1
-        text = removed_carriage_returns
-      end
-
-     text
+    ########## VALIDATE ARRAYS ##########
+    def validate_arrays(orig_arrays)
+      headers, val_hshs, inval_rows = [], [], []
+      ## Not created yet.
+      binding.pry
+      compile_results ## Calls method to handle returns.
     end
-    ########################################
 
 
+    #########################################################################################################
+    ### PROBABLY DON'T NEED BELOW, BUT KEEP SOMEWHERE FOR FUTURE, BECAUSE THEY ARE PRETTY HELPFUL.
+    #########################################################################################################
     # def compare_diff(hsh)
     #   binding.pry
     #   ### Need to redo this!
@@ -257,33 +324,29 @@ module CrmFormatter
     #   # end
     #   #
     #   # res.compact!
-    #   # @validations += res
+    #   # @was_utfs_need_move += res
     # end
-
-
-    # def make_groups_from_array(tally_arr)
-    #   binding.pry
-    #   ### Need to Redo This!!!
-    #
-    #   # hsh_by_grp = tally_arr.inject(Hash.new(0)) { |h, e| h[e] += 1 ; h }
-    #   # puts "hsh_by_grp: #{hsh_by_grp}"
-    #   # hsh_by_grp
-    # end
-
-
-
-
-    ########## VALIDATE ARRAYS ##########
-    def validate_arrays(orig_arrays)
-      headers, val_hshs, inval_rows = [], [], []
-      ## Not created yet.
-      binding.pry
-      compile_results ## Calls method to handle returns.
-    end
-
-
-
     #########################################################################################################
+    ### SAMPLE OF HOW TO CONVERT HASH INTO DOT NOTATION, BUT ONLY IF THERE IS A MODEL.:
+    #########################################################################################################
+      # # getter
+      #     ['row_id', 'type_id', 'status'].each do |key|
+      #       define_method key do
+      #         dh[key]
+      #       end
+      #     end
+      #
+      #
+      # # setter
+      #     ['row_id', 'type_id', 'status'].each do |key|
+      #       define_method key do |val|
+      #         dh[key] = val
+      #       end
+      #     end
+      #     # dh.row_id
+      #     # dh.row_id = 'gh'
+    #########################################################################################################
+    ###  CAN RUN BELOW TO GRAB A BUNCH OF NON-UTF8 STRINGS TO TEST check_utf METHOD.
     #########################################################################################################
 
     # non_utfs = non_utf_strings ## For testing.  Returns array of non-utf8
@@ -315,7 +378,7 @@ module CrmFormatter
       str_arr
     end
     #########################################################################################################
-
+    #########################################################################################################
 
 
 
