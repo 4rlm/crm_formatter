@@ -43,7 +43,10 @@ module CrmFormatter
       if args.any?
         permitted_arg = get_path_hash_url_args(args)
       else
-        permitted_arg = {file_path: "./lib/crm_formatter/seeds.csv"}
+        # permitted_arg = {file_path: "./lib/crm_formatter/csv/seeds_clean.csv"}
+        # permitted_arg = {file_path: "./lib/crm_formatter/csv/seeds_dirty.csv"}
+        permitted_arg = {file_path: "./lib/crm_formatter/csv/seeds_mega.csv"}
+        # permitted_arg = {file_path: "./lib/crm_formatter/csv/seeds_mini.csv"}
       end
 
       @crm_data = @utf.validate_data(permitted_arg) if permitted_arg.any?
@@ -107,13 +110,13 @@ module CrmFormatter
   #     binding.pry
   #     if string.present?
   #       string = string&.gsub(/\s/, ' ')&.strip ## Removes carriage returns and new lines.
-  #       string = force_utf_encoding(string) ## Removes non-utf8 chars.
+  #       string = validate_encoding(string) ## Removes non-utf8 chars.
   #       return string
   #     end
   #   end
   #
   #
-  #   def self.force_utf_encoding(text)
+  #   def self.validate_encoding(text)
   #     binding.pry
   #     # text = "Ã¥ÃŠÃ¥Â©team auto solutions"
   #     # text = "Ã¥ÃŠÃ¥ÃŠÃ¥ÃŠour staff"
@@ -141,7 +144,7 @@ module CrmFormatter
   #     binding.pry
   #     begin
   #       line_1 = line&.gsub(/\s/, ' ')&.strip ## Removes carriage returns and new lines.
-  #       line_2 = force_utf_encoding(line_1) ## Removes non-utf8 chars.
+  #       line_2 = validate_encoding(line_1) ## Removes non-utf8 chars.
   #
   #       CSV.parse(line_2) do |row|
   #         row = row.collect { |x| x.try(:strip) } ## Strips white space from each el in row array.

@@ -5,6 +5,8 @@ module CrmFormatter
 
     def initialize
       @utf_tls = []
+      @non_utf_texts = []
+      @row_id = 1
     end
 
     ## Accepted arg keys & values: either :file_path, :array_of_strings, or :array_of_hashes.
@@ -29,8 +31,8 @@ module CrmFormatter
 
       ###### TESTING BELOW ########
       # SENDING RETURNED validate_csv THROUGH validate_hashes
+      binding.pry
       sample_hashes = utf_results[:valid_csv_hashes]
-      # binding.pry
 
       utf_results = validate_hashes(sample_hashes)
       binding.pry
@@ -53,22 +55,27 @@ module CrmFormatter
     end
     ##################################################
 
+    # CSV.parse(line) do |row|
+    #   headers.empty? ? headers = row : val_hshs << row_to_hsh(row, headers)
+    # end
+
+
     ########## VALIDATE HASHES ##########
     def validate_hashes(orig_hashes)
-      # headers, val_hshs, inval_rows = [], [], []
+      binding.pry
+      headers, val_hshs, inval_rows = [], [], []
 
       row_num = 0
       dif_count = 0
       err_rows = []
 
-      new_orig_hashes
-      orig_hashes.each do |hsh|
+      new_orig_hashes = orig_hashes.map do |hsh|
 
         clean_hsh = hsh.each do |el|
           key = el.first
           val = el.last
 
-          val2 = force_utf_encoding(val)
+          val2 = validate_encoding(val)
           hsh[key] = val2
           err_rows << [row_num, key] if val2 != val
         end
@@ -99,36 +106,56 @@ module CrmFormatter
     end
 
 
-
     ########## VALIDATE CSV ##########
     def validate_csv(file_path)
       headers, val_hshs, inval_rows = [], [], []
       File.open(file_path).each do |line|
         begin
           ######### TEMPORARILY TURNED OFF DURING TESTING!!!
-          # line = force_utf_encoding(line)  ######### TEMPORARILY TURNED OFF DURING TESTING!!!
+          line = validate_encoding(line)  ######### TEMPORARILY TURNED OFF DURING TESTING!!!
+          binding.pry if !line.valid_encoding?
+
           CSV.parse(line) do |row|
             headers.empty? ? headers = row : val_hshs << row_to_hsh(row, headers)
           end
         rescue => er
+          binding.pry
           counter = val_hshs.count + inval_rows.count
           inval_rows << {"#{counter}": "#{er.message}"}
           next
         end
       end
+
+      binding.pry
       utf_results = tally_results(inval_rows, val_hshs)
     end
 
 
     ########################################
     ### UTF ENCODING! ###
-    def force_utf_encoding(text)
-      carriage_returns = text&.gsub(/\s+/, ' ')&.strip ## Removes carriage returns and new lines.
-      non_utf8 = carriage_returns.delete("^\u{0000}-\u{007F}")
-      ## Note: carriage_returns & non_utf8 are formatted 'text'.  Just named as such for tallying purposes.
-      utf_hsh = { text: text, carriage_returns: carriage_returns, non_utf8: non_utf8 }
-      diff = compare_diff(utf_hsh)
-      text = non_utf8  ## non_utf8 is text.
+
+    def validate_encoding(text)
+
+     if !text.valid_encoding?
+       @non_utf_texts << text
+       removed_non_utf8 = text.chars.select(&:valid_encoding?).join
+       removed_non_utf8.gsub!('_', '')
+       removed_non_utf8.gsub!('ˌ', '') ### Keep this for future. If needed.
+       removed_non_utf8 = removed_non_utf8.delete("^\u{0000}-\u{007F}")
+       removed_carriage_returns = removed_non_utf8&.gsub(/\s+/, ' ')&.strip ## Removes carriage returns and new lines.
+       text = removed_carriage_returns  ## removed_non_utf8 is text.
+       @non_utf_texts << text
+     else
+       removed_non_utf8 = text.delete("^\u{0000}-\u{007F}")
+       removed_carriage_returns = removed_non_utf8&.gsub(/\s+/, ' ')&.strip ## Removes carriage returns and new lines.
+
+       utf_hsh = { text: text, removed_carriage_returns: removed_carriage_returns, removed_non_utf8: removed_non_utf8 }
+       diff = compare_diff(utf_hsh)
+       text = removed_carriage_returns
+     end
+
+     @row_id +=1
+     text
     end
     ########################################
 
@@ -146,19 +173,24 @@ module CrmFormatter
 
 
     def tally_results(inval_rows, val_hshs)
-      utf_report = { valid: val_hshs.count,
-        invalid: inval_rows.length,
-        valid_details: make_groups_from_array(@utf_tls),
-        invalid_details: inval_rows.each_with_index { |hsh, i| "#{i+1}) Row #{hsh.keys[0]}: #{hsh.values[0]}." }
-      }
-      utf_results = { utf_report: utf_report, valid_csv_hashes: val_hshs }
+      binding.pry
+      ## Need to redo this!!
+
+      # utf_report = { valid: val_hshs.count,
+      #   invalid: inval_rows.length,
+      #   valid_details: make_groups_from_array(@utf_tls),
+      #   invalid_details: inval_rows.each_with_index { |hsh, i| "#{i+1}) Row #{hsh.keys[0]}: #{hsh.values[0]}." }
+      # }
+      # utf_results = { utf_report: utf_report, valid_csv_hashes: val_hshs }
     end
 
 
     def make_groups_from_array(tally_arr)
-      hsh_by_grp = tally_arr.inject(Hash.new(0)) { |h, e| h[e] += 1 ; h }
-      puts "hsh_by_grp: #{hsh_by_grp}"
-      hsh_by_grp
+      ### Need to Redo This!!!
+
+      # hsh_by_grp = tally_arr.inject(Hash.new(0)) { |h, e| h[e] += 1 ; h }
+      # puts "hsh_by_grp: #{hsh_by_grp}"
+      # hsh_by_grp
     end
 
 
@@ -170,6 +202,41 @@ module CrmFormatter
       ## Not created yet.
       binding.pry
     end
+
+
+
+    #########################################################################################################
+    #########################################################################################################
+
+    # non_utfs = non_utf_strings ## For testing.  Returns array of non-utf8
+    def non_utf_strings ## For testing UTF8 Validator
+      str_arr = ["𝘀𝔞ｍϱl𝔢", "xC2", "hellÔ!", "hi∑", "hi\x99!", "foo\x92bar"]
+      # str_arr += %w(𝘀𝔞ｍϱl𝔢 xC2 hellÔ! hi∑ hi\x99! foo\x92bar)
+      str_arr << "2,heritagemazdatowson.com,Heritage Mazda Towson,1630 York Rd_\xED\xBF\x8Cˌ_\xED\xEE\xE4\xF3\xC1\xED_\x8C\xE7_\xED\xBF\x8Cˌ___\xED\xBF\x8Cˌ_\xED\xBF\x8Cˌ__,Lutherville,MD,21093,(877) 361-1038\r\n"
+
+      ### TRIALS WITH UTF8 BELOW.  IF EVER HAVE A TOUGH ONE, USE THESE NOTES AGAIN.  ###
+      # best1 = text.chars.select(&:valid_encoding?).join
+      # best2 = text.chars.map{|c| c.valid_encoding? ? c : " "}.join
+      # best3 = text.scrub
+      # best4 = text.encode('UTF-8', invalid: :replace, undef: :replace)
+      # best5 = text.encode("UTF-8", "Windows-1252", invalid: :replace, undef: :replace)
+      # best6 = text.encode('utf-16', invalid: :replace).encode('utf-8')
+      # best7 = text.encode('utf-8', invalid: :replace)
+      # fail = text.encode("ISO-8859-1"); str.encode("UTF-8")
+      # fail = text.force_encoding("ISO-8859-5"); str.encode("UTF-8")
+      # clean5.gsub!('_', '')
+      # clean5.gsub!('ˌ', '')
+      # puts clean5.inspect
+      # 'ˌ'.class => String
+      # 'ˌ'.bytes => [203, 140]
+      # [203, 140].pack('c*')
+      # myst2 = [203, 140].pack('c*').chars.select(&:valid_encoding?).join
+      # cl = [203, 140].pack('c*').encode("UTF-8", "ASCII-8BIT", invalid: :replace, undef: :replace)
+      # cl = [203, 140].pack('c*').encode("UTF-8", "Windows-1252", invalid: :replace, undef: :replace)
+
+      str_arr
+    end
+    #########################################################################################################
 
 
 

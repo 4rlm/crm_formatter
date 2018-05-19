@@ -125,7 +125,7 @@ module CrmFormatter
         if url_exts.empty?   ## Missing ext.
           err_msg = "error: ext.none"
         else   ## Has ext(s), but need to verify validity and count.
-          file_path = "./lib/crm_formatter/extensions.csv"
+          file_path = "./lib/crm_formatter/csv/extensions.csv"
           iana_list = CSV.read(file_path).flatten
           matched_exts = iana_list & url_exts
 

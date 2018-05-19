@@ -10,19 +10,19 @@ RSpec.describe CrmFormatter do
     expect(false).to eq(true)
   end
 
-  it "broccoli is gross" do
-    expect(CrmFormatter::Tools.portray("Broccoli")).to eql("Gross!")
-  end
-
-  it "anything else is delicious" do
-    expect(CrmFormatter::Tools.portray("Not Broccoli")).to eql("Delicious!")
-  end
-
-  it 'generates a random title' do
-    title = CrmFormatter.generate_title
-    title_array = title.split
-
-    expect(title_array.length).to eq 3
-  end
+  # it "broccoli is gross" do
+  #   expect(CrmFormatter::Tools.portray("Broccoli")).to eql("Gross!")
+  # end
+  #
+  # it "anything else is delicious" do
+  #   expect(CrmFormatter::Tools.portray("Not Broccoli")).to eql("Delicious!")
+  # end
+  #
+  # it 'generates a random title' do
+  #   title = CrmFormatter.generate_title
+  #   title_array = title.split
+  #
+  #   expect(title_array.length).to eq 3
+  # end
 
 end

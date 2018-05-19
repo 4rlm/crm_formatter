@@ -1,6 +1,6 @@
 require "bundler/setup"
 require "crm_formatter"
-require 'crm_formatter/dictionary'
+# require 'crm_formatter/dictionary'
 
 RSpec.configure do |config|
   # Enable flags like --only-failures and --next-failure
