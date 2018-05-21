@@ -44,9 +44,9 @@ module CrmFormatter
         permitted_arg = get_path_hash_url_args(args)
       else
         # permitted_arg = {file_path: "./lib/crm_formatter/csv/seeds_clean.csv"}
-        permitted_arg = {file_path: "./lib/crm_formatter/csv/seeds_dirty.csv"}
+        # permitted_arg = {file_path: "./lib/crm_formatter/csv/seeds_dirty.csv"}
         # permitted_arg = {file_path: "./lib/crm_formatter/csv/seeds_mega.csv"}
-        # permitted_arg = {file_path: "./lib/crm_formatter/csv/seeds_mini.csv"}
+        permitted_arg = {file_path: "./lib/crm_formatter/csv/seeds_mini.csv"}
       end
 
       @crm_data = @utf.validate_data(permitted_arg) if permitted_arg.any?
