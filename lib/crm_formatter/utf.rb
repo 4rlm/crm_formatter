@@ -9,7 +9,8 @@ module CrmFormatter
       @row_id = 0
     end
 
-    ## Accepted arg keys & values: either :file_path, :array_of_strings, or :array_of_hashes.
+    #################### * VALIDATE DATA * ####################---------||| 13
+    ## Accepted arg keys & values: either :file_path, :arrays, or :hashes.
     ## First entry point for UTF, then distributes to 3 diff meth options based on arg name and type.
     ## Only accepts 1 arg, even though arg.keys / arg.values being used!
     def validate_data(arg)
@@ -20,22 +21,26 @@ module CrmFormatter
 
       if arg_key == :file_path
         utf_result = validate_csv(arg_val)
-        arg_val = utf_result[:data][:valid_data]
-        arg_val = arg_val.map { |hsh| hsh.except(:details) }
-        initialize
-        utf_result = nil
+        # arg_val = utf_result[:data][:valid_data]
+        # arg_val = arg_val.map { |hsh| hsh.except(:details) }
+        # initialize
+        # utf_result = nil
+        # utf_results = validate_hashes(arg_val)
+        # binding.pry
+      elsif arg_key == :hashes
         utf_results = validate_hashes(arg_val)
         binding.pry
-      elsif arg_key == :array_of_hashes
-        utf_results = validate_hashes(arg_val)
-      elsif arg_key == :array_of_strings
+      elsif arg_key == :arrays
         utf_results = validate_arrays(arg_val)
       else
         utf_results = {}
       end
     end
+    #################### * VALIDATE DATA * ####################---------||| 38
 
 
+
+    #################### * COMPILE RESULTS * ####################---------||| 39
     def compile_results
       details = @valid_data.map { |hsh| hsh[:details] }
       mapped_details = details.map { |str| str.split(', ') }.flatten.compact
@@ -47,17 +52,27 @@ module CrmFormatter
       @utf_result = { stats: stats, data: data }
       return @utf_result
     end
+    #################### * COMPILE RESULTS * ####################---------||| 51
 
 
-    ########## VALIDATE CSV ##########
+
+    #################### * VALIDATE CSV * ####################---------||| 53
     def validate_csv(file_path)
       headers = []
+      # headers =  ["url", "act_name", "street", "city", "state", "zip", "phone"]
       File.open(file_path).each do |line|
+        # line = "url,act_name,street,city,state,zip,phone\r\n"
+        # line = "stanleykaufman.net,Stanley Chevrolet Kaufman,825 E Fair St,Kaufman,TX,75142,(888) 457-4391\r\n"
         begin
           line = utf_filter(check_utf(line))
+          # line = "url,act_name,street,city,state,zip,phone"
+          # line = "stanleykaufman.net,Stanley Chevrolet Kaufman,825 E Fair St,Kaufman,TX,75142,(888) 457-4391"
           @row_id +=1
           if line
             CSV.parse(line) do |row|
+              binding.pry
+              # row = ["url", "act_name", "street", "city", "state", "zip", "phone"]
+              # row = ["stanleykaufman.net", "Stanley Chevrolet Kaufman", "825 E Fair St", "Kaufman", "TX", "75142", "(888) 457-4391"]
               if headers.empty?
                 headers = row
               else
@@ -73,64 +88,73 @@ module CrmFormatter
 
       compile_results ## Calls method to handle returns.
     end
-    ###########################################################
+    #################### * VALIDATE CSV * ####################---------||| 85
 
+    def symbols_to_strings(syms)
+      strings = syms.map(&:to_s)
+    end
 
+    def file_open(arr)
+      joined_string = arr.join(",")
+    end
 
-    ########## VALIDATE HASHES ##########
+    # row = ["url", "act_name", "street", "city", "state", "zip", "phone"]
+    def line_parse(line)
+      row = line.split(',')
+    end
+
+    @group = [@row_id, @valid_data, @encoded, @invalid_data, @errors]
+    #################### * VALIDATE HASHES * ####################---------||| 88
     def validate_hashes(orig_hashes)
-      headers, val_hshs, inval_rows = [], [], []
+      keys = orig_hashes.first.keys
+      values = orig_hashes.first.values
+      headers = []
 
-      row_num = 0
-      dif_count = 0
-      err_rows = []
+      if headers.empty?
+        key_string_array = symbols_to_strings(keys)
+        line = file_open(key_string_array)
+        line = utf_filter(check_utf(line))
+        row = line_parse(line)
+        headers = row
+      end
 
-      new_orig_hashes = orig_hashes.map do |hsh|
-        clean_hsh = hsh.each do |el|
-          key = el.first
-          val = el.last
 
-          val2 = check_utf(val)
-          hsh[key] = val2
-          err_rows << [row_num, key] if val2 != val
+
+
+      orig_hashes.each do |hsh|
+        begin
+          binding.pry
+          check_utf(line)
+          # line = utf_filter(check_utf(line))
+          binding.pry
+
+          @row_id +=1
+          if line
+            CSV.parse(line) do |row|
+              if headers.empty?
+                headers = row
+              else
+                @data_hash.merge!(row_to_hsh(row, headers))
+                @valid_data << @data_hash
+              end
+            end
+          end
+        rescue => er
+          binding.pry
         end
-
-        row_num +=1
-        clean_hsh
       end
-
-      puts err_rows.inspect
-
-      err_rows.each do |err_row|
-        puts new_orig_hashes[err_row.first].inspect
-        puts orig_hashes[err_row.first].inspect
-      end
-      compile_results ## Calls method to handle returns.
     end
-
-
-    def insert_non_utf(text)
-      binding.pry
-      carriage = "\r\n"
-      list = ["h∑", "lÔ", "\x92", "\x98", "\x99", "\xC0", "\xC1", "\xC2", "\xCC", "\xDD", "\xE5", "\xF8"]
-
-      var = "\xC0"
-      text = "welcome all"
-      index = text.length / 2
-      text.insert(index, var)
-      text.valid_encoding?
-
-      ## For testing.  Gets all inval text from results.
-      # headers = %w(act_name street city state zip phone)
-      # rows = @encoded.map{|row| row[:text]}
-      # inval_hsh = {headers: headers, rows: rows}
-      text
-    end
+    #################### * VALIDATE HASHES * ####################---------||| 119
 
 
 
-    ################# HERE - HERE ####################
+    #################### * CHECK UTF * ####################---------||| 122
     def check_utf(text)
+      # text = "url,act_name,street,city,state,zip,phone\r\n"
+      # text = "stanleykaufman.net,Stanley Chevrolet Kaufman,825 E Fair St,Kaufman,TX,75142,(888) 457-4391\r\n"
+      puts text.inspect
+      # binding.pry
+
       results = {text: text, encoded: nil, wchar: nil, error: nil}
       begin
         if !text.valid_encoding?
@@ -148,10 +172,16 @@ module CrmFormatter
         results[:error] = e.message if e.message.present?
         binding.pry
       end
+      # puts results.inspect
+      # binding.pry
+
       results
     end
+    #################### * CHECK UTF * ####################---------||| 151
 
 
+
+    #################### * UTF FILTER * ####################---------||| 154
     def utf_filter(utf)
       details = utf.except(:text).compact.keys
       details = details.map(&:to_s).join(', ')
@@ -190,6 +220,29 @@ module CrmFormatter
       # filt_utf_hsh = {line: line, data_hash: data_hash}
       # filt_utf_hsh = {line: line, data_hash: data_hash, invalid_data: invalid_data, encoded: encoded, error: error}
       line
+    end
+    #################### * UTF FILTER * ####################---------||| 194
+
+
+
+    #################### !! HELPERS BELOW !! ####################
+    #############################################################
+    def insert_non_utf(text)
+      binding.pry
+      carriage = "\r\n"
+      list = ["h∑", "lÔ", "\x92", "\x98", "\x99", "\xC0", "\xC1", "\xC2", "\xCC", "\xDD", "\xE5", "\xF8"]
+
+      var = "\xC0"
+      text = "welcome all"
+      index = text.length / 2
+      text.insert(index, var)
+      text.valid_encoding?
+
+      ## For testing.  Gets all inval text from results.
+      # headers = %w(act_name street city state zip phone)
+      # rows = @encoded.map{|row| row[:text]}
+      # inval_hsh = {headers: headers, rows: rows}
+      text
     end
 
 
@@ -281,6 +334,44 @@ module CrmFormatter
     end
     #########################################################################################################
     #########################################################################################################
+
+
+
+    #########################################################################################################
+    ######## Redoing validate_hashes Above.  keep this to reference till done.
+    #########################################################################################################
+    # def orig_validate_hashes(orig_hashes)
+    #   headers, val_hshs, inval_rows = [], [], []
+    #
+    #   row_num = 0
+    #   dif_count = 0
+    #   err_rows = []
+    #
+    #   new_orig_hashes = orig_hashes.map do |hsh|
+    #     clean_hsh = hsh.each do |el|
+    #       key = el.first
+    #       val = el.last
+    #
+    #       val2 = check_utf(val)
+    #       hsh[key] = val2
+    #       err_rows << [row_num, key] if val2 != val
+    #     end
+    #
+    #     row_num +=1
+    #     clean_hsh
+    #   end
+    #
+    #   puts err_rows.inspect
+    #
+    #   err_rows.each do |err_row|
+    #     puts new_orig_hashes[err_row.first].inspect
+    #     puts orig_hashes[err_row.first].inspect
+    #   end
+    #   compile_results ## Calls method to handle returns.
+    # end
+    #########################################################################################################
+    #########################################################################################################
+
 
 
   end
