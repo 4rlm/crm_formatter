@@ -57,7 +57,7 @@ module CrmFormatter
     def check_reformatted_status(url_hash)
       formatted = url_hash[:formatted_url]
       if formatted.present?
-        url_hash[:is_reformatted] = url_hash[:url_path] != formatted
+        url_hash[:reformatted] = url_hash[:url_path] != formatted
       end
       url_hash
     end
@@ -71,7 +71,7 @@ module CrmFormatter
 
     ##Call: StartCrm.run_webs
     def prep_for_uri(url)
-      url_hash = { is_reformatted: false, url_path: url, formatted_url: nil, neg: [], pos: [] }
+      url_hash = { reformatted: false, url_path: url, formatted_url: nil, neg: [], pos: [] }
       begin
         url = url&.split('|')&.first
         url = url&.split('\\')&.first

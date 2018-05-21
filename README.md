@@ -92,11 +92,11 @@ end
 Results as Hash: 3/6 Reformatted due to invalid or no url extensions. 3 Reformatted and Normalized with `http://www.`  
 URL Extensions, **.com, .net, .fake** cross referenced with official IANA list.
 ```
-[ {:is_reformatted=>true, :url_path=>"website.com", :formatted_url=>"http://www.website.com", :neg=>[], :pos=>[]},
-  {:is_reformatted=>false, :url_path=>"website.business.site", :formatted_url=>nil, :neg=>["error: ext.valid > 1 [business, site]"], :pos=>[]}, {:is_reformatted=>false, :url_path=>"website", :formatted_url=>nil, :neg=>["error: ext.none"], :pos=>[]},
-  {:is_reformatted=>false, :url_path=>"website.fake", :formatted_url=>nil, :neg=>["error: ext.invalid [fake]"], :pos=>[]},
-  {:is_reformatted=>true, :url_path=>"website.fake.com", :formatted_url=>"http://www.website.com", :neg=>[], :pos=>[]},
-  {:is_reformatted=>true, :url_path=>"website.com.fake", :formatted_url=>"http://www.website.com", :neg=>[], :pos=>[]}
+[ {:reformatted=>true, :url_path=>"website.com", :formatted_url=>"http://www.website.com", :neg=>[], :pos=>[]},
+  {:reformatted=>false, :url_path=>"website.business.site", :formatted_url=>nil, :neg=>["error: ext.valid > 1 [business, site]"], :pos=>[]}, {:reformatted=>false, :url_path=>"website", :formatted_url=>nil, :neg=>["error: ext.none"], :pos=>[]},
+  {:reformatted=>false, :url_path=>"website.fake", :formatted_url=>nil, :neg=>["error: ext.invalid [fake]"], :pos=>[]},
+  {:reformatted=>true, :url_path=>"website.fake.com", :formatted_url=>"http://www.website.com", :neg=>[], :pos=>[]},
+  {:reformatted=>true, :url_path=>"website.com.fake", :formatted_url=>"http://www.website.com", :neg=>[], :pos=>[]}
 ]
 ```
 
@@ -107,12 +107,12 @@ urls = %w(approvXXXutosales.org autXXXartfinance.com leXXXummitautorepair.net me
 ```
 These results list 'neg' and 'pos', which are the criteria I was scrubbing against.  I wanted to find the URLs of franchise auto dealers and exclude ancillary URLs.
 ```
-[{:is_reformatted=>true, :url_path=>"approvXXXutosales.org", :formatted_url=>"http://www.approvXXXutosales.org", :neg=>["neg_urls: approv"], :pos=>[]},
- {:is_reformatted=>true, :url_path=>"autXXXartfinance.com", :formatted_url=>"http://www.autXXXartfinance.com", :neg=>["neg_urls: financ"], :pos=>["pos_urls: smart"]},
- {:is_reformatted=>true, :url_path=>"leXXXummitautorepair.net", :formatted_url=>"http://www.leXXXummitautorepair.net", :neg=>["neg_urls: repair"], :pos=>[]},
- {:is_reformatted=>true, :url_path=>"melXXXtoyota.com", :formatted_url=>"http://www.melXXXtoyota.com", :neg=>[], :pos=>["pos_urls: toyota"]},
- {:is_reformatted=>true, :url_path=>"norXXXastacura.com", :formatted_url=>"http://www.norXXXastacura.com", :neg=>[], :pos=>["pos_urls: acura"]},
- {:is_reformatted=>true, :url_path=>"XXXmazda.com", :formatted_url=>"http://www.XXXmazda.com", :neg=>[], :pos=>["pos_urls: mazda"]}
+[{:reformatted=>true, :url_path=>"approvXXXutosales.org", :formatted_url=>"http://www.approvXXXutosales.org", :neg=>["neg_urls: approv"], :pos=>[]},
+ {:reformatted=>true, :url_path=>"autXXXartfinance.com", :formatted_url=>"http://www.autXXXartfinance.com", :neg=>["neg_urls: financ"], :pos=>["pos_urls: smart"]},
+ {:reformatted=>true, :url_path=>"leXXXummitautorepair.net", :formatted_url=>"http://www.leXXXummitautorepair.net", :neg=>["neg_urls: repair"], :pos=>[]},
+ {:reformatted=>true, :url_path=>"melXXXtoyota.com", :formatted_url=>"http://www.melXXXtoyota.com", :neg=>[], :pos=>["pos_urls: toyota"]},
+ {:reformatted=>true, :url_path=>"norXXXastacura.com", :formatted_url=>"http://www.norXXXastacura.com", :neg=>[], :pos=>["pos_urls: acura"]},
+ {:reformatted=>true, :url_path=>"XXXmazda.com", :formatted_url=>"http://www.XXXmazda.com", :neg=>[], :pos=>["pos_urls: mazda"]}
  ]
 ```
 
@@ -158,7 +158,7 @@ class StartCrm
     formatted_url_hashes = query_accounts.map do |act|
       url_hsh = web.format_url(act.url)
 
-      if url_hash[:is_reformatted]
+      if url_hash[:reformatted]
 
         act_hsh = { url: url_hsh[:formatted_url],
                     url_sts: url_hsh[:formatted_url],
@@ -182,7 +182,7 @@ end
 CRM Formatter returns data as a hash, which includes your original unaltered data you submitted, the formatted data, a T/F boolean indicator regarding if the original and formatted data are different, and for some methods, negs and pos regarding your criteria to scrub against.  In the above example, the returned data from each submitted url would resemble the one below.
 ```
 # format_url method returns data like below this example...
-# url_hash = {:is_reformatted=>false,
+# url_hash = {:reformatted=>false,
     :url_path=>"https://www.steXXXXXXmitsubishiserviceandpartscenter.com",
     :formatted_url=>"https://www.steXXXXXXmitsubishiserviceandpartscenter.com",
     :neg=>["neg_urls: parts, rv, service"],
@@ -316,32 +316,32 @@ Run your class and wrapper method in Rails C.  By creating the wrapper method, y
 ```
 Results are always in a Hash, like below.  The URLs are slightly obfuscated out of respect (it's not a bug).  These are examples from a large DB that runs on a loop 24/7 and gets to each organization about once a week, so it's already pretty well up to date, so there aren't any big changes below, but there are still a few things to point out below the code example.
 ```
-[ {:is_reformatted=>false,
+[ {:reformatted=>false,
     :url_path=>"https://www.steXXXXXXmitsubishiserviceandpartscenter.com",
     :formatted_url=>"https://www.steXXXXXXmitsubishiserviceandpartscenter.com",
     :neg=>["neg_urls: parts, rv, service"],
     :pos=>["pos_urls: mitsubishi"]},
 
-   {:is_reformatted=>false,
+   {:reformatted=>false,
     :url_path=>"https://www.perXXXXXXchryslerjeepcenterville.com",
     :formatted_url=>"https://www.perXXXXXXchryslerjeepcenterville.com",
     :neg=>["neg_urls: rv"],
     :pos=>["pos_urls: chrysler, jeep"]},
 
-   {:is_reformatted=>false,
+   {:reformatted=>false,
     :url_path=>"http://www.pXXXXXXchryslerjeepcenterville.com",
     :formatted_url=>"http://www.XXXXXXechryslerjeepcenterville.com",
     :neg=>["neg_urls: rv"],
     :pos=>["pos_urls: chrysler, jeep"]},
 
-   {:is_reformatted=>false,
+   {:reformatted=>false,
     :url_path=>"http://www.colXXXXXXchryslerdodgejeepram.com",
     :formatted_url=>"http://www.colXXXXXXchryslerdodgejeepram.com",
     :neg=>["neg_urls: rv"],
     :pos=>["pos_urls: chrysler, dodge, jeep, ram"]}
   ]
 ```
-`:is_reformatted` indicates T/F if url_path and `:formatted_url` differ.  If False, then it means they are the same, or the `:url_path` had significant errors which prevented it from being formatted, thus `:formatted_url` would be nil in such a case.  The reality is that you might have some URLs that are so far off that, that they can't be reliably reformatted, so better to only let them pass if we are confident that they are reliable.
+`:reformatted` indicates T/F if url_path and `:formatted_url` differ.  If False, then it means they are the same, or the `:url_path` had significant errors which prevented it from being formatted, thus `:formatted_url` would be nil in such a case.  The reality is that you might have some URLs that are so far off that, that they can't be reliably reformatted, so better to only let them pass if we are confident that they are reliable.
 
 `:url_path` is the url originally submitted by the client.  It can include directory links on the end too, '/careers/, '/about-us/', etc.
 

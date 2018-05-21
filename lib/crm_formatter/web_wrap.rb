@@ -4,11 +4,12 @@ module CrmFormatter
   class WebWrap
 
     def initialize
-      utf_args = {seed_non_utfs: false, seed_hashes: false, seed_csv: false}
+      utf_args = {pollute_seeds: true, seed_hashes: false, seed_csv: false}
       @utf = CrmFormatter::UTF.new(utf_args)
       @crm_data = []
+      # @crm_data[:data][:valid_data] ## path to 'valid data'
+      # @crm_data[:stats] ## path to 'stats'
     end
-
 
     def wrap
       formatted_urls = format_urls
@@ -19,81 +20,46 @@ module CrmFormatter
 
     def format_urls(args={})
       import_data(args={}) ## data sent to @crm_data
-      binding.pry
+      valid_data = @crm_data[:data][:valid_data]
 
-      ### @crm_data is clean.  It can now run through formatter.
-      if @crm_data.any?
-        binding.pry
-        web = CrmFormatter::Web.new(get_args)
-        binding.pry
+      if valid_data&.any?
+        web = CrmFormatter::Web.new(get_web_args)
+        puts "\n\n\n\n===============================================\n\n\n\n"
 
-        @crm_data.map do |web|
-          url = web[:url]
+        formatted_data = valid_data.map do |valid_hash|
+          formatted_hash = web.format_url(valid_hash[:url])
+          formatted_hash2 = valid_hash.merge(formatted_hash)
+          puts "\n----------------------------------------"
+          puts valid_hash.inspect
+          puts "\n----------------------------------------"
+          puts formatted_hash.inspect
+          puts "\n----------------------------------------"
+          puts formatted_hash2.inspect
+          puts "\n----------------------------------------"
           binding.pry
-          url_hsh = web.format_url(url)
-          binding.pry
+
+          formatted_hash2
         end
+        puts "\n\n=========================================\n\n"
+        puts formatted_data.inspect
+        binding.pry
+
+        formatted_data
+      else
+        binding.pry
       end
     end
 
 
     ## Accepted arg keys & values: either :file_path, or :hashes.
     def import_data(args={})
-      ## Need to test if permitted args works.
-      # samps = get_seed_hashes
-      # args = {hashes: samps}
-      # if args.any?
-      #   permitted_arg = get_path_hash_url_args(args)
-      #   binding.pry
-      # else
-      #   # permitted_arg = {file_path: "./lib/crm_formatter/csv/seeds_clean.csv"}
-      #   # permitted_arg = {file_path: "./lib/crm_formatter/csv/seeds_dirty.csv"}
-      #   # permitted_arg = {file_path: "./lib/crm_formatter/csv/seeds_mega.csv"}
-      #   permitted_arg = {file_path: "./lib/crm_formatter/csv/seeds_mini.csv"}
-      #   permitted_arg = {file_path: "./lib/crm_formatter/csv/seeds_mini_10.csv"}
-      # end
-
-
-      # @crm_data = @utf.validate_data(permitted_arg) if permitted_arg.any?
-
-      binding.pry
       args = {file_path: @utf.get_seed_file_path}
-      args = {data_hashes: @utf.get_seed_hashes}
-
-      binding.pry
+      # args = {data: @utf.get_seed_hashes}
       @crm_data = @utf.validate_data(args)
-      binding.pry
-      ## Returns nothing.  Sent to @crm_data
     end
 
 
-    ## Returns args that match permitted names and types if arg value not nil.
-    def get_path_hash_url_args(args={})
-      args_hash = args.delete_if {|k,v| !v.present? }
-      allowed_arg_kvs = {file_path: 'string', hashes: 'array'}
-      permitted_arg_keys = check_args_name_and_class(allowed_arg_kvs, args_hash)
-      permitted_arg = args_hash.select { |k,v| permitted_arg_keys.include?(k) }
-    end
-
-
-    ## Returns keys of the args with allowed key name and value type if arg value not nil.
-    def check_args_name_and_class(allowed_arg_kvs, args_hash)
-      if allowed_arg_kvs&.any? && args_hash&.any?
-        passed_keys = args_hash.keys & allowed_arg_kvs.keys
-
-        if passed_keys.any?
-          passed_arg_kvs = passed_keys.map do |key|
-            arg_val = args_hash[key]
-            allowed_type = allowed_arg_kvs[key]
-            arg_val.is_a?(allowed_type.classify.constantize) ? key : nil
-          end
-        end
-      end
-      passed_arg_kvs&.any? ? passed_arg_kvs : nil
-    end
-
-
-    def get_args
+    def get_web_args
       neg_urls = %w(approv avis budget collis eat enterprise facebook financ food google gourmet hertz hotel hyatt insur invest loan lube mobility motel motorola parts quick rent repair restaur rv ryder service softwar travel twitter webhost yellowpages yelp youtube)
 
       pos_urls = ["acura", "alfa romeo", "aston martin", "audi", "bmw", "bentley", "bugatti", "buick", "cdjr", "cadillac", "chevrolet", "chrysler", "dodge", "ferrari", "fiat", "ford", "gmc", "group", "group", "honda", "hummer", "hyundai", "infiniti", "isuzu", "jaguar", "jeep", "kia", "lamborghini", "lexus", "lincoln", "lotus", "mini", "maserati", "mazda", "mclaren", "mercedes-benz", "mitsubishi", "nissan", "porsche", "ram", "rolls-royce", "saab", "scion", "smart", "subaru", "suzuki", "toyota", "volkswagen", "volvo"]
