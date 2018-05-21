@@ -4,6 +4,7 @@ module CrmFormatter
     def initialize(args={})
       @args = args
       @empty_args = args.empty?
+      @global_hash = %w(row_id url act_name street city zip phone utf_details)
     end
 
     ## scrub_oa, is only called if client OA args were passed at initialization.
@@ -43,6 +44,55 @@ module CrmFormatter
       hash
     end
 
+
+    # @tools.row_to_hsh(keys, row)
+    def row_to_hsh(keys, row)
+      binding.pry
+      # headers = ["url", "act_name", "street", "city", "state", "zip", "phone"]
+
+       # row = ["stanleykaufman.net", "Stanley Chevrolet Kaufman", "8h_l25 E Fair St", "Kaufman", "TX", "75142", "(888) 457-4391"]
+      headers = keys.map(&:to_s).join(",")
+
+      h = Hash[headers.zip(row)]
+      h.symbolize_keys
+    end
+
+
+    # @tools.update_global_hash(hashes)
+    def update_global_hash(hashes)
+      global_keys = @global_hash
+      keys = hashes.map(&:keys).flatten.uniq.sort
+      keys.map!(&:to_s)
+      global_keys += keys
+      global_keys.uniq!
+
+
+
+      row = global_keys.map { |el| nil }
+      master = row_to_hsh(global_keys, row)
+      binding.pry
+
+      master2 = hashes.map { |hsh| master.update(hsh) }
+      binding.pry
+
+      => ["row_id",
+ "url",
+ "act_name",
+ "street",
+ "city",
+ "zip",
+ "phone",
+ "utf_details",
+ "formatted_url",
+ "neg",
+ "pos",
+ "reformatted",
+ "state",
+ "url_path"]
+
+ formatted_url => web_url
+
+    end
 
 
 

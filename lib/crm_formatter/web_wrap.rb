@@ -9,6 +9,7 @@ module CrmFormatter
       @crm_data = []
       # @crm_data[:data][:valid_data] ## path to 'valid data'
       # @crm_data[:stats] ## path to 'stats'
+      @tools = CrmFormatter::Tools.new
     end
 
     def wrap
@@ -24,10 +25,21 @@ module CrmFormatter
 
       if valid_data&.any?
         web = CrmFormatter::Web.new(get_web_args)
+        ### First need to re-order hash, then merge new data into that.
+        binding.pry
+        samp_valid_hash = @crm_data[:data][:valid_data].first
+        samp_formatted_hash = web.format_url(samp_valid_hash[:url])
+        hashes = [samp_valid_hash, samp_formatted_hash]
+
+        master_hsh = @tools.update_global_hash(hashes)
+        binding.pry
+
         puts "\n\n\n\n===============================================\n\n\n\n"
 
         formatted_data = valid_data.map do |valid_hash|
           formatted_hash = web.format_url(valid_hash[:url])
+
+
           formatted_hash2 = valid_hash.merge(formatted_hash)
           puts "\n----------------------------------------"
           puts valid_hash.inspect
