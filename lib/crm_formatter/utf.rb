@@ -6,6 +6,7 @@ module CrmFormatter
     def initialize
       @utf_result = { stats: {}, data: {} }
       @valid_data, @invalid_data, @errors, @encoded = [], [], [], []
+      @headers = []
       @row_id = 0
     end
 
@@ -58,25 +59,23 @@ module CrmFormatter
 
     #################### * VALIDATE CSV * ####################---------||| 53
     def validate_csv(file_path)
-      headers = []
-      # headers =  ["url", "act_name", "street", "city", "state", "zip", "phone"]
-      File.open(file_path).each do |line|
-        # line = "url,act_name,street,city,state,zip,phone\r\n"
-        # line = "stanleykaufman.net,Stanley Chevrolet Kaufman,825 E Fair St,Kaufman,TX,75142,(888) 457-4391\r\n"
+      File.open(file_path).each do |file_line|
+        # file_line = "url,act_name,street,city,state,zip,phone\r\n"
+        # file_line = "stanleykaufman.net,Stanley Chevrolet Kaufman,825 E Fair St,Kaufman,TX,75142,(888) 457-4391\r\n"
         begin
-          line = utf_filter(check_utf(line))
-          # line = "url,act_name,street,city,state,zip,phone"
-          # line = "stanleykaufman.net,Stanley Chevrolet Kaufman,825 E Fair St,Kaufman,TX,75142,(888) 457-4391"
+          validated_line = utf_filter(check_utf(file_line))
+          # validated_line = "url,act_name,street,city,state,zip,phone"
+          # validated_line = "stanleykaufman.net,Stanley Chevrolet Kaufman,825 E Fair St,Kaufman,TX,75142,(888) 457-4391"
           @row_id +=1
-          if line
-            CSV.parse(line) do |row|
+          if validated_line
+            CSV.parse(validated_line) do |row|
               binding.pry
               # row = ["url", "act_name", "street", "city", "state", "zip", "phone"]
               # row = ["stanleykaufman.net", "Stanley Chevrolet Kaufman", "825 E Fair St", "Kaufman", "TX", "75142", "(888) 457-4391"]
-              if headers.empty?
-                headers = row
+              if @headers.empty?
+                @headers = row
               else
-                @data_hash.merge!(row_to_hsh(row, headers))
+                @data_hash.merge!(row_to_hsh(row))
                 @valid_data << @data_hash
               end
             end
@@ -94,67 +93,58 @@ module CrmFormatter
       strings = syms.map(&:to_s)
     end
 
+    ## Joins array of strings into single combined string.
     def file_open(arr)
-      joined_string = arr.join(",")
+      file_line = arr.join(",")
     end
 
-    # row = ["url", "act_name", "street", "city", "state", "zip", "phone"]
-    def line_parse(line)
-      row = line.split(',')
+    def process_headers(key_syms)
+      key_string_array = symbols_to_strings(key_syms)
     end
 
-    @group = [@row_id, @valid_data, @encoded, @invalid_data, @errors]
-    #################### * VALIDATE HASHES * ####################---------||| 88
-    def validate_hashes(orig_hashes)
-      keys = orig_hashes.first.keys
-      values = orig_hashes.first.values
-      headers = []
-
-      if headers.empty?
-        key_string_array = symbols_to_strings(keys)
-        line = file_open(key_string_array)
-        line = utf_filter(check_utf(line))
-        row = line_parse(line)
-        headers = row
+    def process_hash_row(hsh)
+      if @headers.any?
+        keys_or_values = hsh.values
+        @row_id = hsh[:row_id]
+      else
+        keys_or_values = process_headers(hsh.keys)
       end
 
+      file_line = file_open(keys_or_values)
+      validated_line = utf_filter(check_utf(file_line))
+      line_parse(validated_line)
+    end
 
-
-
+    #################### * VALIDATE HASHES * ####################---------||| 88
+    def validate_hashes(orig_hashes)
       orig_hashes.each do |hsh|
         begin
-          binding.pry
-          check_utf(line)
-          # line = utf_filter(check_utf(line))
-          binding.pry
-
-          @row_id +=1
-          if line
-            CSV.parse(line) do |row|
-              if headers.empty?
-                headers = row
-              else
-                @data_hash.merge!(row_to_hsh(row, headers))
-                @valid_data << @data_hash
-              end
-            end
-          end
+          process_hash_row(hsh) if @headers.empty?
+          process_hash_row(hsh) ## Called twice on purpose!
         rescue => er
           binding.pry
+        end
+      end
+    end
+    #################### *
+    def line_parse(validated_line)
+      if validated_line
+        row = validated_line.split(',')
+        if row.any?
+          if @headers.empty?
+            @headers = row
+          else
+            @data_hash.merge!(row_to_hsh(row))
+            @valid_data << @data_hash
+          end
         end
       end
     end
     #################### * VALIDATE HASHES * ####################---------||| 119
 
 
-
     #################### * CHECK UTF * ####################---------||| 122
     def check_utf(text)
-      # text = "url,act_name,street,city,state,zip,phone\r\n"
-      # text = "stanleykaufman.net,Stanley Chevrolet Kaufman,825 E Fair St,Kaufman,TX,75142,(888) 457-4391\r\n"
-      puts text.inspect
-      # binding.pry
-
       results = {text: text, encoded: nil, wchar: nil, error: nil}
       begin
         if !text.valid_encoding?
@@ -172,19 +162,18 @@ module CrmFormatter
         results[:error] = e.message if e.message.present?
         binding.pry
       end
-      # puts results.inspect
-      # binding.pry
 
       results
     end
     #################### * CHECK UTF * ####################---------||| 151
 
 
-
     #################### * UTF FILTER * ####################---------||| 154
     def utf_filter(utf)
+      puts utf.inspect
       details = utf.except(:text).compact.keys
-      details = details.map(&:to_s).join(', ')
+      details = details&.map(&:to_s).join(', ')
+      details = nil if details.blank?
 
       encoded = utf[:text] if utf[:encoded]
       error = utf[:error]
@@ -200,25 +189,6 @@ module CrmFormatter
         @data_hash = data_hash
       end
 
-      # if @data_hash && @data_hash[:row_id] == @row_id
-      #   binding.pry
-      #   @data_hash[:details] = details
-      # else
-      #   binding.pry
-      #   @data_hash = {row_id: @row_id, details: details}
-      # end
-
-      # @data_hash[:row_id]
-
-      # utf[:encoded] ? encoded = utf[:text] : encoded = nil
-      # error = utf[:error] if utf[:error].present?
-      # error ? invalid_data = nil : invalid_data = utf[:text]
-      # error ? line = nil : line = utf.except(:error).compact.values.last
-
-      ### Create Return Hashes ###
-      # data_hash = {row_id: @row_id, details: details}
-      # filt_utf_hsh = {line: line, data_hash: data_hash}
-      # filt_utf_hsh = {line: line, data_hash: data_hash, invalid_data: invalid_data, encoded: encoded, error: error}
       line
     end
     #################### * UTF FILTER * ####################---------||| 194
@@ -256,8 +226,8 @@ module CrmFormatter
 
 
     ############# KEY VALUE CONVERTERS #############
-    def row_to_hsh(row, headers)
-      h = Hash[headers.zip(row)]
+    def row_to_hsh(row)
+      h = Hash[@headers.zip(row)]
       h.symbolize_keys
     end
 
