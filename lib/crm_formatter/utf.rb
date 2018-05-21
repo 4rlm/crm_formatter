@@ -19,28 +19,13 @@ module CrmFormatter
       arg_val = arg.values.first
 
       if arg_key == :file_path
-        utf_results = validate_csv(arg_val)
+        utf_result = validate_csv(arg_val)
+        arg_val = utf_result[:data][:valid_data]
+        arg_val = arg_val.map { |hsh| hsh.except(:details) }
+        initialize
+        utf_result = nil
+        utf_results = validate_hashes(arg_val)
         binding.pry
-
-        ### Need to create hash to test 'validate_hashes'
-        valid_data = @valid_data.map { |hsh| hsh.except(:details) }
-        headers = %w(act_name street city state zip phone)
-        encoded = @encoded.map { |hsh| hsh[:text] }
-
-
-        # carriage = "\r\n"
-        # list = ["h∑", "lÔ", "\x92", "\x98", "\x99", "\xC0", "\xC1", "\xC2", "\xCC", "\xDD", "\xE5", "\xF8"]
-        #
-        # var = "\xC0"
-        # text = "welcome all"
-        # index = text.length / 2
-        # text.insert(index, var)
-        # text.valid_encoding?
-        #
-
-        # initialize
-        binding.pry
-
       elsif arg_key == :array_of_hashes
         utf_results = validate_hashes(arg_val)
       elsif arg_key == :array_of_strings
@@ -51,19 +36,15 @@ module CrmFormatter
     end
 
 
-
     def compile_results
       details = @valid_data.map { |hsh| hsh[:details] }
       mapped_details = details.map { |str| str.split(', ') }.flatten.compact
       groups = make_groups_from_array(mapped_details)
       wchar = groups['wchar']
-      binding.pry
 
       stats = {valid: @valid_data.count, invalid: @invalid_data.count, encoded: @encoded.count, wchar: wchar }
       data = {valid_data: @valid_data, invalid_data: @invalid_data, errors: @errors}
       @utf_result = { stats: stats, data: data }
-      binding.pry
-
       return @utf_result
     end
 
@@ -90,8 +71,6 @@ module CrmFormatter
         end
       end
 
-      puts @valid_data.count
-      binding.pry
       compile_results ## Calls method to handle returns.
     end
     ###########################################################
@@ -100,7 +79,6 @@ module CrmFormatter
 
     ########## VALIDATE HASHES ##########
     def validate_hashes(orig_hashes)
-      binding.pry
       headers, val_hshs, inval_rows = [], [], []
 
       row_num = 0
@@ -108,8 +86,6 @@ module CrmFormatter
       err_rows = []
 
       new_orig_hashes = orig_hashes.map do |hsh|
-        binding.pry
-
         clean_hsh = hsh.each do |el|
           key = el.first
           val = el.last
@@ -131,7 +107,6 @@ module CrmFormatter
       end
       compile_results ## Calls method to handle returns.
     end
-
 
 
     def insert_non_utf(text)
