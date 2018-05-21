@@ -3,13 +3,95 @@ require "csv"
 module CrmFormatter
   class UTF
 
-    def initialize
+    # args = {seed_non_utfs: false, seed_hashes: false, seed_csv: false}
+    def initialize(args={})
+      binding.pry
       @utf_result = { stats: {}, data: {} }
       @valid_rows, @defective, @errors, @encoded = [], [], [], []
       @headers = []
       @row_id = 0
-      @insert_non_utf = false
+      # @seed_non_utfs = true
+      # @seed_hashes = true
+      # @seed_csv = true
+      @seed_non_utfs = args.fetch(:seed_non_utfs, false)
+      @seed_hashes = args.fetch(:seed_hashes, false)
+      @seed_csv = args.fetch(:seed_csv, false)
     end
+
+    #################### * VALIDATE DATA * ####################
+    ## Only accepts 1 arg, w/ either 2 key symbols:  :file_path OR :hashes.
+    def validate_data(args={})
+      arg_key = args.compact.keys.first
+      arg_val = args.compact.values.first
+
+      if @seed_hashes
+        validate_hashes(get_seed_hashes)
+      elsif @seed_csv
+        validate_csv(get_seed_file_path)
+      elsif arg_key
+        file_path = args.fetch(:file_path)
+
+        binding.pry
+      else
+        binding.pry
+      end
+      binding.pry
+
+
+      if arg.is_a?(String) && arg.include?(".csv")
+        utf_result = validate_csv(arg)
+        binding.pry
+      elsif arg.is_a?(Array) && arg.first.is_a?(Hash)
+        binding.pry
+      end
+
+      binding.pry
+
+
+
+      # file_path = arg.fetch(:file_path, {})
+      # utf_result = arg.fetch(:data_hashes, {}) if utf_result.empty?
+
+
+      # utf_result = validate_csv(arg[:file_path])
+      binding.pry
+      utf_result = validate_hashes(arg[:data_hashes]) if !utf_result.present?
+      binding.pry
+
+      # file_path = arg[:file_path]
+      # data_hashes = arg[:data_hashes]
+      # utf_result = validate_csv(file_path) if file_path
+      # utf_result = validate_hashes(data_hashes) if data_hashes
+
+      # file_path = arg[:file_path]
+      # data_hashes = arg[:data_hashes]
+
+
+
+
+      # if file_path
+      #   utf_result = validate_csv(file_path)
+      # elsif data_hashes
+      #   utf_result = validate_hashes(data_hashes)
+      # else
+      #   binding.pry
+      #   utf_result = {}
+      # end
+      # utf_result
+
+      # data_hash_key = arg.keys.first
+      # data_hash_val = arg.values.first
+
+      # if data_hash_key == :file_path
+      #   utf_result = validate_csv(data_hash_val)
+      # elsif data_hash_key == :hashes
+      #   utf_result = validate_hashes(data_hash_val)
+      # else
+      #   utf_result = {}
+      # end
+      # utf_result
+    end
+    #################### * VALIDATE DATA * ####################
 
     #################### * COMPILE RESULTS * ####################
     def compile_results
@@ -25,45 +107,6 @@ module CrmFormatter
       return @utf_result
     end
     #################### * COMPILE RESULTS * ####################
-
-    #################### * VALIDATE DATA * ####################
-    ## Accepted arg keys & values: either :file_path, :arrays, or :hashes.
-    ## First entry point for UTF, then distributes to 3 diff meth options based on arg name and type.
-    ## Only accepts 1 arg, even though arg.keys / arg.values being used!
-    def validate_data(arg)
-      encoding_details = 'Error: Empty args sent to validate_data!'
-      return encoding_details unless arg&.values&.present?
-      arg_key = arg.keys.first
-      arg_val = arg.values.first
-
-      if arg_key == :file_path
-        utf_result = validate_csv(arg_val)
-        # arg_val = utf_result[:data][:valid_rows]
-        # arg_val = arg_val.map { |hsh| hsh.except(:details) }
-        # initialize
-        # utf_result = nil
-        # utf_results = validate_hashes(arg_val)
-        # binding.pry
-      elsif arg_key == :hashes
-        utf_results = validate_hashes(arg_val)
-        binding.pry
-      elsif arg_key == :arrays
-        utf_results = validate_arrays(arg_val)
-      else
-        utf_results = {}
-      end
-    end
-    #################### * VALIDATE DATA * ####################
-
-
-    ########## VALIDATE ARRAYS ##########
-    def validate_arrays(orig_arrays)
-      headers, val_hshs, inval_rows = [], [], []
-      ## Not created yet.
-      binding.pry
-      compile_results ## Calls method to handle returns.
-    end
-
 
     #################### * VALIDATE CSV * ####################
     def validate_csv(file_path)
@@ -135,7 +178,7 @@ module CrmFormatter
 
     #################### * CHECK UTF * ####################
     def check_utf(text)
-      text = insert_non_utf(text) if @insert_non_utf && @headers.any?
+      text = seed_non_utfs(text) if @seed_non_utfs && @headers.any?
       results = {text: text, encoded: nil, wchar: nil, error: nil}
       begin
         if !text.valid_encoding?
@@ -188,7 +231,7 @@ module CrmFormatter
 
     #################### !! HELPERS BELOW !! ####################
     #############################################################
-    def insert_non_utf(text)
+    def seed_non_utfs(text)
       list = ["h∑", "lÔ", "\x92", "\x98", "\x99", "\xC0", "\xC1", "\xC2", "\xCC", "\xDD", "\xE5", "\xF8"]
       index = text.length / 2
       var = "#{list.sample}_#{list.sample}"
@@ -313,6 +356,98 @@ module CrmFormatter
     # end
     #########################################################################################################
     #########################################################################################################
+
+    def get_seed_file_path
+      # "./lib/crm_formatter/csv/seeds_clean.csv"
+      # "./lib/crm_formatter/csv/seeds_dirty.csv"
+      # "./lib/crm_formatter/csv/seeds_mega.csv"
+      # "./lib/crm_formatter/csv/seeds_mini.csv"
+      "./lib/crm_formatter/csv/seeds_mini_10.csv"
+    end
+
+    ### Sample Hashes for validate_data
+    def get_seed_hashes
+      [{:row_id=>1,
+        :url=>"stanleykaufman.net",
+        :act_name=>"Stanley Chevrolet Kaufman",
+        :street=>"825 E Fair St",
+        :city=>"Kaufman",
+        :state=>"TX",
+        :zip=>"75142",
+        :phone=>"(888) 457-4391"},
+       {:row_id=>2,
+        :url=>"leepartyka.com",
+        :act_name=>"Lee Partyka Chevrolet Mazda Isuzu Truck",
+        :street=>"200 Skiff St",
+        :city=>"Hamden",
+        :state=>"CT",
+        :zip=>"6518",
+        :phone=>"(203) 288-7761"},
+       {:row_id=>3,
+        :url=>"burienhonda.com",
+        :act_name=>"Honda of Burien 15026 1st Avenue South, Burien, WA 98148",
+        :street=>"15026 1st Avenue South",
+        :city=>"Burien",
+        :state=>"WA",
+        :zip=>"98148",
+        :phone=>"(206) 246-9700"},
+       {:row_id=>4,
+        :url=>"cortlandchryslerdodgejeep.com",
+        :act_name=>"Cortland Chrysler Dodge Jeep RAM",
+        :street=>"3878 West Rd",
+        :city=>"Cortland",
+        :state=>"NY",
+        :zip=>"13045",
+        :phone=>"(877) 279-3113"},
+       {:row_id=>5,
+        :url=>"imperialmotors.net",
+        :act_name=>"Imperial Motors",
+        :street=>"4839 Virginia Beach Blvd",
+        :city=>"Virginia Beach",
+        :state=>"VA",
+        :zip=>"23462",
+        :phone=>"(757) 490-3651"},
+       {:row_id=>6,
+        :url=>"liatoyotaofnorthampton.com",
+        :act_name=>"Lia Toyota of Northampton 280 King St. Northampton, MA 01060 Phone 413-341-5299",
+        :street=>"280 King St",
+        :city=>"Northampton",
+        :state=>"MA",
+        :zip=>"1060",
+        :phone=>"(413) 341-5299"},
+       {:row_id=>7,
+        :url=>"nelsonhallchevrolet.com",
+        :act_name=>"Nelson Hall Chevrolet",
+        :street=>"1811 S Frontage Rd",
+        :city=>"Meridian",
+        :state=>"MS",
+        :zip=>"39301",
+        :phone=>"(601) 621-4593"},
+       {:row_id=>8,
+        :url=>"marshallfordco.com",
+        :act_name=>"Marshall Ford Co Inc.",
+        :street=>"14843 MS-16",
+        :city=>"Philadelphia",
+        :state=>"MS",
+        :zip=>"39350",
+        :phone=>"(888) 461-7643"},
+       {:row_id=>9,
+        :url=>"warrentontoyota.com",
+        :act_name=>"Warrenton Toyota",
+        :street=>"6449 Lee Hwy",
+        :city=>"Warrenton",
+        :state=>"VA",
+        :zip=>"20187",
+        :phone=>"(540) 878-4100"},
+       {:row_id=>10,
+        :url=>"toyotacertifiedatcentralcity.com",
+        :act_name=>"Toyota Certified Central City",
+        :street=>"4800 Chestnut St",
+        :city=>"Philadelphia",
+        :state=>"PA",
+        :zip=>"19139",
+        :phone=>"(888) 379-1155"}]
+    end
 
 
 

@@ -4,7 +4,8 @@ module CrmFormatter
   class WebWrap
 
     def initialize
-      @utf = CrmFormatter::UTF.new
+      utf_args = {seed_non_utfs: false, seed_hashes: false, seed_csv: false}
+      @utf = CrmFormatter::UTF.new(utf_args)
       @crm_data = []
     end
 
@@ -36,22 +37,31 @@ module CrmFormatter
     end
 
 
-    ## Accepted arg keys & values: either :file_path, :arrays, or :hashes.
+    ## Accepted arg keys & values: either :file_path, or :hashes.
     def import_data(args={})
       ## Need to test if permitted args works.
-      args = {hashes: get_seed_hashes}
+      # samps = get_seed_hashes
+      # args = {hashes: samps}
+      # if args.any?
+      #   permitted_arg = get_path_hash_url_args(args)
+      #   binding.pry
+      # else
+      #   # permitted_arg = {file_path: "./lib/crm_formatter/csv/seeds_clean.csv"}
+      #   # permitted_arg = {file_path: "./lib/crm_formatter/csv/seeds_dirty.csv"}
+      #   # permitted_arg = {file_path: "./lib/crm_formatter/csv/seeds_mega.csv"}
+      #   permitted_arg = {file_path: "./lib/crm_formatter/csv/seeds_mini.csv"}
+      #   permitted_arg = {file_path: "./lib/crm_formatter/csv/seeds_mini_10.csv"}
+      # end
 
-      if args.any?
-        permitted_arg = get_path_hash_url_args(args)
-      else
-        # permitted_arg = {file_path: "./lib/crm_formatter/csv/seeds_clean.csv"}
-        # permitted_arg = {file_path: "./lib/crm_formatter/csv/seeds_dirty.csv"}
-        # permitted_arg = {file_path: "./lib/crm_formatter/csv/seeds_mega.csv"}
-        permitted_arg = {file_path: "./lib/crm_formatter/csv/seeds_mini.csv"}
-        permitted_arg = {file_path: "./lib/crm_formatter/csv/seeds_mini_10.csv"}
-      end
 
-      @crm_data = @utf.validate_data(permitted_arg) if permitted_arg.any?
+      # @crm_data = @utf.validate_data(permitted_arg) if permitted_arg.any?
+
+      binding.pry
+      args = {file_path: @utf.get_seed_file_path}
+      args = {data_hashes: @utf.get_seed_hashes}
+
+      binding.pry
+      @crm_data = @utf.validate_data(args)
       binding.pry
       ## Returns nothing.  Sent to @crm_data
     end
@@ -60,7 +70,7 @@ module CrmFormatter
     ## Returns args that match permitted names and types if arg value not nil.
     def get_path_hash_url_args(args={})
       args_hash = args.delete_if {|k,v| !v.present? }
-      allowed_arg_kvs = {file_path: 'string', hashes: 'array', arrays: 'array'}
+      allowed_arg_kvs = {file_path: 'string', hashes: 'array'}
       permitted_arg_keys = check_args_name_and_class(allowed_arg_kvs, args_hash)
       permitted_arg = args_hash.select { |k,v| permitted_arg_keys.include?(k) }
     end
@@ -97,90 +107,6 @@ module CrmFormatter
       oa_args = {neg_exts: neg_exts}
     end
 
-
-    ### Sample Hashes for validate_data
-    def get_seed_hashes
-      [{:row_id=>1,
-        :url=>"stanleykaufman.net",
-        :act_name=>"Stanley Chevrolet Kaufman",
-        :street=>"825 E Fair St",
-        :city=>"Kaufman",
-        :state=>"TX",
-        :zip=>"75142",
-        :phone=>"(888) 457-4391"},
-       {:row_id=>2,
-        :url=>"leepartyka.com",
-        :act_name=>"Lee Partyka Chevrolet Mazda Isuzu Truck",
-        :street=>"200 Skiff St",
-        :city=>"Hamden",
-        :state=>"CT",
-        :zip=>"6518",
-        :phone=>"(203) 288-7761"},
-       {:row_id=>3,
-        :url=>"burienhonda.com",
-        :act_name=>"Honda of Burien 15026 1st Avenue South, Burien, WA 98148",
-        :street=>"15026 1st Avenue South",
-        :city=>"Burien",
-        :state=>"WA",
-        :zip=>"98148",
-        :phone=>"(206) 246-9700"},
-       {:row_id=>4,
-        :url=>"cortlandchryslerdodgejeep.com",
-        :act_name=>"Cortland Chrysler Dodge Jeep RAM",
-        :street=>"3878 West Rd",
-        :city=>"Cortland",
-        :state=>"NY",
-        :zip=>"13045",
-        :phone=>"(877) 279-3113"},
-       {:row_id=>5,
-        :url=>"imperialmotors.net",
-        :act_name=>"Imperial Motors",
-        :street=>"4839 Virginia Beach Blvd",
-        :city=>"Virginia Beach",
-        :state=>"VA",
-        :zip=>"23462",
-        :phone=>"(757) 490-3651"},
-       {:row_id=>6,
-        :url=>"liatoyotaofnorthampton.com",
-        :act_name=>"Lia Toyota of Northampton 280 King St. Northampton, MA 01060 Phone 413-341-5299",
-        :street=>"280 King St",
-        :city=>"Northampton",
-        :state=>"MA",
-        :zip=>"1060",
-        :phone=>"(413) 341-5299"},
-       {:row_id=>7,
-        :url=>"nelsonhallchevrolet.com",
-        :act_name=>"Nelson Hall Chevrolet",
-        :street=>"1811 S Frontage Rd",
-        :city=>"Meridian",
-        :state=>"MS",
-        :zip=>"39301",
-        :phone=>"(601) 621-4593"},
-       {:row_id=>8,
-        :url=>"marshallfordco.com",
-        :act_name=>"Marshall Ford Co Inc.",
-        :street=>"14843 MS-16",
-        :city=>"Philadelphia",
-        :state=>"MS",
-        :zip=>"39350",
-        :phone=>"(888) 461-7643"},
-       {:row_id=>9,
-        :url=>"warrentontoyota.com",
-        :act_name=>"Warrenton Toyota",
-        :street=>"6449 Lee Hwy",
-        :city=>"Warrenton",
-        :state=>"VA",
-        :zip=>"20187",
-        :phone=>"(540) 878-4100"},
-       {:row_id=>10,
-        :url=>"toyotacertifiedatcentralcity.com",
-        :act_name=>"Toyota Certified Central City",
-        :street=>"4800 Chestnut St",
-        :city=>"Philadelphia",
-        :state=>"PA",
-        :zip=>"19139",
-        :phone=>"(888) 379-1155"}]
-    end
 
 
 
