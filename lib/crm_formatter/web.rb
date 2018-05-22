@@ -15,14 +15,14 @@ module CrmFormatter
       @empty_args = args.empty?
       # Constants::ARGS
       # ARGS.merge!(args)
-      # @pos_urls = args.fetch(:pos_urls, [])
-      # @neg_urls = args.fetch(:neg_urls, [])
+      @pos_urls = args.fetch(:pos_urls, [])
+      @neg_urls = args.fetch(:neg_urls, [])
       # @pos_links = args.fetch(:pos_links, [])
       # @neg_links = args.fetch(:neg_links, [])
       # @pos_hrefs = args.fetch(:pos_hrefs, [])
       # @neg_hrefs = args.fetch(:neg_hrefs, [])
       # @pos_exts = args.fetch(:pos_exts, [])
-      # @neg_exts = args.fetch(:neg_exts, [])
+      @neg_exts = args.fetch(:neg_exts, [])
       @min_length = args.fetch(:min_length, 2)
       @max_length = args.fetch(:max_length, 100)
     end
@@ -48,30 +48,30 @@ module CrmFormatter
         (url = nil if has_errors(url_hash)) if url.present?
       end
 
-      url_hash[:formatted_url] = url
+      url_hash[:url_f] = url
       url_hash = check_reformatted_status(url_hash) if url.present?
       url_hash
     end
 
 
     def check_reformatted_status(url_hash)
-      formatted = url_hash[:formatted_url]
+      formatted = url_hash[:url_f]
       if formatted.present?
-        url_hash[:reformatted] = url_hash[:url_path] != formatted
+        url_hash[:web_status] = url_hash[:url_path] != formatted
       end
       url_hash
     end
 
 
     def has_errors(url_hash)
-      errors = url_hash[:neg].map { |neg| neg.include?('error') }
+      errors = url_hash[:web_neg].map { |web_neg| web_neg.include?('error') }
       errors.any?
     end
 
 
     ##Call: StartCrm.run_webs
     def prep_for_uri(url)
-      url_hash = { reformatted: false, url_path: url, formatted_url: nil, neg: [], pos: [] }
+      url_hash = { web_status: false, url_path: url, url_f: nil, web_neg: [], web_pos: [] }
       begin
         url = url&.split('|')&.first
         url = url&.split('\\')&.first
@@ -89,12 +89,12 @@ module CrmFormatter
 
         url = nil if url.present? && banned_symbols.any? {|symb| url&.include?(symb) }
         if !url.present?
-          url_hash[:neg] << "error: syntax"
-          url_hash[:formatted_url] = url
+          url_hash[:web_neg] << "error: syntax"
+          url_hash[:url_f] = url
         end
 
       rescue Exception => e
-        url_hash[:neg] << "error: #{e}"
+        url_hash[:web_neg] << "error: #{e}"
         url = nil
         url_hash
       end
@@ -150,9 +150,9 @@ module CrmFormatter
         end
 
         if err_msg
-          url_hash[:neg] << err_msg
+          url_hash[:web_neg] << err_msg
           url = nil
-          url_hash[:formatted_url] = nil
+          url_hash[:url_f] = nil
         end
       end
 
@@ -164,7 +164,7 @@ module CrmFormatter
 
     def extract_link(url_path)
       url_hash = format_url(url_path)
-      url = url_hash[:formatted_url]
+      url = url_hash[:url_f]
       link = url_path
       link_hsh = {url_path: url_path, url: url, link: nil }
       if url.present? && link.present? && link.length > @min_length

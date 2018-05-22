@@ -4,11 +4,49 @@ module CrmFormatter
     def initialize(args={})
       @args = args
       @empty_args = args.empty?
-      @global_hash = %w(row_id url act_name street city zip phone utf_details)
+      @global_hash = {:row_id=>nil, :act_name=>nil, :street=>nil, :city=>nil, :state=>nil, :zip=>nil, :phone=>nil, :url=>nil, :url_f=>nil, :url_path=>nil, :web_status=>nil, :web_neg=>nil, :web_pos=>nil, :utf_status=>nil}
     end
 
+    # @tools.get_global_hash
+    def get_global_hash
+      keys = "row_id, act_name, street, city, state, zip, phone, url, url_f, url_path, web_status, web_neg, web_pos, utf_status"
+      headers = keys.split(', ')
+      headers = headers.map(&:to_sym)
+      row = headers.map { |el| nil }
+      @global_hash = row_to_hsh(headers, row)
+    end
+
+
+    # @tools.update_global_hash(local_keys)
+    def update_global_hash(local_keys)
+      gkeys = @global_hash.keys
+      local_keys
+      lkeys = lkeys.uniq.sort
+      # lkeys = lkeys.map(&:to_sym)
+      # gkeys = gkeys.map(&:to_sym)
+      add_to_global = lkeys - gkeys
+      same_keys = lkeys && gkeys
+      add_to_global += same_keys - gkeys
+      add_to_global&.uniq!
+
+      if add_to_global.any?
+        add_to_global += gkeys
+        row = add_to_global.map { |el| nil }
+        @global_hash = row_to_hsh(global_keys, row)
+      end
+    end
+
+
+    # @tools.row_to_hsh(headers, row)
+    def row_to_hsh(headers, row)
+      headers = headers.map(&:to_sym)
+      hash = Hash[headers.zip(row)]
+    end
+
+
+
     ## scrub_oa, is only called if client OA args were passed at initialization.
-    ## Results listed in url_hash[:neg]/[:pos], and don't impact or hinder final formatted url.
+    ## Results listed in url_hash[:web_neg]/[:web_pos], and don't impact or hinder final formatted url.
     ## Simply adds more details about user's preferences and criteria for the url are.
     def scrub_oa(hash, target, oa_name, include_or_equal)
       if oa_name.present? && !@empty_args
@@ -33,68 +71,17 @@ module CrmFormatter
 
           scrub_match = scrub_matches&.uniq&.sort&.join(', ')
           if scrub_match.present?
-            if oa_name.include?('neg')
-              hash[:neg] << "#{oa_name}: #{scrub_match}"
+            if oa_name.include?('web_neg')
+              hash[:web_neg] << "#{oa_name}: #{scrub_match}"
             else
-              hash[:pos] << "#{oa_name}: #{scrub_match}"
+              hash[:web_pos] << "#{oa_name}: #{scrub_match}"
             end
           end
         end
+      else
       end
       hash
     end
-
-
-    # @tools.row_to_hsh(keys, row)
-    def row_to_hsh(keys, row)
-      binding.pry
-      # headers = ["url", "act_name", "street", "city", "state", "zip", "phone"]
-
-       # row = ["stanleykaufman.net", "Stanley Chevrolet Kaufman", "8h_l25 E Fair St", "Kaufman", "TX", "75142", "(888) 457-4391"]
-      headers = keys.map(&:to_s).join(",")
-
-      h = Hash[headers.zip(row)]
-      h.symbolize_keys
-    end
-
-
-    # @tools.update_global_hash(hashes)
-    def update_global_hash(hashes)
-      global_keys = @global_hash
-      keys = hashes.map(&:keys).flatten.uniq.sort
-      keys.map!(&:to_s)
-      global_keys += keys
-      global_keys.uniq!
-
-
-
-      row = global_keys.map { |el| nil }
-      master = row_to_hsh(global_keys, row)
-      binding.pry
-
-      master2 = hashes.map { |hsh| master.update(hsh) }
-      binding.pry
-
-      => ["row_id",
- "url",
- "act_name",
- "street",
- "city",
- "zip",
- "phone",
- "utf_details",
- "formatted_url",
- "neg",
- "pos",
- "reformatted",
- "state",
- "url_path"]
-
- formatted_url => web_url
-
-    end
-
-
 
 
 

@@ -36,8 +36,8 @@ module CrmFormatter
 
     #################### * COMPILE RESULTS * ####################
     def compile_results
-      utf_details = @valid_rows.map { |hsh| hsh[:utf_details] }
-      mapped_details = utf_details.map { |str| str.split(', ') }.flatten.compact
+      utf_status = @valid_rows.map { |hsh| hsh[:utf_status] }
+      mapped_details = utf_status.map { |str| str.split(', ') }.flatten.compact
       groups = make_groups_from_array(mapped_details)
       wchar = groups['wchar']
       perfect = groups['perfect']
@@ -152,15 +152,15 @@ module CrmFormatter
     def utf_filter(utf)
       if utf.present?
         puts utf.inspect
-        utf_details = utf.except(:text).compact.keys
-        utf_details = utf_details&.map(&:to_s).join(', ')
-        utf_details = 'perfect' if utf_details.blank?
+        utf_status = utf.except(:text).compact.keys
+        utf_status = utf_status&.map(&:to_s).join(', ')
+        utf_status = 'perfect' if utf_status.blank?
 
         encoded = utf[:text] if utf[:encoded]
         error = utf[:error]
         defective = utf[:text] if error
         line = utf.except(:error).compact.values.last if !error
-        data_hash = {row_id: @row_id, utf_details: utf_details}
+        data_hash = {row_id: @row_id, utf_status: utf_status}
 
         @encoded_rows << {row_id: @row_id, text: encoded} if encoded
         @error_rows << {row_id: @row_id, text: error} if error
@@ -269,13 +269,14 @@ module CrmFormatter
       # "./lib/crm_formatter/csv/seeds_dirty.csv"
       # "./lib/crm_formatter/csv/seeds_mega.csv"
       # "./lib/crm_formatter/csv/seeds_mini.csv"
-      "./lib/crm_formatter/csv/seeds_mini_10.csv"
+      # "./lib/crm_formatter/csv/seeds_mini_10.csv"
+      "./lib/crm_formatter/csv/seeds_mini_2_bug.csv"
     end
 
     ### Sample Hashes for validate_data
     def get_seed_hashes
       [{:row_id=>1,
-        :url=>"stanleykaufman.net",
+        :url=>"stanleykaufman.com",
         :act_name=>"Stanley Chevrolet Kaufman",
         :street=>"825 E Fair St",
         :city=>"Kaufman",
@@ -283,7 +284,7 @@ module CrmFormatter
         :zip=>"75142",
         :phone=>"(888) 457-4391"},
        {:row_id=>2,
-        :url=>"leepartyka.com",
+        :url=>"leepartyka",
         :act_name=>"Lee Partyka Chevrolet Mazda Isuzu Truck",
         :street=>"200 Skiff St",
         :city=>"Hamden",
@@ -291,7 +292,7 @@ module CrmFormatter
         :zip=>"6518",
         :phone=>"(203) 288-7761"},
        {:row_id=>3,
-        :url=>"burienhonda.com",
+        :url=>"burienhonda.fake.not.net.com",
         :act_name=>"Honda of Burien 15026 1st Avenue South, Burien, WA 98148",
         :street=>"15026 1st Avenue South",
         :city=>"Burien",
