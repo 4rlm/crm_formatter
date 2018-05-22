@@ -1,0 +1,964 @@
+Inspecting 17 files
+CCCCCEWEEECEWWCEC
+
+Offenses:
+
+crm_formatter.gemspec:2:24: C: Prefer single-quoted strings when you don't need string interpolation or special symbols.
+lib = File.expand_path("../lib", __FILE__)
+                       ^^^^^^^^
+crm_formatter.gemspec:5:9: C: Prefer single-quoted strings when you don't need string interpolation or special symbols.
+require "crm_formatter/version"
+        ^^^^^^^^^^^^^^^^^^^^^^^
+crm_formatter.gemspec:8:24: C: Prefer single-quoted strings when you don't need string interpolation or special symbols.
+  spec.name          = "crm_formatter"
+                       ^^^^^^^^^^^^^^^
+crm_formatter.gemspec:10:25: C: Prefer single-quoted strings when you don't need string interpolation or special symbols.
+  spec.authors       = ["Adam Booth"]
+                        ^^^^^^^^^^^^
+crm_formatter.gemspec:11:25: C: Prefer single-quoted strings when you don't need string interpolation or special symbols.
+  spec.email         = ["4rlm@protonmail.ch"]
+                        ^^^^^^^^^^^^^^^^^^^^
+crm_formatter.gemspec:12:24: C: Prefer single-quoted strings when you don't need string interpolation or special symbols.
+  spec.homepage      = "https://github.com/4rlm/crm_formatter"
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+crm_formatter.gemspec:13:24: C: Prefer single-quoted strings when you don't need string interpolation or special symbols.
+  spec.license       = "MIT"
+                       ^^^^^
+crm_formatter.gemspec:15:24: C: %q-literals should be delimited by ( and ).
+  spec.summary       = %q{Reformat, Normalize, and Scrub CRM Contact Data, Addresses, Phones and URLs}
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+crm_formatter.gemspec:15:24: C: Use %q only for strings that contain both single quotes and double quotes.
+  spec.summary       = %q{Reformat, Normalize, and Scrub CRM Contact Data, Addresses, Phones and URLs}
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+crm_formatter.gemspec:15:81: C: Line is too long. [102/80]
+  spec.summary       = %q{Reformat, Normalize, and Scrub CRM Contact Data, Addresses, Phones and URLs}
+                                                                                ^^^^^^^^^^^^^^^^^^^^^^
+crm_formatter.gemspec:16:24: C: %q-literals should be delimited by ( and ).
+  spec.description   = %q{Reformat, Normalize, and Scrub CRM Contact Data, Addresses, Phones and URLs. Originally developed for proprietary use in an enterprise software suite.  Recently decided to make them open source in a gem.  It's a work in progress as there are additional features being added in near future.  Also creating additonal gems with similar CRM office efficiency objectives.  Please contact me if you have any questions or comments.}
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+crm_formatter.gemspec:16:24: C: Use %q only for strings that contain both single quotes and double quotes.
+  spec.description   = %q{Reformat, Normalize, and Scrub CRM Contact Data, Addresses, Phones and URLs. Originally developed for proprietary use in an enterprise software suite.  Recently decided to make them open source in a gem.  It's a work in progress as there are additional features being added in near future.  Also creating additonal gems with similar CRM office efficiency objectives.  Please contact me if you have any questions or comments.}
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+crm_formatter.gemspec:16:81: C: Line is too long. [451/80]
+  spec.description   = %q{Reformat, Normalize, and Scrub CRM Contact Data, Addresses, Phones and URLs. Originally developed for proprietary use in an enterprise software suite.  Recently decided to make them open source in a gem.  It's a work in progress as there are additional features being added in near future.  Also creating additonal gems with similar CRM office efficiency objectives.  Please contact me if you have any questions or comments.}
+                                                                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+crm_formatter.gemspec:19:19: C: Prefer single-quoted strings when you don't need string interpolation or special symbols.
+    spec.metadata["allowed_push_host"] = "rubygems.org"
+                  ^^^^^^^^^^^^^^^^^^^
+crm_formatter.gemspec:19:42: C: Prefer single-quoted strings when you don't need string interpolation or special symbols.
+    spec.metadata["allowed_push_host"] = "rubygems.org"
+                                         ^^^^^^^^^^^^^^
+crm_formatter.gemspec:21:11: C: Prefer single-quoted strings when you don't need string interpolation or special symbols.
+    raise "RubyGems 2.0 or newer is required to protect against " \
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+crm_formatter.gemspec:22:7: C: Prefer single-quoted strings when you don't need string interpolation or special symbols.
+      "public gem pushes."
+      ^^^^^^^^^^^^^^^^^^^^
+crm_formatter.gemspec:25:13: C: Unnecessary spacing detected.
+  spec.files         = `git ls-files -z`.split("\x0").reject do |f|
+            ^^^^^^^^
+crm_formatter.gemspec:25:22: C: Operator = should be surrounded by a single space.
+  spec.files         = `git ls-files -z`.split("\x0").reject do |f|
+                     ^
+crm_formatter.gemspec:29:24: C: Prefer single-quoted strings when you don't need string interpolation or special symbols.
+  spec.bindir        = "exe"
+                       ^^^^^
+crm_formatter.gemspec:31:25: C: Prefer single-quoted strings when you don't need string interpolation or special symbols.
+  spec.require_paths = ["lib"]
+                        ^^^^^
+crm_formatter.gemspec:35:23: C: Prefer single-quoted strings when you don't need string interpolation or special symbols.
+  spec.add_dependency "activesupport", "~> 5.2.0"
+                      ^^^^^^^^^^^^^^^
+crm_formatter.gemspec:35:40: C: Prefer single-quoted strings when you don't need string interpolation or special symbols.
+  spec.add_dependency "activesupport", "~> 5.2.0"
+                                       ^^^^^^^^^^
+crm_formatter.gemspec:56:35: C: Prefer single-quoted strings when you don't need string interpolation or special symbols.
+  spec.add_development_dependency "rubocop", '~> 0.42.0'
+                                  ^^^^^^^^^
+crm_formatter.gemspec:57:35: C: Prefer single-quoted strings when you don't need string interpolation or special symbols.
+  spec.add_development_dependency "byebug", '~> 10.0', '>= 10.0.2'
+                                  ^^^^^^^^
+crm_formatter.gemspec:58:35: C: Prefer single-quoted strings when you don't need string interpolation or special symbols.
+  spec.add_development_dependency "bundler", ">= 1.14.0"
+                                  ^^^^^^^^^
+crm_formatter.gemspec:58:46: C: Prefer single-quoted strings when you don't need string interpolation or special symbols.
+  spec.add_development_dependency "bundler", ">= 1.14.0"
+                                             ^^^^^^^^^^^
+crm_formatter.gemspec:59:35: C: Prefer single-quoted strings when you don't need string interpolation or special symbols.
+  spec.add_development_dependency "rake", '>= 11.5.1'
+                                  ^^^^^^
+crm_formatter.gemspec:60:35: C: Prefer single-quoted strings when you don't need string interpolation or special symbols.
+  spec.add_development_dependency "rspec", ">= 3.0.0"
+                                  ^^^^^^^
+crm_formatter.gemspec:60:44: C: Prefer single-quoted strings when you don't need string interpolation or special symbols.
+  spec.add_development_dependency "rspec", ">= 3.0.0"
+                                           ^^^^^^^^^^
+crm_formatter.gemspec:61:35: C: Prefer single-quoted strings when you don't need string interpolation or special symbols.
+  spec.add_development_dependency "irbtools"
+                                  ^^^^^^^^^^
+crm_formatter.gemspec:67:1: C: Extra blank line detected.
+crm_formatter.gemspec:76:1: C: Extra empty line detected at block body end.
+Gemfile:1:8: C: Prefer single-quoted strings when you don't need string interpolation or special symbols.
+source "https://rubygems.org"
+       ^^^^^^^^^^^^^^^^^^^^^^
+Gemfile:3:21: C: Space between { and | missing.
+git_source(:github) {|repo_name| "https://github.com/#{repo_name}" }
+                    ^^
+menu.rb:1:18: C: Prefer single-quoted strings when you don't need string interpolation or special symbols.
+require_relative "lib/crm_formatter/address.rb"
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+menu.rb:5:8: C: Prefer single-quoted strings when you don't need string interpolation or special symbols.
+system "clear"
+       ^^^^^^^
+menu.rb:6:6: C: Prefer single-quoted strings when you don't need string interpolation or special symbols.
+puts "Welcome!"
+     ^^^^^^^^^^
+Rakefile:1:9: C: Prefer single-quoted strings when you don't need string interpolation or special symbols.
+require "bundler/gem_tasks"
+        ^^^^^^^^^^^^^^^^^^^
+Rakefile:2:9: C: Prefer single-quoted strings when you don't need string interpolation or special symbols.
+require "rspec/core/rake_task"
+        ^^^^^^^^^^^^^^^^^^^^^^
+Rakefile:8:1: C: Extra blank line detected.
+Rakefile:10:6: C: Use the new Ruby 1.9 hash syntax.
+task :default => :spec
+     ^^^^^^^^^^^
+Rakefile:11:6: C: Use the new Ruby 1.9 hash syntax.
+task :test => :spec
+     ^^^^^^^^
+Rakefile:13:1: C: Extra blank line detected.
+Rakefile:18:11: C: Prefer single-quoted strings when you don't need string interpolation or special symbols.
+  require "active_support/all"
+          ^^^^^^^^^^^^^^^^^^^^
+Rakefile:24:1: C: Extra blank line detected.
+Rakefile:25:1: C: Extra blank line detected.
+Rakefile:26:1: C: Extra blank line detected.
+Rakefile:27:1: C: Extra blank line detected.
+Rakefile:28:1: C: Extra blank line detected.
+Rakefile:29:1: C: Extra blank line detected.
+Rakefile:30:1: C: Extra blank line detected.
+Rakefile:31:1: C: Extra blank line detected.
+Rakefile:32:1: C: Extra blank line detected.
+Rakefile:33:1: C: Extra blank line detected.
+Rakefile:34:1: C: Extra blank line detected.
+Rakefile:38:1: C: Extra blank line detected.
+Rakefile:53:1: C: Incorrect indentation detected (column 0 instead of 2).
+#############################
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Rakefile:58:3: C: Incorrect indentation detected (column 2 instead of 0).
+  # alias cd-lib="cd ~/Desktop/gemdev/crm_formatter/lib"
+  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+bin/console:3:9: C: Prefer single-quoted strings when you don't need string interpolation or special symbols.
+require "bundler/setup"
+        ^^^^^^^^^^^^^^^
+bin/console:4:9: C: Prefer single-quoted strings when you don't need string interpolation or special symbols.
+require "crm_formatter"
+        ^^^^^^^^^^^^^^^
+bin/console:13:9: C: Prefer single-quoted strings when you don't need string interpolation or special symbols.
+require "irb"
+        ^^^^^
+lib/crm_formatter/address.rb:36:22: E: unexpected token error
+(Using Ruby 2.0 parser; configure using TargetRubyVersion parameter, under AllCops)
+      street = street&.gsub(/\s/, ' ')&.strip
+                     ^^
+lib/crm_formatter/address.rb:36:39: E: unexpected token error
+(Using Ruby 2.0 parser; configure using TargetRubyVersion parameter, under AllCops)
+      street = street&.gsub(/\s/, ' ')&.strip
+                                      ^^
+lib/crm_formatter/address.rb:43:17: E: unexpected token error
+(Using Ruby 2.0 parser; configure using TargetRubyVersion parameter, under AllCops)
+          street&.gsub!(".", " ")
+                ^^
+lib/crm_formatter/address.rb:44:17: E: unexpected token error
+(Using Ruby 2.0 parser; configure using TargetRubyVersion parameter, under AllCops)
+          street&.gsub!(",", " ")
+                ^^
+lib/crm_formatter/address.rb:46:17: E: unexpected token error
+(Using Ruby 2.0 parser; configure using TargetRubyVersion parameter, under AllCops)
+          street&.gsub!(" North ", " N ")
+                ^^
+lib/crm_formatter/address.rb:47:17: E: unexpected token error
+(Using Ruby 2.0 parser; configure using TargetRubyVersion parameter, under AllCops)
+          street&.gsub!(" South ", " S ")
+                ^^
+lib/crm_formatter/address.rb:48:17: E: unexpected token error
+(Using Ruby 2.0 parser; configure using TargetRubyVersion parameter, under AllCops)
+          street&.gsub!(" East ", " E ")
+                ^^
+lib/crm_formatter/address.rb:49:17: E: unexpected token error
+(Using Ruby 2.0 parser; configure using TargetRubyVersion parameter, under AllCops)
+          street&.gsub!(" West ", " W ")
+                ^^
+lib/crm_formatter/address.rb:50:17: E: unexpected token error
+(Using Ruby 2.0 parser; configure using TargetRubyVersion parameter, under AllCops)
+          street&.gsub!(" Ne ", " NE ")
+                ^^
+lib/crm_formatter/address.rb:51:17: E: unexpected token error
+(Using Ruby 2.0 parser; configure using TargetRubyVersion parameter, under AllCops)
+          street&.gsub!(" Nw ", " NW ")
+                ^^
+lib/crm_formatter/address.rb:52:17: E: unexpected token error
+(Using Ruby 2.0 parser; configure using TargetRubyVersion parameter, under AllCops)
+          street&.gsub!(" Se ", " SE ")
+                ^^
+lib/crm_formatter/address.rb:53:17: E: unexpected token error
+(Using Ruby 2.0 parser; configure using TargetRubyVersion parameter, under AllCops)
+          street&.gsub!(" Sw ", " SW ")
+                ^^
+lib/crm_formatter/address.rb:55:17: E: unexpected token error
+(Using Ruby 2.0 parser; configure using TargetRubyVersion parameter, under AllCops)
+          street&.gsub!("Avenue", "Ave")
+                ^^
+lib/crm_formatter/address.rb:56:17: E: unexpected token error
+(Using Ruby 2.0 parser; configure using TargetRubyVersion parameter, under AllCops)
+          street&.gsub!("Boulevard", "Blvd")
+                ^^
+lib/crm_formatter/address.rb:57:17: E: unexpected token error
+(Using Ruby 2.0 parser; configure using TargetRubyVersion parameter, under AllCops)
+          street&.gsub!("Drive", "Dr")
+                ^^
+lib/crm_formatter/address.rb:58:17: E: unexpected token error
+(Using Ruby 2.0 parser; configure using TargetRubyVersion parameter, under AllCops)
+          street&.gsub!("Expressway", "Expy")
+                ^^
+lib/crm_formatter/address.rb:59:17: E: unexpected token error
+(Using Ruby 2.0 parser; configure using TargetRubyVersion parameter, under AllCops)
+          street&.gsub!("Freeway", "Fwy")
+                ^^
+lib/crm_formatter/address.rb:60:17: E: unexpected token error
+(Using Ruby 2.0 parser; configure using TargetRubyVersion parameter, under AllCops)
+          street&.gsub!("Highway", "Hwy")
+                ^^
+lib/crm_formatter/address.rb:61:17: E: unexpected token error
+(Using Ruby 2.0 parser; configure using TargetRubyVersion parameter, under AllCops)
+          street&.gsub!("Lane", "Ln")
+                ^^
+lib/crm_formatter/address.rb:62:17: E: unexpected token error
+(Using Ruby 2.0 parser; configure using TargetRubyVersion parameter, under AllCops)
+          street&.gsub!("Parkway", "Pkwy")
+                ^^
+lib/crm_formatter/address.rb:63:17: E: unexpected token error
+(Using Ruby 2.0 parser; configure using TargetRubyVersion parameter, under AllCops)
+          street&.gsub!("Road", "Rd")
+                ^^
+lib/crm_formatter/address.rb:64:17: E: unexpected token error
+(Using Ruby 2.0 parser; configure using TargetRubyVersion parameter, under AllCops)
+          street&.gsub!("Route", "Rte")
+                ^^
+lib/crm_formatter/address.rb:65:17: E: unexpected token error
+(Using Ruby 2.0 parser; configure using TargetRubyVersion parameter, under AllCops)
+          street&.gsub!("Street", "St")
+                ^^
+lib/crm_formatter/address.rb:66:17: E: unexpected token error
+(Using Ruby 2.0 parser; configure using TargetRubyVersion parameter, under AllCops)
+          street&.gsub!("Terrace", "Ter")
+                ^^
+lib/crm_formatter/address.rb:67:17: E: unexpected token error
+(Using Ruby 2.0 parser; configure using TargetRubyVersion parameter, under AllCops)
+          street&.gsub!("Trail", "Trl")
+                ^^
+lib/crm_formatter/address.rb:68:17: E: unexpected token error
+(Using Ruby 2.0 parser; configure using TargetRubyVersion parameter, under AllCops)
+          street&.gsub!("Turnpike", "Tpke")
+                ^^
+lib/crm_formatter/address.rb:69:17: E: unexpected token error
+(Using Ruby 2.0 parser; configure using TargetRubyVersion parameter, under AllCops)
+          street&.gsub!("|", " ")
+                ^^
+lib/crm_formatter/address.rb:70:17: E: unexpected token error
+(Using Ruby 2.0 parser; configure using TargetRubyVersion parameter, under AllCops)
+          street&.gsub!("•", " ")
+                ^^
+lib/crm_formatter/address.rb:71:17: E: unexpected token error
+(Using Ruby 2.0 parser; configure using TargetRubyVersion parameter, under AllCops)
+          street&.gsub!("Welcome to", " ")
+                ^^
+lib/crm_formatter/address.rb:72:17: E: unexpected token error
+(Using Ruby 2.0 parser; configure using TargetRubyVersion parameter, under AllCops)
+          street&.gsub!("var address = \"", " ")
+                ^^
+lib/crm_formatter/address.rb:74:17: E: unexpected token error
+(Using Ruby 2.0 parser; configure using TargetRubyVersion parameter, under AllCops)
+          street&.strip!
+                ^^
+lib/crm_formatter/address.rb:75:17: E: unexpected token error
+(Using Ruby 2.0 parser; configure using TargetRubyVersion parameter, under AllCops)
+          street&.squeeze!(" ")
+                ^^
+lib/crm_formatter/address.rb:84:18: E: unexpected token error
+(Using Ruby 2.0 parser; configure using TargetRubyVersion parameter, under AllCops)
+      city = city&.gsub(/\s/, ' ')&.strip
+                 ^^
+lib/crm_formatter/address.rb:84:35: E: unexpected token error
+(Using Ruby 2.0 parser; configure using TargetRubyVersion parameter, under AllCops)
+      city = city&.gsub(/\s/, ' ')&.strip
+                                  ^^
+lib/crm_formatter/address.rb:85:25: E: unexpected token error
+(Using Ruby 2.0 parser; configure using TargetRubyVersion parameter, under AllCops)
+      city = nil if city&.scan(/[0-9]/)&.any?
+                        ^^
+lib/crm_formatter/address.rb:85:40: E: unexpected token error
+(Using Ruby 2.0 parser; configure using TargetRubyVersion parameter, under AllCops)
+      city = nil if city&.scan(/[0-9]/)&.any?
+                                       ^^
+lib/crm_formatter/address.rb:86:25: E: unexpected token error
+(Using Ruby 2.0 parser; configure using TargetRubyVersion parameter, under AllCops)
+      city = nil if city&.downcase&.include?('category')
+                        ^^
+lib/crm_formatter/address.rb:87:25: E: unexpected token error
+(Using Ruby 2.0 parser; configure using TargetRubyVersion parameter, under AllCops)
+      city = nil if city&.downcase&.include?('model')
+                        ^^
+lib/crm_formatter/address.rb:88:25: E: unexpected token error
+(Using Ruby 2.0 parser; configure using TargetRubyVersion parameter, under AllCops)
+      city = nil if city&.downcase&.include?('make')
+                        ^^
+lib/crm_formatter/address.rb:89:25: E: unexpected token error
+(Using Ruby 2.0 parser; configure using TargetRubyVersion parameter, under AllCops)
+      city = nil if city&.downcase&.include?('inventory')
+                        ^^
+lib/crm_formatter/address.rb:90:25: E: unexpected token error
+(Using Ruby 2.0 parser; configure using TargetRubyVersion parameter, under AllCops)
+      city = nil if city&.downcase&.include?('tracker')
+                        ^^
+lib/crm_formatter/address.rb:91:25: E: unexpected token error
+(Using Ruby 2.0 parser; configure using TargetRubyVersion parameter, under AllCops)
+      city = nil if city&.downcase&.include?('push')
+                        ^^
+lib/crm_formatter/address.rb:92:25: E: unexpected token error
+(Using Ruby 2.0 parser; configure using TargetRubyVersion parameter, under AllCops)
+      city = nil if city&.downcase&.include?("(")
+                        ^^
+lib/crm_formatter/address.rb:93:25: E: unexpected token error
+(Using Ruby 2.0 parser; configure using TargetRubyVersion parameter, under AllCops)
+      city = nil if city&.downcase&.include?(")")
+                        ^^
+lib/crm_formatter/address.rb:94:25: E: unexpected token error
+(Using Ruby 2.0 parser; configure using TargetRubyVersion parameter, under AllCops)
+      city = nil if city&.downcase&.include?("[")
+                        ^^
+lib/crm_formatter/address.rb:95:25: E: unexpected token error
+(Using Ruby 2.0 parser; configure using TargetRubyVersion parameter, under AllCops)
+      city = nil if city&.downcase&.include?("]")
+                        ^^
+lib/crm_formatter/address.rb:96:11: E: unexpected token error
+(Using Ruby 2.0 parser; configure using TargetRubyVersion parameter, under AllCops)
+      city&.gsub!("|", " ")
+          ^^
+lib/crm_formatter/address.rb:97:11: E: unexpected token error
+(Using Ruby 2.0 parser; configure using TargetRubyVersion parameter, under AllCops)
+      city&.gsub!("•", " ")
+          ^^
+lib/crm_formatter/address.rb:108:44: E: unexpected token kDO_BLOCK
+(Using Ruby 2.0 parser; configure using TargetRubyVersion parameter, under AllCops)
+          invalid_city = city_parts.select do |city_part|
+                                           ^^
+lib/crm_formatter/address.rb:113:29: E: unexpected token error
+(Using Ruby 2.0 parser; configure using TargetRubyVersion parameter, under AllCops)
+          city = nil if city&.downcase&.include?("/")
+                            ^^
+lib/crm_formatter/address.rb:114:29: E: unexpected token error
+(Using Ruby 2.0 parser; configure using TargetRubyVersion parameter, under AllCops)
+          city = nil if city&.downcase&.include?("www")
+                            ^^
+lib/crm_formatter/address.rb:115:29: E: unexpected token error
+(Using Ruby 2.0 parser; configure using TargetRubyVersion parameter, under AllCops)
+          city = nil if city&.downcase&.include?("*")
+                            ^^
+lib/crm_formatter/address.rb:116:29: E: unexpected token error
+(Using Ruby 2.0 parser; configure using TargetRubyVersion parameter, under AllCops)
+          city = nil if city&.downcase&.include?("number")
+                            ^^
+lib/crm_formatter/address.rb:117:29: E: unexpected token error
+(Using Ruby 2.0 parser; configure using TargetRubyVersion parameter, under AllCops)
+          city = nil if city&.downcase&.include?("stock")
+                            ^^
+lib/crm_formatter/address.rb:118:29: E: unexpected token error
+(Using Ruby 2.0 parser; configure using TargetRubyVersion parameter, under AllCops)
+          city = nil if city&.downcase&.include?(":")
+                            ^^
+lib/crm_formatter/address.rb:119:29: E: unexpected token error
+(Using Ruby 2.0 parser; configure using TargetRubyVersion parameter, under AllCops)
+          city = nil if city&.downcase&.include?("ID")
+                            ^^
+lib/crm_formatter/address.rb:121:15: E: unexpected token error
+(Using Ruby 2.0 parser; configure using TargetRubyVersion parameter, under AllCops)
+          city&.strip!
+              ^^
+lib/crm_formatter/address.rb:122:15: E: unexpected token error
+(Using Ruby 2.0 parser; configure using TargetRubyVersion parameter, under AllCops)
+          city&.squeeze!(" ")
+              ^^
+lib/crm_formatter/address.rb:127:18: E: unexpected token error
+(Using Ruby 2.0 parser; configure using TargetRubyVersion parameter, under AllCops)
+      city = city&.split(' ')&.map(&:capitalize).join(' ')
+                 ^^
+lib/crm_formatter/address.rb:127:30: E: unexpected token error
+(Using Ruby 2.0 parser; configure using TargetRubyVersion parameter, under AllCops)
+      city = city&.split(' ')&.map(&:capitalize).join(' ')
+                             ^^
+lib/crm_formatter/address.rb:134:20: E: unexpected token error
+(Using Ruby 2.0 parser; configure using TargetRubyVersion parameter, under AllCops)
+      state = state&.gsub(/\s/, ' ')&.strip
+                   ^^
+lib/crm_formatter/address.rb:134:37: E: unexpected token error
+(Using Ruby 2.0 parser; configure using TargetRubyVersion parameter, under AllCops)
+      state = state&.gsub(/\s/, ' ')&.strip
+                                    ^^
+lib/crm_formatter/address.rb:150:35: E: unexpected token error
+(Using Ruby 2.0 parser; configure using TargetRubyVersion parameter, under AllCops)
+          state_code = valid_state&.last
+                                  ^^
+lib/crm_formatter/address.rb:162:16: E: unexpected token error
+(Using Ruby 2.0 parser; configure using TargetRubyVersion parameter, under AllCops)
+      zip = zip&.gsub(/\s/, ' ')&.strip
+               ^^
+lib/crm_formatter/address.rb:162:33: E: unexpected token error
+(Using Ruby 2.0 parser; configure using TargetRubyVersion parameter, under AllCops)
+      zip = zip&.gsub(/\s/, ' ')&.strip
+                                ^^
+lib/crm_formatter/address.rb:163:16: E: unexpected token error
+(Using Ruby 2.0 parser; configure using TargetRubyVersion parameter, under AllCops)
+      zip = zip&.split('-')&.first
+               ^^
+lib/crm_formatter/address.rb:163:28: E: unexpected token error
+(Using Ruby 2.0 parser; configure using TargetRubyVersion parameter, under AllCops)
+      zip = zip&.split('-')&.first
+                           ^^
+lib/crm_formatter/address.rb:164:23: E: unexpected token error
+(Using Ruby 2.0 parser; configure using TargetRubyVersion parameter, under AllCops)
+      zip = nil if zip&.scan(/[A-Za-z]/)&.any?
+                      ^^
+lib/crm_formatter/address.rb:164:41: E: unexpected token error
+(Using Ruby 2.0 parser; configure using TargetRubyVersion parameter, under AllCops)
+      zip = nil if zip&.scan(/[A-Za-z]/)&.any?
+                                        ^^
+lib/crm_formatter/address.rb:167:10: E: unexpected token error
+(Using Ruby 2.0 parser; configure using TargetRubyVersion parameter, under AllCops)
+      zip&.strip!
+         ^^
+lib/crm_formatter/address.rb:168:10: E: unexpected token error
+(Using Ruby 2.0 parser; configure using TargetRubyVersion parameter, under AllCops)
+      zip&.squeeze!(" ")
+         ^^
+lib/crm_formatter/address.rb:174:1: E: unexpected token kEND
+(Using Ruby 2.0 parser; configure using TargetRubyVersion parameter, under AllCops)
+end
+^^^
+lib/crm_formatter/dictionary.rb:2:3: C: Missing top-level module documentation comment.
+  module Dictionary
+  ^^^^^^
+lib/crm_formatter/dictionary.rb:3:1: C: Extra empty line detected at module body beginning.
+lib/crm_formatter/dictionary.rb:6:7: W: Remove debugger entry point binding.pry.
+      binding.pry
+      ^^^^^^^^^^^
+lib/crm_formatter/dictionary.rb:10:3: C: Inconsistent indentation detected.
+  DICTIONARY = { pronouns: ["A", "The", "Their", "Some", "None"], adjectives: ["a really long list I won't reproduce here"], nouns: ["another really long list I won't reproduce here"]}
+  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+lib/crm_formatter/dictionary.rb:10:16: C: Freeze mutable objects assigned to constants.
+  DICTIONARY = { pronouns: ["A", "The", "Their", "Some", "None"], adjectives: ["a really long list I won't reproduce here"], nouns: ["another really long list I won't reproduce here"]}
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+lib/crm_formatter/dictionary.rb:10:28: C: Use %w or %W for an array of words.
+  DICTIONARY = { pronouns: ["A", "The", "Their", "Some", "None"], adjectives: ["a really long list I won't reproduce here"], nouns: ["another really long list I won't reproduce here"]}
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+lib/crm_formatter/dictionary.rb:10:29: C: Prefer single-quoted strings when you don't need string interpolation or special symbols.
+  DICTIONARY = { pronouns: ["A", "The", "Their", "Some", "None"], adjectives: ["a really long list I won't reproduce here"], nouns: ["another really long list I won't reproduce here"]}
+                            ^^^
+lib/crm_formatter/dictionary.rb:10:34: C: Prefer single-quoted strings when you don't need string interpolation or special symbols.
+  DICTIONARY = { pronouns: ["A", "The", "Their", "Some", "None"], adjectives: ["a really long list I won't reproduce here"], nouns: ["another really long list I won't reproduce here"]}
+                                 ^^^^^
+lib/crm_formatter/dictionary.rb:10:41: C: Prefer single-quoted strings when you don't need string interpolation or special symbols.
+  DICTIONARY = { pronouns: ["A", "The", "Their", "Some", "None"], adjectives: ["a really long list I won't reproduce here"], nouns: ["another really long list I won't reproduce here"]}
+                                        ^^^^^^^
+lib/crm_formatter/dictionary.rb:10:50: C: Prefer single-quoted strings when you don't need string interpolation or special symbols.
+  DICTIONARY = { pronouns: ["A", "The", "Their", "Some", "None"], adjectives: ["a really long list I won't reproduce here"], nouns: ["another really long list I won't reproduce here"]}
+                                                 ^^^^^^
+lib/crm_formatter/dictionary.rb:10:58: C: Prefer single-quoted strings when you don't need string interpolation or special symbols.
+  DICTIONARY = { pronouns: ["A", "The", "Their", "Some", "None"], adjectives: ["a really long list I won't reproduce here"], nouns: ["another really long list I won't reproduce here"]}
+                                                         ^^^^^^
+lib/crm_formatter/dictionary.rb:10:81: C: Line is too long. [184/80]
+  DICTIONARY = { pronouns: ["A", "The", "Their", "Some", "None"], adjectives: ["a really long list I won't reproduce here"], nouns: ["another really long list I won't reproduce here"]}
+                                                                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+lib/crm_formatter/dictionary.rb:10:184: C: Space inside } missing.
+  DICTIONARY = { pronouns: ["A", "The", "Their", "Some", "None"], adjectives: ["a really long list I won't reproduce here"], nouns: ["another really long list I won't reproduce here"]}
+                                                                                                                                                                                       ^
+lib/crm_formatter/dictionary.rb:12:3: C: Inconsistent indentation detected.
+  def Dictionary.pronoun [33m...[0m
+  ^^^^^^^^^^^^^^^^^^^^^^
+lib/crm_formatter/dictionary.rb:12:7: C: Use self.pronoun instead of Dictionary.pronoun.
+  def Dictionary.pronoun
+      ^^^^^^^^^^
+lib/crm_formatter/dictionary.rb:13:3: C: Use 2 (not 1) spaces for indentation.
+   DICTIONARY[:pronouns].sample
+  ^
+lib/crm_formatter/dictionary.rb:16:3: C: Inconsistent indentation detected.
+  def Dictionary.adjective [33m...[0m
+  ^^^^^^^^^^^^^^^^^^^^^^^^
+lib/crm_formatter/dictionary.rb:16:7: C: Use self.adjective instead of Dictionary.adjective.
+  def Dictionary.adjective
+      ^^^^^^^^^^
+lib/crm_formatter/dictionary.rb:17:3: C: Use 2 (not 1) spaces for indentation.
+   DICTIONARY[:adjectives].sample
+  ^
+lib/crm_formatter/dictionary.rb:20:3: C: Inconsistent indentation detected.
+  def Dictionary.noun [33m...[0m
+  ^^^^^^^^^^^^^^^^^^^
+lib/crm_formatter/dictionary.rb:20:7: C: Use self.noun instead of Dictionary.noun.
+  def Dictionary.noun
+      ^^^^^^^^^^
+lib/crm_formatter/dictionary.rb:21:3: C: Use 2 (not 1) spaces for indentation.
+   DICTIONARY[:nouns].sample
+  ^
+lib/crm_formatter/dictionary.rb:23:1: C: Extra empty line detected at module body end.
+lib/crm_formatter/phone.rb:10:22: E: unexpected token error
+(Using Ruby 2.0 parser; configure using TargetRubyVersion parameter, under AllCops)
+        phone = phone&.gsub(/\s/, ' ')&.strip
+                     ^^
+lib/crm_formatter/phone.rb:10:39: E: unexpected token error
+(Using Ruby 2.0 parser; configure using TargetRubyVersion parameter, under AllCops)
+        phone = phone&.gsub(/\s/, ' ')&.strip
+                                      ^^
+lib/crm_formatter/tools.rb:30:20: E: unexpected token error
+(Using Ruby 2.0 parser; configure using TargetRubyVersion parameter, under AllCops)
+      add_to_global&.uniq!
+                   ^^
+lib/crm_formatter/tools.rb:72:38: E: unexpected token error
+(Using Ruby 2.0 parser; configure using TargetRubyVersion parameter, under AllCops)
+          scrub_match = scrub_matches&.uniq&.sort&.join(', ')
+                                     ^^
+lib/crm_formatter/tools.rb:91:22: E: unexpected token error
+(Using Ruby 2.0 parser; configure using TargetRubyVersion parameter, under AllCops)
+        flashes = str&.gsub(/[^ A-Za-z]/, '')&.strip&.split(' ')
+                     ^^
+lib/crm_formatter/tools.rb:91:46: E: unexpected token error
+(Using Ruby 2.0 parser; configure using TargetRubyVersion parameter, under AllCops)
+        flashes = str&.gsub(/[^ A-Za-z]/, '')&.strip&.split(' ')
+                                             ^^
+lib/crm_formatter/tools.rb:92:24: E: unexpected token error
+(Using Ruby 2.0 parser; configure using TargetRubyVersion parameter, under AllCops)
+        flash = flashes&.reject {|e| e.length < 3 }.join(' ')
+                       ^^
+lib/crm_formatter/tools.rb:98:33: E: unexpected token error
+(Using Ruby 2.0 parser; configure using TargetRubyVersion parameter, under AllCops)
+            str = str.split(' ')&.each { |el| el.capitalize! if el.gsub(/[^ A-Za-z]/, '')&.strip&.length > 2 }&.join(' ')
+                                ^^
+lib/crm_formatter/tools.rb:98:90: E: unexpected token error
+(Using Ruby 2.0 parser; configure using TargetRubyVersion parameter, under AllCops)
+            str = str.split(' ')&.each { |el| el.capitalize! if el.gsub(/[^ A-Za-z]/, '')&.strip&.length > 2 }&.join(' ')
+                                                                                         ^^
+lib/crm_formatter/tools.rb:98:111: E: unexpected token error
+(Using Ruby 2.0 parser; configure using TargetRubyVersion parameter, under AllCops)
+            str = str.split(' ')&.each { |el| el.capitalize! if el.gsub(/[^ A-Za-z]/, '')&.strip&.length > 2 }&.join(' ')
+                                                                                                              ^^
+lib/crm_formatter/utf.rb:139:26: E: unexpected token error
+(Using Ruby 2.0 parser; configure using TargetRubyVersion parameter, under AllCops)
+          wchar = encoded&.gsub(/\s+/, ' ')&.strip
+                         ^^
+lib/crm_formatter/utf.rb:139:44: E: unexpected token error
+(Using Ruby 2.0 parser; configure using TargetRubyVersion parameter, under AllCops)
+          wchar = encoded&.gsub(/\s+/, ' ')&.strip
+                                           ^^
+lib/crm_formatter/utf.rb:156:32: E: unexpected token error
+(Using Ruby 2.0 parser; configure using TargetRubyVersion parameter, under AllCops)
+        utf_status = utf_status&.map(&:to_s).join(', ')
+                               ^^
+lib/crm_formatter/version.rb:2:13: C: Freeze mutable objects assigned to constants.
+  VERSION = "1.0.8-rc.1"
+            ^^^^^^^^^^^^
+lib/crm_formatter/version.rb:2:13: C: Prefer single-quoted strings when you don't need string interpolation or special symbols.
+  VERSION = "1.0.8-rc.1"
+            ^^^^^^^^^^^^
+lib/crm_formatter/web.rb:43:13: E: unexpected token error
+(Using Ruby 2.0 parser; configure using TargetRubyVersion parameter, under AllCops)
+      if url&.present?
+            ^^
+lib/crm_formatter/web.rb:76:18: E: unexpected token error
+(Using Ruby 2.0 parser; configure using TargetRubyVersion parameter, under AllCops)
+        url = url&.split('|')&.first
+                 ^^
+lib/crm_formatter/web.rb:76:30: E: unexpected token error
+(Using Ruby 2.0 parser; configure using TargetRubyVersion parameter, under AllCops)
+        url = url&.split('|')&.first
+                             ^^
+lib/crm_formatter/web.rb:77:18: E: unexpected token error
+(Using Ruby 2.0 parser; configure using TargetRubyVersion parameter, under AllCops)
+        url = url&.split('\\')&.first
+                 ^^
+lib/crm_formatter/web.rb:77:31: E: unexpected token error
+(Using Ruby 2.0 parser; configure using TargetRubyVersion parameter, under AllCops)
+        url = url&.split('\\')&.first
+                              ^^
+lib/crm_formatter/web.rb:78:12: E: unexpected token error
+(Using Ruby 2.0 parser; configure using TargetRubyVersion parameter, under AllCops)
+        url&.gsub!(/\P{ASCII}/, '')
+           ^^
+lib/crm_formatter/web.rb:79:18: E: unexpected token error
+(Using Ruby 2.0 parser; configure using TargetRubyVersion parameter, under AllCops)
+        url = url&.downcase&.strip
+                 ^^
+lib/crm_formatter/web.rb:83:12: E: unexpected token error
+(Using Ruby 2.0 parser; configure using TargetRubyVersion parameter, under AllCops)
+        url&.strip!
+           ^^
+lib/crm_formatter/web.rb:90:69: E: unexpected token error
+(Using Ruby 2.0 parser; configure using TargetRubyVersion parameter, under AllCops)
+        url = nil if url.present? && banned_symbols.any? {|symb| url&.include?(symb) }
+                                                                    ^^
+lib/crm_formatter/web.rb:109:21: E: unexpected token error
+(Using Ruby 2.0 parser; configure using TargetRubyVersion parameter, under AllCops)
+        scheme = uri&.scheme
+                    ^^
+lib/crm_formatter/web.rb:110:19: E: unexpected token error
+(Using Ruby 2.0 parser; configure using TargetRubyVersion parameter, under AllCops)
+        host = uri&.host
+                  ^^
+lib/crm_formatter/web.rb:122:34: E: unexpected token error
+(Using Ruby 2.0 parser; configure using TargetRubyVersion parameter, under AllCops)
+        uri_parts = URI(url).host&.split(".")
+                                 ^^
+lib/crm_formatter/web.rb:173:13: E: unexpected token error
+(Using Ruby 2.0 parser; configure using TargetRubyVersion parameter, under AllCops)
+        link&.gsub!(url, '')
+            ^^
+lib/crm_formatter/web.rb:174:20: E: unexpected token error
+(Using Ruby 2.0 parser; configure using TargetRubyVersion parameter, under AllCops)
+        link = link&.split('.net')&.last
+                   ^^
+lib/crm_formatter/web.rb:174:35: E: unexpected token error
+(Using Ruby 2.0 parser; configure using TargetRubyVersion parameter, under AllCops)
+        link = link&.split('.net')&.last
+                                  ^^
+lib/crm_formatter/web.rb:175:20: E: unexpected token error
+(Using Ruby 2.0 parser; configure using TargetRubyVersion parameter, under AllCops)
+        link = link&.split('.com')&.last
+                   ^^
+lib/crm_formatter/web.rb:175:35: E: unexpected token error
+(Using Ruby 2.0 parser; configure using TargetRubyVersion parameter, under AllCops)
+        link = link&.split('.com')&.last
+                                  ^^
+lib/crm_formatter/web.rb:176:20: E: unexpected token error
+(Using Ruby 2.0 parser; configure using TargetRubyVersion parameter, under AllCops)
+        link = link&.split('.org')&.last
+                   ^^
+lib/crm_formatter/web.rb:176:35: E: unexpected token error
+(Using Ruby 2.0 parser; configure using TargetRubyVersion parameter, under AllCops)
+        link = link&.split('.org')&.last
+                                  ^^
+lib/crm_formatter/web.rb:199:47: E: unexpected token error
+(Using Ruby 2.0 parser; configure using TargetRubyVersion parameter, under AllCops)
+        flags = @neg_links.select { |red| link&.include?(red) }
+                                              ^^
+lib/crm_formatter/web.rb:217:13: E: unexpected token error
+(Using Ruby 2.0 parser; configure using TargetRubyVersion parameter, under AllCops)
+        href&.gsub!("(", ' ')
+            ^^
+lib/crm_formatter/web.rb:218:13: E: unexpected token error
+(Using Ruby 2.0 parser; configure using TargetRubyVersion parameter, under AllCops)
+        href&.gsub!(")", ' ')
+            ^^
+lib/crm_formatter/web.rb:219:13: E: unexpected token error
+(Using Ruby 2.0 parser; configure using TargetRubyVersion parameter, under AllCops)
+        href&.gsub!("[", ' ')
+            ^^
+lib/crm_formatter/web.rb:220:13: E: unexpected token error
+(Using Ruby 2.0 parser; configure using TargetRubyVersion parameter, under AllCops)
+        href&.gsub!("]", ' ')
+            ^^
+lib/crm_formatter/web.rb:221:13: E: unexpected token error
+(Using Ruby 2.0 parser; configure using TargetRubyVersion parameter, under AllCops)
+        href&.gsub!(",", ' ')
+            ^^
+lib/crm_formatter/web.rb:222:13: E: unexpected token error
+(Using Ruby 2.0 parser; configure using TargetRubyVersion parameter, under AllCops)
+        href&.gsub!("'", ' ')
+            ^^
+lib/crm_formatter/web.rb:227:30: E: unexpected token error
+(Using Ruby 2.0 parser; configure using TargetRubyVersion parameter, under AllCops)
+        flags << invalid_text&.match(href)
+                             ^^
+lib/crm_formatter/web.rb:228:20: E: unexpected token error
+(Using Ruby 2.0 parser; configure using TargetRubyVersion parameter, under AllCops)
+        href = href&.downcase
+                   ^^
+lib/crm_formatter/web.rb:229:20: E: unexpected token error
+(Using Ruby 2.0 parser; configure using TargetRubyVersion parameter, under AllCops)
+        href = href&.strip
+                   ^^
+lib/crm_formatter/web.rb:231:48: E: unexpected token error
+(Using Ruby 2.0 parser; configure using TargetRubyVersion parameter, under AllCops)
+        flags << @neg_hrefs.select { |red| href&.include?(red) }
+                                               ^^
+lib/crm_formatter/web.rb:244:12: E: unexpected token error
+(Using Ruby 2.0 parser; configure using TargetRubyVersion parameter, under AllCops)
+        url&.gsub!("www.www", "www")
+           ^^
+lib/crm_formatter/web.rb:259:1: E: unexpected token kEND
+(Using Ruby 2.0 parser; configure using TargetRubyVersion parameter, under AllCops)
+end
+^^^
+lib/crm_formatter/web_wrap.rb:4:3: C: Missing top-level class documentation comment.
+  class WebWrap
+  ^^^^^
+lib/crm_formatter/web_wrap.rb:5:1: C: Extra empty line detected at class body beginning.
+lib/crm_formatter/web_wrap.rb:7:18: C: Space inside { missing.
+      utf_args = {pollute_seeds: false, seed_hashes: true, seed_csv: false}
+                 ^
+lib/crm_formatter/web_wrap.rb:7:75: C: Space inside } missing.
+      utf_args = {pollute_seeds: false, seed_hashes: true, seed_csv: false}
+                                                                          ^
+lib/crm_formatter/web_wrap.rb:17:7: W: Useless assignment to variable - formatted_urls. Did you mean format_urls?
+      formatted_urls = format_urls
+      ^^^^^^^^^^^^^^
+lib/crm_formatter/web_wrap.rb:20:1: C: Extra blank line detected.
+lib/crm_formatter/web_wrap.rb:21:5: C: Method has too many lines. [12/10]
+    def format_urls(args={}) [33m...[0m
+    ^^^^^^^^^^^^^^^^^^^^^^^^
+lib/crm_formatter/web_wrap.rb:21:21: W: Unused method argument - args. If it's necessary, use _ or _args as an argument name to indicate that it won't be used. You can also write as format_urls(*) if you want the method to accept any arguments but don't care about them.
+    def format_urls(args={})
+                    ^^^^
+lib/crm_formatter/web_wrap.rb:21:25: C: Surrounding space missing in default value assignment.
+    def format_urls(args={})
+                        ^
+lib/crm_formatter/web_wrap.rb:22:19: W: Useless assignment to variable - args.
+      import_data(args={}) ## data sent to @crm_data
+                  ^^^^
+lib/crm_formatter/web_wrap.rb:22:23: C: Surrounding space missing for operator =.
+      import_data(args={}) ## data sent to @crm_data
+                      ^
+lib/crm_formatter/web_wrap.rb:32:11: W: Useless assignment to variable - local.
+          local = local.merge(formatted_hash)
+          ^^^^^
+lib/crm_formatter/web_wrap.rb:38:1: C: Extra blank line detected.
+lib/crm_formatter/web_wrap.rb:40:25: C: Surrounding space missing in default value assignment.
+    def import_data(args={})
+                        ^
+lib/crm_formatter/web_wrap.rb:41:14: C: Space inside { missing.
+      args = {file_path: @utf.get_seed_file_path}
+             ^
+lib/crm_formatter/web_wrap.rb:41:49: C: Space inside } missing.
+      args = {file_path: @utf.get_seed_file_path}
+                                                ^
+lib/crm_formatter/web_wrap.rb:46:1: C: Extra blank line detected.
+lib/crm_formatter/web_wrap.rb:47:9: C: Do not prefix reader method names with get_.
+    def get_web_args
+        ^^^^^^^^^^^^
+lib/crm_formatter/web_wrap.rb:48:81: C: Line is too long. [267/80]
+      neg_urls = %w(approv avis budget collis eat enterprise facebook financ food google gourmet hertz hotel hyatt insur invest loan lube mobility motel motorola parts quick rent repair restaur rv ryder service softwar travel twitter webhost yellowpages yelp youtube)
+                                                                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+lib/crm_formatter/web_wrap.rb:50:19: C: Prefer single-quoted strings when you don't need string interpolation or special symbols.
+      pos_urls = ["acura", "alfa romeo", "aston martin", "audi", "bmw", "bentley", "bugatti", "buick", "cdjr", "cadillac", "chevrolet", "chrysler", "dodge", "ferrari", "fiat", "ford", "gmc", "group", "group", "honda", "hummer", "hyundai", "infiniti", "isuzu", "jaguar", "jeep", "kia", "lamborghini", "lexus", "lincoln", "lotus", "mini", "maserati", "mazda", "mclaren", "mercedes-benz", "mitsubishi", "nissan", "porsche", "ram", "rolls-royce", "saab", "scion", "smart", "subaru", "suzuki", "toyota", "volkswagen", "volvo"]
+                  ^^^^^^^
+lib/crm_formatter/web_wrap.rb:50:28: C: Prefer single-quoted strings when you don't need string interpolation or special symbols.
+      pos_urls = ["acura", "alfa romeo", "aston martin", "audi", "bmw", "bentley", "bugatti", "buick", "cdjr", "cadillac", "chevrolet", "chrysler", "dodge", "ferrari", "fiat", "ford", "gmc", "group", "group", "honda", "hummer", "hyundai", "infiniti", "isuzu", "jaguar", "jeep", "kia", "lamborghini", "lexus", "lincoln", "lotus", "mini", "maserati", "mazda", "mclaren", "mercedes-benz", "mitsubishi", "nissan", "porsche", "ram", "rolls-royce", "saab", "scion", "smart", "subaru", "suzuki", "toyota", "volkswagen", "volvo"]
+                           ^^^^^^^^^^^^
+lib/crm_formatter/web_wrap.rb:50:42: C: Prefer single-quoted strings when you don't need string interpolation or special symbols.
+      pos_urls = ["acura", "alfa romeo", "aston martin", "audi", "bmw", "bentley", "bugatti", "buick", "cdjr", "cadillac", "chevrolet", "chrysler", "dodge", "ferrari", "fiat", "ford", "gmc", "group", "group", "honda", "hummer", "hyundai", "infiniti", "isuzu", "jaguar", "jeep", "kia", "lamborghini", "lexus", "lincoln", "lotus", "mini", "maserati", "mazda", "mclaren", "mercedes-benz", "mitsubishi", "nissan", "porsche", "ram", "rolls-royce", "saab", "scion", "smart", "subaru", "suzuki", "toyota", "volkswagen", "volvo"]
+                                         ^^^^^^^^^^^^^^
+lib/crm_formatter/web_wrap.rb:50:58: C: Prefer single-quoted strings when you don't need string interpolation or special symbols.
+      pos_urls = ["acura", "alfa romeo", "aston martin", "audi", "bmw", "bentley", "bugatti", "buick", "cdjr", "cadillac", "chevrolet", "chrysler", "dodge", "ferrari", "fiat", "ford", "gmc", "group", "group", "honda", "hummer", "hyundai", "infiniti", "isuzu", "jaguar", "jeep", "kia", "lamborghini", "lexus", "lincoln", "lotus", "mini", "maserati", "mazda", "mclaren", "mercedes-benz", "mitsubishi", "nissan", "porsche", "ram", "rolls-royce", "saab", "scion", "smart", "subaru", "suzuki", "toyota", "volkswagen", "volvo"]
+                                                         ^^^^^^
+lib/crm_formatter/web_wrap.rb:50:66: C: Prefer single-quoted strings when you don't need string interpolation or special symbols.
+      pos_urls = ["acura", "alfa romeo", "aston martin", "audi", "bmw", "bentley", "bugatti", "buick", "cdjr", "cadillac", "chevrolet", "chrysler", "dodge", "ferrari", "fiat", "ford", "gmc", "group", "group", "honda", "hummer", "hyundai", "infiniti", "isuzu", "jaguar", "jeep", "kia", "lamborghini", "lexus", "lincoln", "lotus", "mini", "maserati", "mazda", "mclaren", "mercedes-benz", "mitsubishi", "nissan", "porsche", "ram", "rolls-royce", "saab", "scion", "smart", "subaru", "suzuki", "toyota", "volkswagen", "volvo"]
+                                                                 ^^^^^
+lib/crm_formatter/web_wrap.rb:50:73: C: Prefer single-quoted strings when you don't need string interpolation or special symbols.
+      pos_urls = ["acura", "alfa romeo", "aston martin", "audi", "bmw", "bentley", "bugatti", "buick", "cdjr", "cadillac", "chevrolet", "chrysler", "dodge", "ferrari", "fiat", "ford", "gmc", "group", "group", "honda", "hummer", "hyundai", "infiniti", "isuzu", "jaguar", "jeep", "kia", "lamborghini", "lexus", "lincoln", "lotus", "mini", "maserati", "mazda", "mclaren", "mercedes-benz", "mitsubishi", "nissan", "porsche", "ram", "rolls-royce", "saab", "scion", "smart", "subaru", "suzuki", "toyota", "volkswagen", "volvo"]
+                                                                        ^^^^^^^^^
+lib/crm_formatter/web_wrap.rb:50:81: C: Line is too long. [521/80]
+      pos_urls = ["acura", "alfa romeo", "aston martin", "audi", "bmw", "bentley", "bugatti", "buick", "cdjr", "cadillac", "chevrolet", "chrysler", "dodge", "ferrari", "fiat", "ford", "gmc", "group", "group", "honda", "hummer", "hyundai", "infiniti", "isuzu", "jaguar", "jeep", "kia", "lamborghini", "lexus", "lincoln", "lotus", "mini", "maserati", "mazda", "mclaren", "mercedes-benz", "mitsubishi", "nissan", "porsche", "ram", "rolls-royce", "saab", "scion", "smart", "subaru", "suzuki", "toyota", "volkswagen", "volvo"]
+                                                                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+lib/crm_formatter/web_wrap.rb:50:84: C: Prefer single-quoted strings when you don't need string interpolation or special symbols.
+      pos_urls = ["acura", "alfa romeo", "aston martin", "audi", "bmw", "bentley", "bugatti", "buick", "cdjr", "cadillac", "chevrolet", "chrysler", "dodge", "ferrari", "fiat", "ford", "gmc", "group", "group", "honda", "hummer", "hyundai", "infiniti", "isuzu", "jaguar", "jeep", "kia", "lamborghini", "lexus", "lincoln", "lotus", "mini", "maserati", "mazda", "mclaren", "mercedes-benz", "mitsubishi", "nissan", "porsche", "ram", "rolls-royce", "saab", "scion", "smart", "subaru", "suzuki", "toyota", "volkswagen", "volvo"]
+                                                                                   ^^^^^^^^^
+lib/crm_formatter/web_wrap.rb:50:95: C: Prefer single-quoted strings when you don't need string interpolation or special symbols.
+      pos_urls = ["acura", "alfa romeo", "aston martin", "audi", "bmw", "bentley", "bugatti", "buick", "cdjr", "cadillac", "chevrolet", "chrysler", "dodge", "ferrari", "fiat", "ford", "gmc", "group", "group", "honda", "hummer", "hyundai", "infiniti", "isuzu", "jaguar", "jeep", "kia", "lamborghini", "lexus", "lincoln", "lotus", "mini", "maserati", "mazda", "mclaren", "mercedes-benz", "mitsubishi", "nissan", "porsche", "ram", "rolls-royce", "saab", "scion", "smart", "subaru", "suzuki", "toyota", "volkswagen", "volvo"]
+                                                                                              ^^^^^^^
+lib/crm_formatter/web_wrap.rb:50:104: C: Prefer single-quoted strings when you don't need string interpolation or special symbols.
+      pos_urls = ["acura", "alfa romeo", "aston martin", "audi", "bmw", "bentley", "bugatti", "buick", "cdjr", "cadillac", "chevrolet", "chrysler", "dodge", "ferrari", "fiat", "ford", "gmc", "group", "group", "honda", "hummer", "hyundai", "infiniti", "isuzu", "jaguar", "jeep", "kia", "lamborghini", "lexus", "lincoln", "lotus", "mini", "maserati", "mazda", "mclaren", "mercedes-benz", "mitsubishi", "nissan", "porsche", "ram", "rolls-royce", "saab", "scion", "smart", "subaru", "suzuki", "toyota", "volkswagen", "volvo"]
+                                                                                                       ^^^^^^
+lib/crm_formatter/web_wrap.rb:50:112: C: Prefer single-quoted strings when you don't need string interpolation or special symbols.
+      pos_urls = ["acura", "alfa romeo", "aston martin", "audi", "bmw", "bentley", "bugatti", "buick", "cdjr", "cadillac", "chevrolet", "chrysler", "dodge", "ferrari", "fiat", "ford", "gmc", "group", "group", "honda", "hummer", "hyundai", "infiniti", "isuzu", "jaguar", "jeep", "kia", "lamborghini", "lexus", "lincoln", "lotus", "mini", "maserati", "mazda", "mclaren", "mercedes-benz", "mitsubishi", "nissan", "porsche", "ram", "rolls-royce", "saab", "scion", "smart", "subaru", "suzuki", "toyota", "volkswagen", "volvo"]
+                                                                                                               ^^^^^^^^^^
+lib/crm_formatter/web_wrap.rb:50:124: C: Prefer single-quoted strings when you don't need string interpolation or special symbols.
+      pos_urls = ["acura", "alfa romeo", "aston martin", "audi", "bmw", "bentley", "bugatti", "buick", "cdjr", "cadillac", "chevrolet", "chrysler", "dodge", "ferrari", "fiat", "ford", "gmc", "group", "group", "honda", "hummer", "hyundai", "infiniti", "isuzu", "jaguar", "jeep", "kia", "lamborghini", "lexus", "lincoln", "lotus", "mini", "maserati", "mazda", "mclaren", "mercedes-benz", "mitsubishi", "nissan", "porsche", "ram", "rolls-royce", "saab", "scion", "smart", "subaru", "suzuki", "toyota", "volkswagen", "volvo"]
+                                                                                                                           ^^^^^^^^^^^
+lib/crm_formatter/web_wrap.rb:50:137: C: Prefer single-quoted strings when you don't need string interpolation or special symbols.
+      pos_urls = ["acura", "alfa romeo", "aston martin", "audi", "bmw", "bentley", "bugatti", "buick", "cdjr", "cadillac", "chevrolet", "chrysler", "dodge", "ferrari", "fiat", "ford", "gmc", "group", "group", "honda", "hummer", "hyundai", "infiniti", "isuzu", "jaguar", "jeep", "kia", "lamborghini", "lexus", "lincoln", "lotus", "mini", "maserati", "mazda", "mclaren", "mercedes-benz", "mitsubishi", "nissan", "porsche", "ram", "rolls-royce", "saab", "scion", "smart", "subaru", "suzuki", "toyota", "volkswagen", "volvo"]
+                                                                                                                                        ^^^^^^^^^^
+lib/crm_formatter/web_wrap.rb:50:149: C: Prefer single-quoted strings when you don't need string interpolation or special symbols.
+      pos_urls = ["acura", "alfa romeo", "aston martin", "audi", "bmw", "bentley", "bugatti", "buick", "cdjr", "cadillac", "chevrolet", "chrysler", "dodge", "ferrari", "fiat", "ford", "gmc", "group", "group", "honda", "hummer", "hyundai", "infiniti", "isuzu", "jaguar", "jeep", "kia", "lamborghini", "lexus", "lincoln", "lotus", "mini", "maserati", "mazda", "mclaren", "mercedes-benz", "mitsubishi", "nissan", "porsche", "ram", "rolls-royce", "saab", "scion", "smart", "subaru", "suzuki", "toyota", "volkswagen", "volvo"]
+                                                                                                                                                    ^^^^^^^
+lib/crm_formatter/web_wrap.rb:50:158: C: Prefer single-quoted strings when you don't need string interpolation or special symbols.
+      pos_urls = ["acura", "alfa romeo", "aston martin", "audi", "bmw", "bentley", "bugatti", "buick", "cdjr", "cadillac", "chevrolet", "chrysler", "dodge", "ferrari", "fiat", "ford", "gmc", "group", "group", "honda", "hummer", "hyundai", "infiniti", "isuzu", "jaguar", "jeep", "kia", "lamborghini", "lexus", "lincoln", "lotus", "mini", "maserati", "mazda", "mclaren", "mercedes-benz", "mitsubishi", "nissan", "porsche", "ram", "rolls-royce", "saab", "scion", "smart", "subaru", "suzuki", "toyota", "volkswagen", "volvo"]
+                                                                                                                                                             ^^^^^^^^^
+lib/crm_formatter/web_wrap.rb:50:169: C: Prefer single-quoted strings when you don't need string interpolation or special symbols.
+      pos_urls = ["acura", "alfa romeo", "aston martin", "audi", "bmw", "bentley", "bugatti", "buick", "cdjr", "cadillac", "chevrolet", "chrysler", "dodge", "ferrari", "fiat", "ford", "gmc", "group", "group", "honda", "hummer", "hyundai", "infiniti", "isuzu", "jaguar", "jeep", "kia", "lamborghini", "lexus", "lincoln", "lotus", "mini", "maserati", "mazda", "mclaren", "mercedes-benz", "mitsubishi", "nissan", "porsche", "ram", "rolls-royce", "saab", "scion", "smart", "subaru", "suzuki", "toyota", "volkswagen", "volvo"]
+                                                                                                                                                                        ^^^^^^
+lib/crm_formatter/web_wrap.rb:50:177: C: Prefer single-quoted strings when you don't need string interpolation or special symbols.
+      pos_urls = ["acura", "alfa romeo", "aston martin", "audi", "bmw", "bentley", "bugatti", "buick", "cdjr", "cadillac", "chevrolet", "chrysler", "dodge", "ferrari", "fiat", "ford", "gmc", "group", "group", "honda", "hummer", "hyundai", "infiniti", "isuzu", "jaguar", "jeep", "kia", "lamborghini", "lexus", "lincoln", "lotus", "mini", "maserati", "mazda", "mclaren", "mercedes-benz", "mitsubishi", "nissan", "porsche", "ram", "rolls-royce", "saab", "scion", "smart", "subaru", "suzuki", "toyota", "volkswagen", "volvo"]
+                                                                                                                                                                                ^^^^^^
+lib/crm_formatter/web_wrap.rb:50:185: C: Prefer single-quoted strings when you don't need string interpolation or special symbols.
+      pos_urls = ["acura", "alfa romeo", "aston martin", "audi", "bmw", "bentley", "bugatti", "buick", "cdjr", "cadillac", "chevrolet", "chrysler", "dodge", "ferrari", "fiat", "ford", "gmc", "group", "group", "honda", "hummer", "hyundai", "infiniti", "isuzu", "jaguar", "jeep", "kia", "lamborghini", "lexus", "lincoln", "lotus", "mini", "maserati", "mazda", "mclaren", "mercedes-benz", "mitsubishi", "nissan", "porsche", "ram", "rolls-royce", "saab", "scion", "smart", "subaru", "suzuki", "toyota", "volkswagen", "volvo"]
+                                                                                                                                                                                        ^^^^^
+lib/crm_formatter/web_wrap.rb:50:192: C: Prefer single-quoted strings when you don't need string interpolation or special symbols.
+      pos_urls = ["acura", "alfa romeo", "aston martin", "audi", "bmw", "bentley", "bugatti", "buick", "cdjr", "cadillac", "chevrolet", "chrysler", "dodge", "ferrari", "fiat", "ford", "gmc", "group", "group", "honda", "hummer", "hyundai", "infiniti", "isuzu", "jaguar", "jeep", "kia", "lamborghini", "lexus", "lincoln", "lotus", "mini", "maserati", "mazda", "mclaren", "mercedes-benz", "mitsubishi", "nissan", "porsche", "ram", "rolls-royce", "saab", "scion", "smart", "subaru", "suzuki", "toyota", "volkswagen", "volvo"]
+                                                                                                                                                                                               ^^^^^^^
+lib/crm_formatter/web_wrap.rb:50:201: C: Prefer single-quoted strings when you don't need string interpolation or special symbols.
+      pos_urls = ["acura", "alfa romeo", "aston martin", "audi", "bmw", "bentley", "bugatti", "buick", "cdjr", "cadillac", "chevrolet", "chrysler", "dodge", "ferrari", "fiat", "ford", "gmc", "group", "group", "honda", "hummer", "hyundai", "infiniti", "isuzu", "jaguar", "jeep", "kia", "lamborghini", "lexus", "lincoln", "lotus", "mini", "maserati", "mazda", "mclaren", "mercedes-benz", "mitsubishi", "nissan", "porsche", "ram", "rolls-royce", "saab", "scion", "smart", "subaru", "suzuki", "toyota", "volkswagen", "volvo"]
+                                                                                                                                                                                                        ^^^^^^^
+lib/crm_formatter/web_wrap.rb:50:210: C: Prefer single-quoted strings when you don't need string interpolation or special symbols.
+      pos_urls = ["acura", "alfa romeo", "aston martin", "audi", "bmw", "bentley", "bugatti", "buick", "cdjr", "cadillac", "chevrolet", "chrysler", "dodge", "ferrari", "fiat", "ford", "gmc", "group", "group", "honda", "hummer", "hyundai", "infiniti", "isuzu", "jaguar", "jeep", "kia", "lamborghini", "lexus", "lincoln", "lotus", "mini", "maserati", "mazda", "mclaren", "mercedes-benz", "mitsubishi", "nissan", "porsche", "ram", "rolls-royce", "saab", "scion", "smart", "subaru", "suzuki", "toyota", "volkswagen", "volvo"]
+                                                                                                                                                                                                                 ^^^^^^^
+lib/crm_formatter/web_wrap.rb:50:219: C: Prefer single-quoted strings when you don't need string interpolation or special symbols.
+      pos_urls = ["acura", "alfa romeo", "aston martin", "audi", "bmw", "bentley", "bugatti", "buick", "cdjr", "cadillac", "chevrolet", "chrysler", "dodge", "ferrari", "fiat", "ford", "gmc", "group", "group", "honda", "hummer", "hyundai", "infiniti", "isuzu", "jaguar", "jeep", "kia", "lamborghini", "lexus", "lincoln", "lotus", "mini", "maserati", "mazda", "mclaren", "mercedes-benz", "mitsubishi", "nissan", "porsche", "ram", "rolls-royce", "saab", "scion", "smart", "subaru", "suzuki", "toyota", "volkswagen", "volvo"]
+                                                                                                                                                                                                                          ^^^^^^^^
+lib/crm_formatter/web_wrap.rb:50:229: C: Prefer single-quoted strings when you don't need string interpolation or special symbols.
+      pos_urls = ["acura", "alfa romeo", "aston martin", "audi", "bmw", "bentley", "bugatti", "buick", "cdjr", "cadillac", "chevrolet", "chrysler", "dodge", "ferrari", "fiat", "ford", "gmc", "group", "group", "honda", "hummer", "hyundai", "infiniti", "isuzu", "jaguar", "jeep", "kia", "lamborghini", "lexus", "lincoln", "lotus", "mini", "maserati", "mazda", "mclaren", "mercedes-benz", "mitsubishi", "nissan", "porsche", "ram", "rolls-royce", "saab", "scion", "smart", "subaru", "suzuki", "toyota", "volkswagen", "volvo"]
+                                                                                                                                                                                                                                    ^^^^^^^^^
+lib/crm_formatter/web_wrap.rb:50:240: C: Prefer single-quoted strings when you don't need string interpolation or special symbols.
+      pos_urls = ["acura", "alfa romeo", "aston martin", "audi", "bmw", "bentley", "bugatti", "buick", "cdjr", "cadillac", "chevrolet", "chrysler", "dodge", "ferrari", "fiat", "ford", "gmc", "group", "group", "honda", "hummer", "hyundai", "infiniti", "isuzu", "jaguar", "jeep", "kia", "lamborghini", "lexus", "lincoln", "lotus", "mini", "maserati", "mazda", "mclaren", "mercedes-benz", "mitsubishi", "nissan", "porsche", "ram", "rolls-royce", "saab", "scion", "smart", "subaru", "suzuki", "toyota", "volkswagen", "volvo"]
+                                                                                                                                                                                                                                               ^^^^^^^^^^
+lib/crm_formatter/web_wrap.rb:50:252: C: Prefer single-quoted strings when you don't need string interpolation or special symbols.
+      pos_urls = ["acura", "alfa romeo", "aston martin", "audi", "bmw", "bentley", "bugatti", "buick", "cdjr", "cadillac", "chevrolet", "chrysler", "dodge", "ferrari", "fiat", "ford", "gmc", "group", "group", "honda", "hummer", "hyundai", "infiniti", "isuzu", "jaguar", "jeep", "kia", "lamborghini", "lexus", "lincoln", "lotus", "mini", "maserati", "mazda", "mclaren", "mercedes-benz", "mitsubishi", "nissan", "porsche", "ram", "rolls-royce", "saab", "scion", "smart", "subaru", "suzuki", "toyota", "volkswagen", "volvo"]
+                                                                                                                                                                                                                                                           ^^^^^^^
+lib/crm_formatter/web_wrap.rb:50:261: C: Prefer single-quoted strings when you don't need string interpolation or special symbols.
+      pos_urls = ["acura", "alfa romeo", "aston martin", "audi", "bmw", "bentley", "bugatti", "buick", "cdjr", "cadillac", "chevrolet", "chrysler", "dodge", "ferrari", "fiat", "ford", "gmc", "group", "group", "honda", "hummer", "hyundai", "infiniti", "isuzu", "jaguar", "jeep", "kia", "lamborghini", "lexus", "lincoln", "lotus", "mini", "maserati", "mazda", "mclaren", "mercedes-benz", "mitsubishi", "nissan", "porsche", "ram", "rolls-royce", "saab", "scion", "smart", "subaru", "suzuki", "toyota", "volkswagen", "volvo"]
+                                                                                                                                                                                                                                                                    ^^^^^^^^
+lib/crm_formatter/web_wrap.rb:50:271: C: Prefer single-quoted strings when you don't need string interpolation or special symbols.
+      pos_urls = ["acura", "alfa romeo", "aston martin", "audi", "bmw", "bentley", "bugatti", "buick", "cdjr", "cadillac", "chevrolet", "chrysler", "dodge", "ferrari", "fiat", "ford", "gmc", "group", "group", "honda", "hummer", "hyundai", "infiniti", "isuzu", "jaguar", "jeep", "kia", "lamborghini", "lexus", "lincoln", "lotus", "mini", "maserati", "mazda", "mclaren", "mercedes-benz", "mitsubishi", "nissan", "porsche", "ram", "rolls-royce", "saab", "scion", "smart", "subaru", "suzuki", "toyota", "volkswagen", "volvo"]
+                                                                                                                                                                                                                                                                              ^^^^^^
+lib/crm_formatter/web_wrap.rb:50:279: C: Prefer single-quoted strings when you don't need string interpolation or special symbols.
+      pos_urls = ["acura", "alfa romeo", "aston martin", "audi", "bmw", "bentley", "bugatti", "buick", "cdjr", "cadillac", "chevrolet", "chrysler", "dodge", "ferrari", "fiat", "ford", "gmc", "group", "group", "honda", "hummer", "hyundai", "infiniti", "isuzu", "jaguar", "jeep", "kia", "lamborghini", "lexus", "lincoln", "lotus", "mini", "maserati", "mazda", "mclaren", "mercedes-benz", "mitsubishi", "nissan", "porsche", "ram", "rolls-royce", "saab", "scion", "smart", "subaru", "suzuki", "toyota", "volkswagen", "volvo"]
+                                                                                                                                                                                                                                                                                      ^^^^^
+lib/crm_formatter/web_wrap.rb:50:286: C: Prefer single-quoted strings when you don't need string interpolation or special symbols.
+      pos_urls = ["acura", "alfa romeo", "aston martin", "audi", "bmw", "bentley", "bugatti", "buick", "cdjr", "cadillac", "chevrolet", "chrysler", "dodge", "ferrari", "fiat", "ford", "gmc", "group", "group", "honda", "hummer", "hyundai", "infiniti", "isuzu", "jaguar", "jeep", "kia", "lamborghini", "lexus", "lincoln", "lotus", "mini", "maserati", "mazda", "mclaren", "mercedes-benz", "mitsubishi", "nissan", "porsche", "ram", "rolls-royce", "saab", "scion", "smart", "subaru", "suzuki", "toyota", "volkswagen", "volvo"]
+                                                                                                                                                                                                                                                                                             ^^^^^^^^^^^^^
+lib/crm_formatter/web_wrap.rb:50:301: C: Prefer single-quoted strings when you don't need string interpolation or special symbols.
+      pos_urls = ["acura", "alfa romeo", "aston martin", "audi", "bmw", "bentley", "bugatti", "buick", "cdjr", "cadillac", "chevrolet", "chrysler", "dodge", "ferrari", "fiat", "ford", "gmc", "group", "group", "honda", "hummer", "hyundai", "infiniti", "isuzu", "jaguar", "jeep", "kia", "lamborghini", "lexus", "lincoln", "lotus", "mini", "maserati", "mazda", "mclaren", "mercedes-benz", "mitsubishi", "nissan", "porsche", "ram", "rolls-royce", "saab", "scion", "smart", "subaru", "suzuki", "toyota", "volkswagen", "volvo"]
+                                                                                                                                                                                                                                                                                                            ^^^^^^^
+lib/crm_formatter/web_wrap.rb:50:310: C: Prefer single-quoted strings when you don't need string interpolation or special symbols.
+      pos_urls = ["acura", "alfa romeo", "aston martin", "audi", "bmw", "bentley", "bugatti", "buick", "cdjr", "cadillac", "chevrolet", "chrysler", "dodge", "ferrari", "fiat", "ford", "gmc", "group", "group", "honda", "hummer", "hyundai", "infiniti", "isuzu", "jaguar", "jeep", "kia", "lamborghini", "lexus", "lincoln", "lotus", "mini", "maserati", "mazda", "mclaren", "mercedes-benz", "mitsubishi", "nissan", "porsche", "ram", "rolls-royce", "saab", "scion", "smart", "subaru", "suzuki", "toyota", "volkswagen", "volvo"]
+                                                                                                                                                                                                                                                                                                                     ^^^^^^^^^
+lib/crm_formatter/web_wrap.rb:50:321: C: Prefer single-quoted strings when you don't need string interpolation or special symbols.
+      pos_urls = ["acura", "alfa romeo", "aston martin", "audi", "bmw", "bentley", "bugatti", "buick", "cdjr", "cadillac", "chevrolet", "chrysler", "dodge", "ferrari", "fiat", "ford", "gmc", "group", "group", "honda", "hummer", "hyundai", "infiniti", "isuzu", "jaguar", "jeep", "kia", "lamborghini", "lexus", "lincoln", "lotus", "mini", "maserati", "mazda", "mclaren", "mercedes-benz", "mitsubishi", "nissan", "porsche", "ram", "rolls-royce", "saab", "scion", "smart", "subaru", "suzuki", "toyota", "volkswagen", "volvo"]
+                                                                                                                                                                                                                                                                                                                                ^^^^^^^
+lib/crm_formatter/web_wrap.rb:50:330: C: Prefer single-quoted strings when you don't need string interpolation or special symbols.
+      pos_urls = ["acura", "alfa romeo", "aston martin", "audi", "bmw", "bentley", "bugatti", "buick", "cdjr", "cadillac", "chevrolet", "chrysler", "dodge", "ferrari", "fiat", "ford", "gmc", "group", "group", "honda", "hummer", "hyundai", "infiniti", "isuzu", "jaguar", "jeep", "kia", "lamborghini", "lexus", "lincoln", "lotus", "mini", "maserati", "mazda", "mclaren", "mercedes-benz", "mitsubishi", "nissan", "porsche", "ram", "rolls-royce", "saab", "scion", "smart", "subaru", "suzuki", "toyota", "volkswagen", "volvo"]
+                                                                                                                                                                                                                                                                                                                                         ^^^^^^
+lib/crm_formatter/web_wrap.rb:50:338: C: Prefer single-quoted strings when you don't need string interpolation or special symbols.
+      pos_urls = ["acura", "alfa romeo", "aston martin", "audi", "bmw", "bentley", "bugatti", "buick", "cdjr", "cadillac", "chevrolet", "chrysler", "dodge", "ferrari", "fiat", "ford", "gmc", "group", "group", "honda", "hummer", "hyundai", "infiniti", "isuzu", "jaguar", "jeep", "kia", "lamborghini", "lexus", "lincoln", "lotus", "mini", "maserati", "mazda", "mclaren", "mercedes-benz", "mitsubishi", "nissan", "porsche", "ram", "rolls-royce", "saab", "scion", "smart", "subaru", "suzuki", "toyota", "volkswagen", "volvo"]
+                                                                                                                                                                                                                                                                                                                                                 ^^^^^^^^^^
+lib/crm_formatter/web_wrap.rb:50:350: C: Prefer single-quoted strings when you don't need string interpolation or special symbols.
+      pos_urls = ["acura", "alfa romeo", "aston martin", "audi", "bmw", "bentley", "bugatti", "buick", "cdjr", "cadillac", "chevrolet", "chrysler", "dodge", "ferrari", "fiat", "ford", "gmc", "group", "group", "honda", "hummer", "hyundai", "infiniti", "isuzu", "jaguar", "jeep", "kia", "lamborghini", "lexus", "lincoln", "lotus", "mini", "maserati", "mazda", "mclaren", "mercedes-benz", "mitsubishi", "nissan", "porsche", "ram", "rolls-royce", "saab", "scion", "smart", "subaru", "suzuki", "toyota", "volkswagen", "volvo"]
+                                                                                                                                                                                                                                                                                                                                                             ^^^^^^^
+lib/crm_formatter/web_wrap.rb:50:359: C: Prefer single-quoted strings when you don't need string interpolation or special symbols.
+      pos_urls = ["acura", "alfa romeo", "aston martin", "audi", "bmw", "bentley", "bugatti", "buick", "cdjr", "cadillac", "chevrolet", "chrysler", "dodge", "ferrari", "fiat", "ford", "gmc", "group", "group", "honda", "hummer", "hyundai", "infiniti", "isuzu", "jaguar", "jeep", "kia", "lamborghini", "lexus", "lincoln", "lotus", "mini", "maserati", "mazda", "mclaren", "mercedes-benz", "mitsubishi", "nissan", "porsche", "ram", "rolls-royce", "saab", "scion", "smart", "subaru", "suzuki", "toyota", "volkswagen", "volvo"]
+                                                                                                                                                                                                                                                                                                                                                                      ^^^^^^^^^
+lib/crm_formatter/web_wrap.rb:50:370: C: Prefer single-quoted strings when you don't need string interpolation or special symbols.
+      pos_urls = ["acura", "alfa romeo", "aston martin", "audi", "bmw", "bentley", "bugatti", "buick", "cdjr", "cadillac", "chevrolet", "chrysler", "dodge", "ferrari", "fiat", "ford", "gmc", "group", "group", "honda", "hummer", "hyundai", "infiniti", "isuzu", "jaguar", "jeep", "kia", "lamborghini", "lexus", "lincoln", "lotus", "mini", "maserati", "mazda", "mclaren", "mercedes-benz", "mitsubishi", "nissan", "porsche", "ram", "rolls-royce", "saab", "scion", "smart", "subaru", "suzuki", "toyota", "volkswagen", "volvo"]
+                                                                                                                                                                                                                                                                                                                                                                                 ^^^^^^^^^^^^^^^
+lib/crm_formatter/web_wrap.rb:50:387: C: Prefer single-quoted strings when you don't need string interpolation or special symbols.
+      pos_urls = ["acura", "alfa romeo", "aston martin", "audi", "bmw", "bentley", "bugatti", "buick", "cdjr", "cadillac", "chevrolet", "chrysler", "dodge", "ferrari", "fiat", "ford", "gmc", "group", "group", "honda", "hummer", "hyundai", "infiniti", "isuzu", "jaguar", "jeep", "kia", "lamborghini", "lexus", "lincoln", "lotus", "mini", "maserati", "mazda", "mclaren", "mercedes-benz", "mitsubishi", "nissan", "porsche", "ram", "rolls-royce", "saab", "scion", "smart", "subaru", "suzuki", "toyota", "volkswagen", "volvo"]
+                                                                                                                                                                                                                                                                                                                                                                                                  ^^^^^^^^^^^^
+lib/crm_formatter/web_wrap.rb:50:401: C: Prefer single-quoted strings when you don't need string interpolation or special symbols.
+      pos_urls = ["acura", "alfa romeo", "aston martin", "audi", "bmw", "bentley", "bugatti", "buick", "cdjr", "cadillac", "chevrolet", "chrysler", "dodge", "ferrari", "fiat", "ford", "gmc", "group", "group", "honda", "hummer", "hyundai", "infiniti", "isuzu", "jaguar", "jeep", "kia", "lamborghini", "lexus", "lincoln", "lotus", "mini", "maserati", "mazda", "mclaren", "mercedes-benz", "mitsubishi", "nissan", "porsche", "ram", "rolls-royce", "saab", "scion", "smart", "subaru", "suzuki", "toyota", "volkswagen", "volvo"]
+                                                                                                                                                                                                                                                                                                                                                                                                                ^^^^^^^^
+lib/crm_formatter/web_wrap.rb:50:411: C: Prefer single-quoted strings when you don't need string interpolation or special symbols.
+      pos_urls = ["acura", "alfa romeo", "aston martin", "audi", "bmw", "bentley", "bugatti", "buick", "cdjr", "cadillac", "chevrolet", "chrysler", "dodge", "ferrari", "fiat", "ford", "gmc", "group", "group", "honda", "hummer", "hyundai", "infiniti", "isuzu", "jaguar", "jeep", "kia", "lamborghini", "lexus", "lincoln", "lotus", "mini", "maserati", "mazda", "mclaren", "mercedes-benz", "mitsubishi", "nissan", "porsche", "ram", "rolls-royce", "saab", "scion", "smart", "subaru", "suzuki", "toyota", "volkswagen", "volvo"]
+                                                                                                                                                                                                                                                                                                                                                                                                                          ^^^^^^^^^
+lib/crm_formatter/web_wrap.rb:50:422: C: Prefer single-quoted strings when you don't need string interpolation or special symbols.
+      pos_urls = ["acura", "alfa romeo", "aston martin", "audi", "bmw", "bentley", "bugatti", "buick", "cdjr", "cadillac", "chevrolet", "chrysler", "dodge", "ferrari", "fiat", "ford", "gmc", "group", "group", "honda", "hummer", "hyundai", "infiniti", "isuzu", "jaguar", "jeep", "kia", "lamborghini", "lexus", "lincoln", "lotus", "mini", "maserati", "mazda", "mclaren", "mercedes-benz", "mitsubishi", "nissan", "porsche", "ram", "rolls-royce", "saab", "scion", "smart", "subaru", "suzuki", "toyota", "volkswagen", "volvo"]
+                                                                                                                                                                                                                                                                                                                                                                                                                                     ^^^^^
+lib/crm_formatter/web_wrap.rb:50:429: C: Prefer single-quoted strings when you don't need string interpolation or special symbols.
+      pos_urls = ["acura", "alfa romeo", "aston martin", "audi", "bmw", "bentley", "bugatti", "buick", "cdjr", "cadillac", "chevrolet", "chrysler", "dodge", "ferrari", "fiat", "ford", "gmc", "group", "group", "honda", "hummer", "hyundai", "infiniti", "isuzu", "jaguar", "jeep", "kia", "lamborghini", "lexus", "lincoln", "lotus", "mini", "maserati", "mazda", "mclaren", "mercedes-benz", "mitsubishi", "nissan", "porsche", "ram", "rolls-royce", "saab", "scion", "smart", "subaru", "suzuki", "toyota", "volkswagen", "volvo"]
+                                                                                                                                                                                                                                                                                                                                                                                                                                            ^^^^^^^^^^^^^
+lib/crm_formatter/web_wrap.rb:50:444: C: Prefer single-quoted strings when you don't need string interpolation or special symbols.
+      pos_urls = ["acura", "alfa romeo", "aston martin", "audi", "bmw", "bentley", "bugatti", "buick", "cdjr", "cadillac", "chevrolet", "chrysler", "dodge", "ferrari", "fiat", "ford", "gmc", "group", "group", "honda", "hummer", "hyundai", "infiniti", "isuzu", "jaguar", "jeep", "kia", "lamborghini", "lexus", "lincoln", "lotus", "mini", "maserati", "mazda", "mclaren", "mercedes-benz", "mitsubishi", "nissan", "porsche", "ram", "rolls-royce", "saab", "scion", "smart", "subaru", "suzuki", "toyota", "volkswagen", "volvo"]
+                                                                                                                                                                                                                                                                                                                                                                                                                                                           ^^^^^^
+lib/crm_formatter/web_wrap.rb:50:452: C: Prefer single-quoted strings when you don't need string interpolation or special symbols.
+      pos_urls = ["acura", "alfa romeo", "aston martin", "audi", "bmw", "bentley", "bugatti", "buick", "cdjr", "cadillac", "chevrolet", "chrysler", "dodge", "ferrari", "fiat", "ford", "gmc", "group", "group", "honda", "hummer", "hyundai", "infiniti", "isuzu", "jaguar", "jeep", "kia", "lamborghini", "lexus", "lincoln", "lotus", "mini", "maserati", "mazda", "mclaren", "mercedes-benz", "mitsubishi", "nissan", "porsche", "ram", "rolls-royce", "saab", "scion", "smart", "subaru", "suzuki", "toyota", "volkswagen", "volvo"]
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                   ^^^^^^^
+lib/crm_formatter/web_wrap.rb:50:461: C: Prefer single-quoted strings when you don't need string interpolation or special symbols.
+      pos_urls = ["acura", "alfa romeo", "aston martin", "audi", "bmw", "bentley", "bugatti", "buick", "cdjr", "cadillac", "chevrolet", "chrysler", "dodge", "ferrari", "fiat", "ford", "gmc", "group", "group", "honda", "hummer", "hyundai", "infiniti", "isuzu", "jaguar", "jeep", "kia", "lamborghini", "lexus", "lincoln", "lotus", "mini", "maserati", "mazda", "mclaren", "mercedes-benz", "mitsubishi", "nissan", "porsche", "ram", "rolls-royce", "saab", "scion", "smart", "subaru", "suzuki", "toyota", "volkswagen", "volvo"]
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                            ^^^^^^^
+lib/crm_formatter/web_wrap.rb:50:470: C: Prefer single-quoted strings when you don't need string interpolation or special symbols.
+      pos_urls = ["acura", "alfa romeo", "aston martin", "audi", "bmw", "bentley", "bugatti", "buick", "cdjr", "cadillac", "chevrolet", "chrysler", "dodge", "ferrari", "fiat", "ford", "gmc", "group", "group", "honda", "hummer", "hyundai", "infiniti", "isuzu", "jaguar", "jeep", "kia", "lamborghini", "lexus", "lincoln", "lotus", "mini", "maserati", "mazda", "mclaren", "mercedes-benz", "mitsubishi", "nissan", "porsche", "ram", "rolls-royce", "saab", "scion", "smart", "subaru", "suzuki", "toyota", "volkswagen", "volvo"]
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     ^^^^^^^^
+lib/crm_formatter/web_wrap.rb:50:480: C: Prefer single-quoted strings when you don't need string interpolation or special symbols.
+      pos_urls = ["acura", "alfa romeo", "aston martin", "audi", "bmw", "bentley", "bugatti", "buick", "cdjr", "cadillac", "chevrolet", "chrysler", "dodge", "ferrari", "fiat", "ford", "gmc", "group", "group", "honda", "hummer", "hyundai", "infiniti", "isuzu", "jaguar", "jeep", "kia", "lamborghini", "lexus", "lincoln", "lotus", "mini", "maserati", "mazda", "mclaren", "mercedes-benz", "mitsubishi", "nissan", "porsche", "ram", "rolls-royce", "saab", "scion", "smart", "subaru", "suzuki", "toyota", "volkswagen", "volvo"]
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               ^^^^^^^^
+lib/crm_formatter/web_wrap.rb:50:490: C: Prefer single-quoted strings when you don't need string interpolation or special symbols.
+      pos_urls = ["acura", "alfa romeo", "aston martin", "audi", "bmw", "bentley", "bugatti", "buick", "cdjr", "cadillac", "chevrolet", "chrysler", "dodge", "ferrari", "fiat", "ford", "gmc", "group", "group", "honda", "hummer", "hyundai", "infiniti", "isuzu", "jaguar", "jeep", "kia", "lamborghini", "lexus", "lincoln", "lotus", "mini", "maserati", "mazda", "mclaren", "mercedes-benz", "mitsubishi", "nissan", "porsche", "ram", "rolls-royce", "saab", "scion", "smart", "subaru", "suzuki", "toyota", "volkswagen", "volvo"]
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         ^^^^^^^^
+lib/crm_formatter/web_wrap.rb:50:500: C: Prefer single-quoted strings when you don't need string interpolation or special symbols.
+      pos_urls = ["acura", "alfa romeo", "aston martin", "audi", "bmw", "bentley", "bugatti", "buick", "cdjr", "cadillac", "chevrolet", "chrysler", "dodge", "ferrari", "fiat", "ford", "gmc", "group", "group", "honda", "hummer", "hyundai", "infiniti", "isuzu", "jaguar", "jeep", "kia", "lamborghini", "lexus", "lincoln", "lotus", "mini", "maserati", "mazda", "mclaren", "mercedes-benz", "mitsubishi", "nissan", "porsche", "ram", "rolls-royce", "saab", "scion", "smart", "subaru", "suzuki", "toyota", "volkswagen", "volvo"]
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   ^^^^^^^^^^^^
+lib/crm_formatter/web_wrap.rb:50:514: C: Prefer single-quoted strings when you don't need string interpolation or special symbols.
+      pos_urls = ["acura", "alfa romeo", "aston martin", "audi", "bmw", "bentley", "bugatti", "buick", "cdjr", "cadillac", "chevrolet", "chrysler", "dodge", "ferrari", "fiat", "ford", "gmc", "group", "group", "honda", "hummer", "hyundai", "infiniti", "isuzu", "jaguar", "jeep", "kia", "lamborghini", "lexus", "lincoln", "lotus", "mini", "maserati", "mazda", "mclaren", "mercedes-benz", "mitsubishi", "nissan", "porsche", "ram", "rolls-royce", "saab", "scion", "smart", "subaru", "suzuki", "toyota", "volkswagen", "volvo"]
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 ^^^^^^^
+lib/crm_formatter/web_wrap.rb:55:81: C: Line is too long. [467/80]
+      # neg_links = %w(: .biz .co .edu .gov .jpg .net // afri anounc book business buy bye call cash cheap click collis cont distrib download drop event face feature feed financ find fleet form gas generat graphic hello home hospi hour hours http info insta inventory item join login mail mailto mobile movie museu music news none offer part phone policy priva pump rate regist review schedul school service shop site test ticket tire tv twitter watch www yelp youth)
+                                                                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+lib/crm_formatter/web_wrap.rb:57:81: C: Line is too long. [549/80]
+      # neg_hrefs = %w(? .com .jpg @ * afri after anounc apply approved blog book business buy call care career cash charit cheap check click collis commerc cont contrib deal distrib download employ event face feature feed financ find fleet form gas generat golf here holiday hospi hour info insta inventory join later light login mail mobile movie museu music news none now oil part pay phone policy priva pump quick quote rate regist review saving schedul service shop sign site speci ticket tire today transla travel truck tv twitter watch youth)
+                                                                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+lib/crm_formatter/web_wrap.rb:61:7: W: Useless assignment to variable - oa_args.
+      oa_args = {neg_exts: neg_exts, pos_urls: pos_urls, neg_urls: neg_urls}
+      ^^^^^^^
+lib/crm_formatter/web_wrap.rb:61:17: C: Space inside { missing.
+      oa_args = {neg_exts: neg_exts, pos_urls: pos_urls, neg_urls: neg_urls}
+                ^
+lib/crm_formatter/web_wrap.rb:61:76: C: Space inside } missing.
+      oa_args = {neg_exts: neg_exts, pos_urls: pos_urls, neg_urls: neg_urls}
+                                                                           ^
+lib/crm_formatter/web_wrap.rb:64:1: C: Extra blank line detected.
+lib/crm_formatter/web_wrap.rb:65:1: C: Extra blank line detected.
+lib/crm_formatter/web_wrap.rb:68:21: W: Unused method argument - hash. If it's necessary, use _ or _hash as an argument name to indicate that it won't be used. You can also write as export(*) if you want the method to accept any arguments but don't care about them.
+    def self.export(hash)
+                    ^^^^
+lib/crm_formatter/web_wrap.rb:85:1: C: Extra blank line detected.
+lib/crm_formatter/web_wrap.rb:85:1: C: Extra empty line detected at class body end.
+lib/crm_formatter/web_wrap.rb:87:1: C: Extra empty line detected at module body end.
+lib/crm_formatter.rb:1:9: C: Prefer single-quoted strings when you don't need string interpolation or special symbols.
+require "crm_formatter/version"
+        ^^^^^^^^^^^^^^^^^^^^^^^
+lib/crm_formatter.rb:2:9: C: Prefer single-quoted strings when you don't need string interpolation or special symbols.
+require "crm_formatter/dictionary"
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+lib/crm_formatter.rb:12:1: C: Missing top-level module documentation comment.
+module CrmFormatter
+^^^^^^
+lib/crm_formatter.rb:13:1: C: Extra empty line detected at module body beginning.
+lib/crm_formatter.rb:23:5: W: Remove debugger entry point binding.pry.
+    binding.pry if urls.any?
+    ^^^^^^^^^^^
+lib/crm_formatter.rb:30:5: W: Remove debugger entry point binding.pry.
+    binding.pry
+    ^^^^^^^^^^^
+lib/crm_formatter.rb:34:1: C: Extra blank line detected.
+lib/crm_formatter.rb:35:1: C: Extra blank line detected.
+lib/crm_formatter.rb:36:1: C: Extra blank line detected.
+lib/crm_formatter.rb:37:1: C: Extra blank line detected.
+lib/crm_formatter.rb:38:1: C: Extra blank line detected.
+lib/crm_formatter.rb:38:1: C: Extra empty line detected at module body end.
+spec/crm_formatter_spec.rb:5:6: C: Prefer single-quoted strings when you don't need string interpolation or special symbols.
+  it "has a version number" do
+     ^^^^^^^^^^^^^^^^^^^^^^
+spec/crm_formatter_spec.rb:9:6: C: Prefer single-quoted strings when you don't need string interpolation or special symbols.
+  it "does something useful" do
+     ^^^^^^^^^^^^^^^^^^^^^^^
+spec/crm_formatter_spec.rb:27:1: C: Extra empty line detected at block body end.
+spec/dictionary_spec.rb:23:1: E: unexpected token kEND
+(Using Ruby 2.0 parser; configure using TargetRubyVersion parameter, under AllCops)
+end
+^^^
+spec/spec_helper.rb:1:9: C: Prefer single-quoted strings when you don't need string interpolation or special symbols.
+require "bundler/setup"
+        ^^^^^^^^^^^^^^^
+spec/spec_helper.rb:2:9: C: Prefer single-quoted strings when you don't need string interpolation or special symbols.
+require "crm_formatter"
+        ^^^^^^^^^^^^^^^
+spec/spec_helper.rb:7:49: C: Prefer single-quoted strings when you don't need string interpolation or special symbols.
+  config.example_status_persistence_file_path = ".rspec_status"
+                                                ^^^^^^^^^^^^^^^
+
+17 files inspected, 303 offenses detected

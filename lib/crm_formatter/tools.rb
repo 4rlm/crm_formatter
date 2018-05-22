@@ -1,21 +1,21 @@
+# frozen_string_literal: true
+
 module CrmFormatter
   class Tools
-
     def initialize(args={})
       @args = args
       @empty_args = args.empty?
-      @global_hash = {:row_id=>nil, :act_name=>nil, :street=>nil, :city=>nil, :state=>nil, :zip=>nil, :phone=>nil, :url=>nil, :url_f=>nil, :url_path=>nil, :web_status=>nil, :web_neg=>nil, :web_pos=>nil, :utf_status=>nil}
+      @global_hash = { row_id: nil, act_name: nil, street: nil, city: nil, state: nil, zip: nil, phone: nil, url: nil, url_crmf: nil, url_path: nil, web_status: nil, web_neg: nil, web_pos: nil, utf_status: nil }
     end
 
     # @tools.get_global_hash
     def get_global_hash
-      keys = "row_id, act_name, street, city, state, zip, phone, url, url_f, url_path, web_status, web_neg, web_pos, utf_status"
+      keys = 'row_id, act_name, street, city, state, zip, phone, url, url_crmf, url_path, web_status, web_neg, web_pos, utf_status'
       headers = keys.split(', ')
       headers = headers.map(&:to_sym)
-      row = headers.map { |el| nil }
+      row = headers.map { |_el| nil }
       @global_hash = row_to_hsh(headers, row)
     end
-
 
     # @tools.update_global_hash(local_keys)
     def update_global_hash(local_keys)
@@ -31,19 +31,16 @@ module CrmFormatter
 
       if add_to_global.any?
         add_to_global += gkeys
-        row = add_to_global.map { |el| nil }
+        row = add_to_global.map { |_el| nil }
         @global_hash = row_to_hsh(global_keys, row)
       end
     end
-
 
     # @tools.row_to_hsh(headers, row)
     def row_to_hsh(headers, row)
       headers = headers.map(&:to_sym)
       hash = Hash[headers.zip(row)]
     end
-
-
 
     ## scrub_oa, is only called if client OA args were passed at initialization.
     ## Results listed in url_hash[:web_neg]/[:web_pos], and don't impact or hinder final formatted url.
@@ -53,11 +50,11 @@ module CrmFormatter
         criteria = @args.fetch(oa_name.to_sym, [])
 
         if criteria.any?
-          if target.is_a?(::String)
-            tars = target.split(', ')
-          else
-            tars = target
-          end
+          tars = if target.is_a?(::String)
+                   target.split(', ')
+                 else
+                   target
+                 end
 
           scrub_matches = tars.map do |tar|
             if criteria.present?
@@ -78,18 +75,15 @@ module CrmFormatter
             end
           end
         end
-      else
       end
       hash
     end
 
-
-
-    #CALL: Formatter.new.letter_case_check(street)
+    # CALL: Formatter.new.letter_case_check(street)
     def self.letter_case_check(str)
       if str.present?
         flashes = str&.gsub(/[^ A-Za-z]/, '')&.strip&.split(' ')
-        flash = flashes&.reject {|e| e.length < 3 }.join(' ')
+        flash = flashes&.reject { |e| e.length < 3 }.join(' ')
 
         if flash.present?
           has_caps = flash.scan(/[A-Z]/).any?
@@ -98,10 +92,8 @@ module CrmFormatter
             str = str.split(' ')&.each { |el| el.capitalize! if el.gsub(/[^ A-Za-z]/, '')&.strip&.length > 2 }&.join(' ')
           end
         end
-        return str
+        str
       end
     end
-
-
   end
 end

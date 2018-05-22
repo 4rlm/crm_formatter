@@ -1,12 +1,16 @@
-require "csv"
+# frozen_string_literal: true
+
+require 'csv'
 
 module CrmFormatter
   class UTF
-
     # args = {pollute_seeds: false, seed_hashes: false, seed_csv: false}
     def initialize(args={})
       @utf_result = { stats: {}, data: {} }
-      @valid_rows, @encoded_rows, @defective_rows, @error_rows = [], [], [], []
+      @valid_rows = []
+      @encoded_rows = []
+      @defective_rows = []
+      @error_rows = []
       @headers = []
       @row_id = 0
       @data_hash = {}
@@ -42,13 +46,13 @@ module CrmFormatter
       wchar = groups['wchar']
       perfect = groups['perfect']
 
-      @headers.any? ? header_row_count = 1 : header_row_count = 0
-      stats = {total_rows: @row_id, header_row: header_row_count, valid_rows: @valid_rows.count, error_rows: @error_rows.count, defective_rows: @defective_rows.count, perfect_rows: perfect, encoded_rows: @encoded_rows.count, wchar_rows: wchar }
-      data = {valid_data: @valid_rows, encoded_data: @encoded_rows, defective_data: @defective_rows, error_data: @error_rows}
+      header_row_count = @headers.any? ? 1 : 0
+      stats = { total_rows: @row_id, header_row: header_row_count, valid_rows: @valid_rows.count, error_rows: @error_rows.count, defective_rows: @defective_rows.count, perfect_rows: perfect, encoded_rows: @encoded_rows.count, wchar_rows: wchar }
+      data = { valid_data: @valid_rows, encoded_data: @encoded_rows, defective_data: @defective_rows, error_data: @error_rows }
       @utf_result = { stats: stats, data: data }
       utf_result = @utf_result
       initialize
-      return utf_result
+      utf_result
     end
     #################### * COMPILE RESULTS * ####################
 
@@ -56,22 +60,20 @@ module CrmFormatter
     def validate_csv(file_path)
       if file_path.present?
         File.open(file_path).each do |file_line|
-          begin
-            validated_line = utf_filter(check_utf(file_line))
-            @row_id +=1
-            if validated_line
-              CSV.parse(validated_line) do |row|
-                if @headers.empty?
-                  @headers = row
-                else
-                  @data_hash.merge!(row_to_hsh(row))
-                  @valid_rows << @data_hash
-                end
+          validated_line = utf_filter(check_utf(file_line))
+          @row_id += 1
+          if validated_line
+            CSV.parse(validated_line) do |row|
+              if @headers.empty?
+                @headers = row
+              else
+                @data_hash.merge!(row_to_hsh(row))
+                @valid_rows << @data_hash
               end
             end
-          rescue => error
-            @error_rows << {row_id: @row_id, text: error.message}
           end
+        rescue StandardError => error
+          @error_rows << { row_id: @row_id, text: error.message }
         end
         compile_results
       end
@@ -84,8 +86,8 @@ module CrmFormatter
         begin
           process_hash_row(orig_hashes.first) ## re keys for headers.
           orig_hashes.each { |hsh| process_hash_row(hsh) } ## re values
-        rescue => error
-          @error_rows << {row_id: @row_id, text: error.message}
+        rescue StandardError => error
+          @error_rows << { row_id: @row_id, text: error.message }
         end
         compile_results ## handles returns.
       end
@@ -101,7 +103,7 @@ module CrmFormatter
         keys_or_values = hsh.keys.map(&:to_s)
       end
 
-      file_line = keys_or_values.join(",")
+      file_line = keys_or_values.join(',')
       line_parse(utf_filter(check_utf(file_line)))
     end
 
@@ -122,16 +124,15 @@ module CrmFormatter
     end
     #################### * VALIDATE HASHES * ####################
 
-
     #################### * CHECK UTF * ####################
     def check_utf(text)
       if text.present?
         text = pollute_seeds(text) if @pollute_seeds && @headers.any?
-        results = {text: text, encoded: nil, wchar: nil, error: nil}
+        results = { text: text, encoded: nil, wchar: nil, error: nil }
         begin
           if !text.valid_encoding?
             encoded = text.chars.select(&:valid_encoding?).join
-            encoded.gsub!('_', '')
+            encoded.delete!('_')
             encoded = encoded.delete("^\u{0000}-\u{007F}")
           else
             encoded = text.delete("^\u{0000}-\u{007F}")
@@ -139,14 +140,13 @@ module CrmFormatter
           wchar = encoded&.gsub(/\s+/, ' ')&.strip
           results[:encoded] = encoded if text != encoded
           results[:wchar] = wchar if encoded != wchar
-        rescue=> error
+        rescue StandardError => error
           results[:error] = error.message if error
         end
         results
       end
     end
     #################### * CHECK UTF * ####################
-
 
     #################### * UTF FILTER * ####################
     def utf_filter(utf)
@@ -159,11 +159,11 @@ module CrmFormatter
         encoded = utf[:text] if utf[:encoded]
         error = utf[:error]
         defective = utf[:text] if error
-        line = utf.except(:error).compact.values.last if !error
-        data_hash = {row_id: @row_id, utf_status: utf_status}
+        line = utf.except(:error).compact.values.last unless error
+        data_hash = { row_id: @row_id, utf_status: utf_status }
 
-        @encoded_rows << {row_id: @row_id, text: encoded} if encoded
-        @error_rows << {row_id: @row_id, text: error} if error
+        @encoded_rows << { row_id: @row_id, text: encoded } if encoded
+        @error_rows << { row_id: @row_id, text: error } if error
         @defective_rows << filt_utf_hsh[:text] if error
         @data_hash = data_hash if @data_hash[:row_id] != @row_id
         line
@@ -171,12 +171,10 @@ module CrmFormatter
     end
     #################### * UTF FILTER * ####################
 
-
-
     #################### !! HELPERS BELOW !! ####################
     #############################################################
     def pollute_seeds(text)
-      list = ["h∑", "lÔ", "\x92", "\x98", "\x99", "\xC0", "\xC1", "\xC2", "\xCC", "\xDD", "\xE5", "\xF8"]
+      list = ['h∑', 'lÔ', "\x92", "\x98", "\x99", "\xC0", "\xC1", "\xC2", "\xCC", "\xDD", "\xE5", "\xF8"]
       index = text.length / 2
       var = "#{list.sample}_#{list.sample}"
       text.insert(index, var)
@@ -192,44 +190,44 @@ module CrmFormatter
 
     def val_hsh(cols, hsh)
       keys = hsh.keys
-      keys.each { |key| hsh.delete(key) if !cols.include?(key) }
+      keys.each { |key| hsh.delete(key) unless cols.include?(key) }
       hsh
     end
 
     def make_groups_from_array(array)
-      groups = array.inject(Hash.new(0)) { |h, e| h[e] += 1 ; h }
+      groups = array.each_with_object(Hash.new(0)) { |e, h| h[e] += 1; }
     end
 
     #########################################################################################################
     ### MIGHT NOT USE, BUT SAVE FOR LATER IN CASE NEEDED
     #########################################################################################################
-      # def compare_diff(hsh)
-      #   res = []
-      #   hsh.to_a.reduce do |el, nxt|
-      #     res << nxt.first if el.last != nxt.last
-      #     el = nxt
-      #   end
-      #   res.compact!
-      # end
+    # def compare_diff(hsh)
+    #   res = []
+    #   hsh.to_a.reduce do |el, nxt|
+    #     res << nxt.first if el.last != nxt.last
+    #     el = nxt
+    #   end
+    #   res.compact!
+    # end
     #########################################################################################################
     ### SAMPLE OF HOW TO CONVERT HASH INTO DOT NOTATION, BUT ONLY IF THERE IS A MODEL.:
     #########################################################################################################
-      # # getter
-      #     ['row_id', 'type_id', 'status'].each do |key|
-      #       define_method key do
-      #         data_hash[key]
-      #       end
-      #     end
-      #
-      #
-      # # setter
-      #     ['row_id', 'type_id', 'status'].each do |key|
-      #       define_method key do |val|
-      #         data_hash[key] = val
-      #       end
-      #     end
-      #     # data_hash.row_id
-      #     # data_hash.row_id = 'gh'
+    # # getter
+    #     ['row_id', 'type_id', 'status'].each do |key|
+    #       define_method key do
+    #         data_hash[key]
+    #       end
+    #     end
+    #
+    #
+    # # setter
+    #     ['row_id', 'type_id', 'status'].each do |key|
+    #       define_method key do |val|
+    #         data_hash[key] = val
+    #       end
+    #     end
+    #     # data_hash.row_id
+    #     # data_hash.row_id = 'gh'
     #########################################################################################################
     ###  CAN RUN BELOW TO GRAB A BUNCH OF NON-UTF8 STRINGS TO TEST check_utf METHOD.
     #########################################################################################################
@@ -237,7 +235,7 @@ module CrmFormatter
     def get_non_utf_seeds ## For testing UTF8 Validator
       strings = []
       strings << "2,heritagemazdatowson.com,Heritage Mazda Towson,1630 York Rd_\xED\xBF\x8Cˌ_\xED\xEE\xE4\xF3\xC1\xED_\x8C\xE7_\xED\xBF\x8Cˌ___\xED\xBF\x8Cˌ_\xED\xBF\x8Cˌ__,Lutherville,MD,21093,(877) 361-1038\r\n"
-      strings += ["𝘀𝔞ｍϱl𝔢", "xC2", "hellÔ!", "hi∑", "hi\x99!", "foo\x92bar"]
+      strings += ['𝘀𝔞ｍϱl𝔢', 'xC2', 'hellÔ!', 'hi∑', "hi\x99!", "foo\x92bar"]
       # str_arr += %w(𝘀𝔞ｍϱl𝔢 xC2 hellÔ! hi∑ hi\x99! foo\x92bar)
 
       ### TRIALS WITH UTF8 BELOW.  IF EVER HAVE A TOUGH ONE, USE THESE NOTES AGAIN.  ###
@@ -270,95 +268,91 @@ module CrmFormatter
       # "./lib/crm_formatter/csv/seeds_mega.csv"
       # "./lib/crm_formatter/csv/seeds_mini.csv"
       # "./lib/crm_formatter/csv/seeds_mini_10.csv"
-      "./lib/crm_formatter/csv/seeds_mini_2_bug.csv"
+      './lib/crm_formatter/csv/seeds_mini_2_bug.csv'
     end
 
     ### Sample Hashes for validate_data
     def get_seed_hashes
-      [{:row_id=>1,
-        :url=>"stanleykaufman.com",
-        :act_name=>"Stanley Chevrolet Kaufman",
-        :street=>"825 E Fair St",
-        :city=>"Kaufman",
-        :state=>"TX",
-        :zip=>"75142",
-        :phone=>"(888) 457-4391"},
-       {:row_id=>2,
-        :url=>"leepartyka",
-        :act_name=>"Lee Partyka Chevrolet Mazda Isuzu Truck",
-        :street=>"200 Skiff St",
-        :city=>"Hamden",
-        :state=>"CT",
-        :zip=>"6518",
-        :phone=>"(203) 288-7761"},
-       {:row_id=>3,
-        :url=>"burienhonda.fake.not.net.com",
-        :act_name=>"Honda of Burien 15026 1st Avenue South, Burien, WA 98148",
-        :street=>"15026 1st Avenue South",
-        :city=>"Burien",
-        :state=>"WA",
-        :zip=>"98148",
-        :phone=>"(206) 246-9700"},
-       {:row_id=>4,
-        :url=>"cortlandchryslerdodgejeep.com",
-        :act_name=>"Cortland Chrysler Dodge Jeep RAM",
-        :street=>"3878 West Rd",
-        :city=>"Cortland",
-        :state=>"NY",
-        :zip=>"13045",
-        :phone=>"(877) 279-3113"},
-       {:row_id=>5,
-        :url=>"imperialmotors.net",
-        :act_name=>"Imperial Motors",
-        :street=>"4839 Virginia Beach Blvd",
-        :city=>"Virginia Beach",
-        :state=>"VA",
-        :zip=>"23462",
-        :phone=>"(757) 490-3651"},
-       {:row_id=>6,
-        :url=>"liatoyotaofnorthampton.com",
-        :act_name=>"Lia Toyota of Northampton 280 King St. Northampton, MA 01060 Phone 413-341-5299",
-        :street=>"280 King St",
-        :city=>"Northampton",
-        :state=>"MA",
-        :zip=>"1060",
-        :phone=>"(413) 341-5299"},
-       {:row_id=>7,
-        :url=>"nelsonhallchevrolet.com",
-        :act_name=>"Nelson Hall Chevrolet",
-        :street=>"1811 S Frontage Rd",
-        :city=>"Meridian",
-        :state=>"MS",
-        :zip=>"39301",
-        :phone=>"(601) 621-4593"},
-       {:row_id=>8,
-        :url=>"marshallfordco.com",
-        :act_name=>"Marshall Ford Co Inc.",
-        :street=>"14843 MS-16",
-        :city=>"Philadelphia",
-        :state=>"MS",
-        :zip=>"39350",
-        :phone=>"(888) 461-7643"},
-       {:row_id=>9,
-        :url=>"warrentontoyota.com",
-        :act_name=>"Warrenton Toyota",
-        :street=>"6449 Lee Hwy",
-        :city=>"Warrenton",
-        :state=>"VA",
-        :zip=>"20187",
-        :phone=>"(540) 878-4100"},
-       {:row_id=>10,
-        :url=>"toyotacertifiedatcentralcity.com",
-        :act_name=>"Toyota Certified Central City",
-        :street=>"4800 Chestnut St",
-        :city=>"Philadelphia",
-        :state=>"PA",
-        :zip=>"19139",
-        :phone=>"(888) 379-1155"}]
+      [{ row_id: 1,
+         url: 'stanleykaufman.com',
+         act_name: 'Stanley Chevrolet Kaufman',
+         street: '825 E Fair St',
+         city: 'Kaufman',
+         state: 'TX',
+         zip: '75142',
+         phone: '(888) 457-4391' },
+       { row_id: 2,
+         url: 'leepartyka',
+         act_name: 'Lee Partyka Chevrolet Mazda Isuzu Truck',
+         street: '200 Skiff St',
+         city: 'Hamden',
+         state: 'CT',
+         zip: '6518',
+         phone: '(203) 288-7761' },
+       { row_id: 3,
+         url: 'burienhonda.fake.not.net.com',
+         act_name: 'Honda of Burien 15026 1st Avenue South, Burien, WA 98148',
+         street: '15026 1st Avenue South',
+         city: 'Burien',
+         state: 'WA',
+         zip: '98148',
+         phone: '(206) 246-9700' },
+       { row_id: 4,
+         url: 'cortlandchryslerdodgejeep.com',
+         act_name: 'Cortland Chrysler Dodge Jeep RAM',
+         street: '3878 West Rd',
+         city: 'Cortland',
+         state: 'NY',
+         zip: '13045',
+         phone: '(877) 279-3113' },
+       { row_id: 5,
+         url: 'imperialmotors.net',
+         act_name: 'Imperial Motors',
+         street: '4839 Virginia Beach Blvd',
+         city: 'Virginia Beach',
+         state: 'VA',
+         zip: '23462',
+         phone: '(757) 490-3651' },
+       { row_id: 6,
+         url: 'liatoyotaofnorthampton.com',
+         act_name: 'Lia Toyota of Northampton 280 King St. Northampton, MA 01060 Phone 413-341-5299',
+         street: '280 King St',
+         city: 'Northampton',
+         state: 'MA',
+         zip: '1060',
+         phone: '(413) 341-5299' },
+       { row_id: 7,
+         url: 'nelsonhallchevrolet.com',
+         act_name: 'Nelson Hall Chevrolet',
+         street: '1811 S Frontage Rd',
+         city: 'Meridian',
+         state: 'MS',
+         zip: '39301',
+         phone: '(601) 621-4593' },
+       { row_id: 8,
+         url: 'marshallfordco.com',
+         act_name: 'Marshall Ford Co Inc.',
+         street: '14843 MS-16',
+         city: 'Philadelphia',
+         state: 'MS',
+         zip: '39350',
+         phone: '(888) 461-7643' },
+       { row_id: 9,
+         url: 'warrentontoyota.com',
+         act_name: 'Warrenton Toyota',
+         street: '6449 Lee Hwy',
+         city: 'Warrenton',
+         state: 'VA',
+         zip: '20187',
+         phone: '(540) 878-4100' },
+       { row_id: 10,
+         url: 'toyotacertifiedatcentralcity.com',
+         act_name: 'Toyota Certified Central City',
+         street: '4800 Chestnut St',
+         city: 'Philadelphia',
+         state: 'PA',
+         zip: '19139',
+         phone: '(888) 379-1155' }]
     end
-
-
-
   end
-
 end

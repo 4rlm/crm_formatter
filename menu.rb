@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require_relative "lib/crm_formatter/address.rb"
 
 address = CrmFormatter::Address.new

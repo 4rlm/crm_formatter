@@ -1,5 +1,7 @@
-require "crm_formatter/version"
-require "crm_formatter/dictionary"
+# frozen_string_literal: true
+
+require 'crm_formatter/version'
+require 'crm_formatter/dictionary'
 require 'crm_formatter/address'
 require 'crm_formatter/web'
 require 'crm_formatter/web_wrap'
@@ -10,7 +12,6 @@ require 'crm_formatter/utf'
 require 'pry'
 
 module CrmFormatter
-
   def self.run
     run_web_wrap
     # dicts
@@ -30,10 +31,4 @@ module CrmFormatter
     binding.pry
     msg
   end
-
-
-
-
-
-
 end
