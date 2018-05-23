@@ -1,27 +1,26 @@
 # frozen_string_literal: true
+
 # require 'rubygems'
 # require 'active_support'
 require 'csv'
 
-# #Rails C: StartCrm.run_webs
+# StartCrm.run_webs
 module CrmFormatter
   class Web
-
-    # #Rails C: StartCrm.run_webs
     def initialize(args={})
-      #Args List: pos_urls, neg_urls, pos_links, neg_links, pos_hrefs, neg_hrefs, pos_exts, neg_exts
+      # Args get passed to tools for scrubbing list.
+      # Args List: pos_urls, neg_urls, pos_links, neg_links, pos_hrefs, neg_hrefs, pos_exts, neg_exts
       @tools = CrmFormatter::Tools.new(args)
       @empty_args = args.empty?
       @min_length = args.fetch(:min_length, 2)
       @max_length = args.fetch(:max_length, 100)
     end
-    # hash = @tools.scrub_oa(hash, target, oa_name, include_or_equal)
 
     def banned_symbols
       ['!', '$', '%', "'", '(', ')', '*', '+', ',', '<', '>', '@', '[', ']', '^', '{', '}', '~']
     end
 
-    # #Call: StartCrm.run_webs
+    # StartCrm.run_webs
     def format_url(url)
       prep_result = prep_for_uri(url)
       url_hash = prep_result[:url_hash]
@@ -52,7 +51,7 @@ module CrmFormatter
       errors.any?
     end
 
-    # #Call: StartCrm.run_webs
+    # StartCrm.run_webs
     def prep_for_uri(url)
       url_hash = { web_status: false, url_path: url, url_crmf: nil, web_neg: [], web_pos: [] }
       begin
@@ -75,13 +74,12 @@ module CrmFormatter
           url_hash[:web_neg] << 'error: syntax'
           url_hash[:url_crmf] = url
         end
-      rescue Exception => e
-        url_hash[:web_neg] << "error: #{e}"
+      rescue StandardError => error
+        url_hash[:web_neg] << "error: #{error}"
         url = nil
         url_hash
       end
-
-      prep_result = { url_hash: url_hash, url: url }
+      { url_hash: url_hash, url: url }
     end
 
     def normalize_url(url)
@@ -91,7 +89,7 @@ module CrmFormatter
       host = uri&.host
       url = "#{scheme}://#{host}" if host.present? && scheme.present?
       url = "http://#{url}" if url[0..3] != 'http'
-      url = url.gsub('//', '//www.') unless url.include?('www.')
+      return url.gsub('//', '//www.') unless url.include?('www.')
     end
 
     # Source: http://www.iana.org/domains/root/db
@@ -113,14 +111,14 @@ module CrmFormatter
           err_msg = "error: ext.invalid [#{url_exts.join(', ')}]"
         elsif matched_exts.count > 1 ## Has too many valid exts, Limit 1.
           err_msg = "error: ext.valid > 1 [#{matched_exts.join(', ')}]"
-        end ## Perfect: Has just one valid ext.
+        end
       end
 
       if err_msg
         url_hash[:web_neg] << err_msg
         url = nil
         url_hash[:url_crmf] = nil
-        return { url_hash: url_hash, url: url }
+        { url_hash: url_hash, url: url }
       end
 
       ### Only Non-Errors Get Here ###
@@ -131,7 +129,7 @@ module CrmFormatter
       end
 
       return { url_hash: url_hash, url: url } if @empty_args
-      ext_result = run_scrub(url_hash, url, matched_exts)
+      run_scrub(url_hash, url, matched_exts)
     end
 
     def run_scrub(url_hash, url, matched_exts)
@@ -139,7 +137,7 @@ module CrmFormatter
       url_hash = @tools.scrub_oa(url_hash, matched_exts, 'neg_exts', 'equal')
       url_hash = @tools.scrub_oa(url_hash, url, 'pos_urls', 'include')
       url_hash = @tools.scrub_oa(url_hash, url, 'neg_urls', 'include')
-      ext_result = { url_hash: url_hash, url: url }
+      { url_hash: url_hash, url: url }
     end
 
     ###### Supporting Methods Below #######
@@ -166,7 +164,7 @@ module CrmFormatter
       url = url.downcase.strip
       url = url.gsub('www.', '')
       url = url.split('://')
-      url = url[-1]
+      url[-1]
     end
 
     def remove_invalid_links(link)
@@ -224,6 +222,5 @@ module CrmFormatter
       return parts[0..1].join if parts.length > 2
       url
     end
-
   end
 end

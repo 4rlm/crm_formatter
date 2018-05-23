@@ -5,18 +5,17 @@ module CrmFormatter
     def initialize(args={})
       @args = args
       @empty_args = args.empty?
-      @global_hash = get_global_hash
+      @global_hash = grab_global_hash
     end
 
-    def get_global_hash
-      keys = [:row_id, :act_name, :street, :city, :state, :zip, :phone, :url, :url_crmf, :url_path, :web_status, :web_neg, :web_pos, :utf_status]
-      @global_hash = Hash[keys.map{ |a| [a, nil] }]
+    def grab_global_hash
+      keys = %i[row_id act_name street city state zip phone url url_crmf url_path web_status web_neg web_pos utf_status]
+      @global_hash = Hash[keys.map { |a| [a, nil] }]
     end
 
     def update_global_hash(local_keys)
       gkeys = @global_hash.keys
-      local_keys
-      lkeys = lkeys.uniq.sort
+      lkeys = local_keys.uniq.sort
       # lkeys = lkeys.map(&:to_sym)
       # gkeys = gkeys.map(&:to_sym)
       add_to_global = lkeys - gkeys
@@ -26,7 +25,7 @@ module CrmFormatter
 
       if add_to_global.any?
         add_to_global += gkeys
-        row = add_to_global.map { |_el| nil }
+        row = add_to_global.map { |_| nil }
         @global_hash = row_to_hsh(global_keys, row)
       end
     end
@@ -44,7 +43,7 @@ module CrmFormatter
       criteria = @args.fetch(oa_name.to_sym, [])
 
       return hash unless criteria.any?
-      target.is_a?(::String) ? tars = target.split(', ') : tars = target
+      tars = target.is_a?(::String) ? target.split(', ') : target
 
       scrub_matches = tars.map do |tar|
         return hash unless criteria.present?
@@ -69,7 +68,7 @@ module CrmFormatter
     def self.letter_case_check(str)
       return unless str.present?
       flashes = str&.gsub(/[^ A-Za-z]/, '')&.strip&.split(' ')
-      flash = flashes&.reject { |e| e.length < 3 }.join(' ')
+      flash = flashes&.reject { |e| e.length < 3 }&.join(' ')
 
       return str unless flash.present?
       has_caps = flash.scan(/[A-Z]/).any?
@@ -92,6 +91,5 @@ module CrmFormatter
     #   args.slice!(*keys_to_slice)
     #   args
     # end
-
   end
 end

@@ -10,7 +10,7 @@ module CrmFormatter
       # @crm_data[:data][:valid_data] ## path to 'valid data'
       # @crm_data[:stats] ## path to 'stats'
       @tools = CrmFormatter::Tools.new
-      @global_hash = @tools.get_global_hash
+      @global_hash = @tools.grab_global_hash
     end
 
     ## Starting point of class. Can call wrap method to run.
