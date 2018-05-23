@@ -1,5 +1,4 @@
 # frozen_string_literal: true
-
 require 'csv'
 
 module CrmFormatter
@@ -17,7 +16,7 @@ module CrmFormatter
     ## Starting point of class. Can call wrap method to run.
     def wrap
       format_urls
-      puts @crm_data[:data][:valid_data].inspect
+      puts @crm_data.inspect
       binding.pry
       @crm_data
       ## Exit point from this class. Should return @crm_data.
@@ -40,8 +39,8 @@ module CrmFormatter
 
     ## Accepted arg keys & values: either :file_path, or :hashes.
     def import_data(args={})
-      args = { file_path: @utf.get_seed_file_path }
-      # args = {data: @utf.get_seed_hashes}
+      args = { file_path: @utf.grab_seed_file_path }
+      # args = {data: @utf.grab_seed_hashes}
       @crm_data = @utf.validate_data(args)
     end
 

@@ -20,5 +20,12 @@ module CrmFormatter
     def self.noun
       DICTIONARY[:nouns].sample
     end
+
+    def self.run
+      run_web_wrap
+      # dicts
+      # format_urls
+    end
+
   end
 end

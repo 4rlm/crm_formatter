@@ -22,21 +22,23 @@ module CrmFormatter
     #################### * VALIDATE DATA * ####################
     ## Only accepts 1 arg, w/ either 2 key symbols:  :file_path OR :hashes.
     def validate_data(args={})
-      if args.present?
-        if @seed_hashes
-          utf_result = validate_hashes(get_seed_hashes)
-        elsif @seed_csv
-          utf_result = validate_csv(get_seed_file_path)
-        else
-          file_path = args[:file_path]
-          utf_result = validate_csv(file_path) if file_path
-          data = args[:data]
-          utf_result = validate_hashes(data) if data
-        end
-        utf_result
-      end
+      return unless args.present?
+      utf_result = run_seeds
+
+      return utf_result if utf_result.any?
+      file_path = args[:file_path]
+      utf_result = validate_csv(file_path) if file_path
+      data = args[:data]
+      utf_result = validate_hashes(data) if data
+      utf_result
     end
     #################### * VALIDATE DATA * ####################
+
+    def run_seeds
+      utf_result = validate_hashes(grab_seed_hashes) if @seed_hashes
+      utf_result = validate_csv(grab_seed_file_path) if @seed_csv && utf_result.empty
+      utf_result
+    end
 
     #################### * COMPILE RESULTS * ####################
     def compile_results
@@ -58,39 +60,37 @@ module CrmFormatter
 
     #################### * VALIDATE CSV * ####################
     def validate_csv(file_path)
-      if file_path.present?
-        File.open(file_path).each do |file_line|
-          validated_line = utf_filter(check_utf(file_line))
-          @row_id += 1
-          if validated_line
-            CSV.parse(validated_line) do |row|
-              if @headers.empty?
-                @headers = row
-              else
-                @data_hash.merge!(row_to_hsh(row))
-                @valid_rows << @data_hash
-              end
+      return unless file_path.present?
+      File.open(file_path).each do |file_line|
+        validated_line = utf_filter(check_utf(file_line))
+        @row_id += 1
+        if validated_line
+          CSV.parse(validated_line) do |row|
+            if @headers.empty?
+              @headers = row
+            else
+              @data_hash.merge!(row_to_hsh(row))
+              @valid_rows << @data_hash
             end
           end
-        rescue StandardError => error
-          @error_rows << { row_id: @row_id, text: error.message }
         end
-        compile_results
+      rescue StandardError => error
+        @error_rows << { row_id: @row_id, text: error.message }
       end
+      compile_results
     end
     #################### * VALIDATE CSV * ####################
 
     #################### * VALIDATE HASHES * ####################
     def validate_hashes(orig_hashes)
-      if orig_hashes.present?
-        begin
-          process_hash_row(orig_hashes.first) ## re keys for headers.
-          orig_hashes.each { |hsh| process_hash_row(hsh) } ## re values
-        rescue StandardError => error
-          @error_rows << { row_id: @row_id, text: error.message }
-        end
-        compile_results ## handles returns.
+      return unless orig_hashes.present?
+      begin
+        process_hash_row(orig_hashes.first) ## re keys for headers.
+        orig_hashes.each { |hsh| process_hash_row(hsh) } ## re values
+      rescue StandardError => error
+        @error_rows << { row_id: @row_id, text: error.message }
       end
+      compile_results ## handles returns.
     end
 
     ### process_hash_row - helper VALIDATE HASHES ###
@@ -110,64 +110,59 @@ module CrmFormatter
     ### line_parse - helper VALIDATE HASHES ###
     ### Parses line to row, then updates final results.
     def line_parse(validated_line)
-      if validated_line
-        row = validated_line.split(',')
-        if row.any?
-          if @headers.empty?
-            @headers = row
-          else
-            @data_hash.merge!(row_to_hsh(row))
-            @valid_rows << @data_hash
-          end
-        end
+      return unless validated_line
+      row = validated_line.split(',')
+      return unless row.any?
+      if @headers.empty?
+        @headers = row
+      else
+        @data_hash.merge!(row_to_hsh(row))
+        @valid_rows << @data_hash
       end
     end
     #################### * VALIDATE HASHES * ####################
 
     #################### * CHECK UTF * ####################
     def check_utf(text)
-      if text.present?
-        text = pollute_seeds(text) if @pollute_seeds && @headers.any?
-        results = { text: text, encoded: nil, wchar: nil, error: nil }
-        begin
-          if !text.valid_encoding?
-            encoded = text.chars.select(&:valid_encoding?).join
-            encoded.delete!('_')
-            encoded = encoded.delete("^\u{0000}-\u{007F}")
-          else
-            encoded = text.delete("^\u{0000}-\u{007F}")
-          end
-          wchar = encoded&.gsub(/\s+/, ' ')&.strip
-          results[:encoded] = encoded if text != encoded
-          results[:wchar] = wchar if encoded != wchar
-        rescue StandardError => error
-          results[:error] = error.message if error
+      return unless text.present?
+      text = pollute_seeds(text) if @pollute_seeds && @headers.any?
+      results = { text: text, encoded: nil, wchar: nil, error: nil }
+      begin
+        if !text.valid_encoding?
+          encoded = text.chars.select(&:valid_encoding?).join
+          encoded.delete!('_')
+          encoded = encoded.delete("^\u{0000}-\u{007F}")
+        else
+          encoded = text.delete("^\u{0000}-\u{007F}")
         end
-        results
+        wchar = encoded&.gsub(/\s+/, ' ')&.strip
+        results[:encoded] = encoded if text != encoded
+        results[:wchar] = wchar if encoded != wchar
+      rescue StandardError => error
+        results[:error] = error.message if error
       end
+      results
     end
     #################### * CHECK UTF * ####################
 
     #################### * UTF FILTER * ####################
     def utf_filter(utf)
-      if utf.present?
-        puts utf.inspect
-        utf_status = utf.except(:text).compact.keys
-        utf_status = utf_status&.map(&:to_s).join(', ')
-        utf_status = 'perfect' if utf_status.blank?
+      return unless utf.present?
+      puts utf.inspect
+      utf_status = utf.except(:text).compact.keys
+      utf_status = utf_status&.map(&:to_s)&.join(', ')
+      utf_status = 'perfect' if utf_status.blank?
 
-        encoded = utf[:text] if utf[:encoded]
-        error = utf[:error]
-        defective = utf[:text] if error
-        line = utf.except(:error).compact.values.last unless error
-        data_hash = { row_id: @row_id, utf_status: utf_status }
+      encoded = utf[:text] if utf[:encoded]
+      error = utf[:error]
+      line = utf.except(:error).compact.values.last unless error
+      data_hash = { row_id: @row_id, utf_status: utf_status }
 
-        @encoded_rows << { row_id: @row_id, text: encoded } if encoded
-        @error_rows << { row_id: @row_id, text: error } if error
-        @defective_rows << filt_utf_hsh[:text] if error
-        @data_hash = data_hash if @data_hash[:row_id] != @row_id
-        line
-      end
+      @encoded_rows << { row_id: @row_id, text: encoded } if encoded
+      @error_rows << { row_id: @row_id, text: error } if error
+      @defective_rows << filt_utf_hsh[:text] if error
+      @data_hash = data_hash if @data_hash[:row_id] != @row_id
+      line
     end
     #################### * UTF FILTER * ####################
 
@@ -195,7 +190,7 @@ module CrmFormatter
     end
 
     def make_groups_from_array(array)
-      groups = array.each_with_object(Hash.new(0)) { |e, h| h[e] += 1; }
+      array.each_with_object(Hash.new(0)) { |e, h| h[e] += 1; }
     end
 
     #########################################################################################################
@@ -231,38 +226,8 @@ module CrmFormatter
     #########################################################################################################
     ###  CAN RUN BELOW TO GRAB A BUNCH OF NON-UTF8 STRINGS TO TEST check_utf METHOD.
     #########################################################################################################
-    # defective = get_non_utf_seeds ## For testing.  Returns array of non-utf8
-    def get_non_utf_seeds ## For testing UTF8 Validator
-      strings = []
-      strings << "2,heritagemazdatowson.com,Heritage Mazda Towson,1630 York Rd_\xED\xBF\x8Cˌ_\xED\xEE\xE4\xF3\xC1\xED_\x8C\xE7_\xED\xBF\x8Cˌ___\xED\xBF\x8Cˌ_\xED\xBF\x8Cˌ__,Lutherville,MD,21093,(877) 361-1038\r\n"
-      strings += ['𝘀𝔞ｍϱl𝔢', 'xC2', 'hellÔ!', 'hi∑', "hi\x99!", "foo\x92bar"]
-      # str_arr += %w(𝘀𝔞ｍϱl𝔢 xC2 hellÔ! hi∑ hi\x99! foo\x92bar)
 
-      ### TRIALS WITH UTF8 BELOW.  IF EVER HAVE A TOUGH ONE, USE THESE NOTES AGAIN.  ###
-      # best1 = text.chars.select(&:valid_encoding?).join
-      # best2 = text.chars.map{|c| c.valid_encoding? ? c : " "}.join
-      # best3 = text.scrub
-      # best4 = text.encode('UTF-8', invalid: :replace, undef: :replace)
-      # best5 = text.encode("UTF-8", "Windows-1252", invalid: :replace, undef: :replace)
-      # best6 = text.encode('utf-16', invalid: :replace).encode('utf-8')
-      # best7 = text.encode('utf-8', invalid: :replace)
-      # fail = text.encode("ISO-8859-1"); str.encode("UTF-8")
-      # fail = text.force_encoding("ISO-8859-5"); str.encode("UTF-8")
-      # clean5.gsub!('_', '')
-      # clean5.gsub!('ˌ', '')
-      # puts clean5.inspect
-      # 'ˌ'.class => String
-      # 'ˌ'.bytes => [203, 140]
-      # [203, 140].pack('c*')
-      # myst2 = [203, 140].pack('c*').chars.select(&:valid_encoding?).join
-      # cl = [203, 140].pack('c*').encode("UTF-8", "ASCII-8BIT", invalid: :replace, undef: :replace)
-      # cl = [203, 140].pack('c*').encode("UTF-8", "Windows-1252", invalid: :replace, undef: :replace)
-      strings
-    end
-    ###################################################################################
-    ###################################################################################
-
-    def get_seed_file_path
+    def grab_seed_file_path
       # "./lib/crm_formatter/csv/seeds_clean.csv"
       # "./lib/crm_formatter/csv/seeds_dirty.csv"
       # "./lib/crm_formatter/csv/seeds_mega.csv"
@@ -272,7 +237,7 @@ module CrmFormatter
     end
 
     ### Sample Hashes for validate_data
-    def get_seed_hashes
+    def grab_seed_hashes
       [{ row_id: 1,
          url: 'stanleykaufman.com',
          act_name: 'Stanley Chevrolet Kaufman',

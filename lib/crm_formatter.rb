@@ -12,6 +12,7 @@ require 'crm_formatter/utf'
 require 'pry'
 
 module CrmFormatter
+
   def self.run
     run_web_wrap
     # dicts
@@ -20,9 +21,7 @@ module CrmFormatter
 
   def self.run_web_wrap
     web_wrap = self::WebWrap.new
-    urls = web_wrap.wrap
-    binding.pry if urls.any?
-    urls
+    web_wrap.wrap ## returns formatted urls.
   end
 
   def self.dicts
