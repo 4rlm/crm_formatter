@@ -4,7 +4,7 @@ require 'crm_formatter/version'
 require 'crm_formatter/dictionary'
 require 'crm_formatter/address'
 require 'crm_formatter/web'
-require 'crm_formatter/web_wrap'
+require 'crm_formatter/wrap'
 require 'crm_formatter/phone'
 require 'crm_formatter/tools'
 require 'crm_formatter/utf'
@@ -21,8 +21,8 @@ module CrmFormatter
   end
 
   def self.run_web_wrap
-    web_wrap = self::WebWrap.new
-    web_wrap.wrap ## returns formatted urls.
+    wrap = self::Wrap.new
+    wrap.wrap ## returns formatted urls.
   end
 
   def self.dicts

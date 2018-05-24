@@ -2,7 +2,7 @@
 require 'csv'
 
 module CrmFormatter
-  class WebWrap
+  class Wrap
     def initialize
       @crm_data = []
       @tools = CrmFormatter::Tools.new
