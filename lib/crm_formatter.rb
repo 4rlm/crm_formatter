@@ -8,6 +8,7 @@ require 'crm_formatter/web_wrap'
 require 'crm_formatter/phone'
 require 'crm_formatter/tools'
 require 'crm_formatter/utf'
+require 'crm_formatter/seed'
 
 require 'pry'
 

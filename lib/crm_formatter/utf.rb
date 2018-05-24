@@ -1,10 +1,8 @@
 # frozen_string_literal: true
-
-require 'csv'
+# require 'csv'
 
 module CrmFormatter
   class UTF
-    # args = {pollute_seeds: false, seed_hashes: false, seed_csv: false}
     def initialize(args={})
       @utf_result = { stats: {}, data: {} }
       @valid_rows = []
@@ -14,29 +12,17 @@ module CrmFormatter
       @headers = []
       @row_id = 0
       @data_hash = {}
-      @pollute_seeds = args.fetch(:pollute_seeds, false)
-      @seed_hashes = args.fetch(:seed_hashes, false)
-      @seed_csv = args.fetch(:seed_csv, false)
     end
 
     #################### * VALIDATE DATA * ####################
-    ## Only accepts 1 arg, w/ either 2 key symbols:  :file_path OR :hashes.
     def validate_data(args={})
-      return unless args.present?
-      utf_result = run_seeds
+      @seed = Seed.new if args.fetch(:pollute_seeds)
 
-      return utf_result if utf_result.any?
       file_path = args[:file_path]
-      utf_result = validate_csv(file_path) if file_path
       data = args[:data]
-      utf_result = validate_hashes(data) if data
-      utf_result
-    end
-    #################### * VALIDATE DATA * ####################
 
-    def run_seeds
-      utf_result = validate_hashes(grab_seed_hashes) if @seed_hashes
-      utf_result = validate_csv(grab_seed_file_path) if @seed_csv && utf_result.empty
+      utf_result = validate_csv(file_path) if file_path
+      utf_result = validate_hashes(data) if data
       utf_result
     end
 
@@ -56,7 +42,6 @@ module CrmFormatter
       initialize
       utf_result
     end
-    #################### * COMPILE RESULTS * ####################
 
     #################### * VALIDATE CSV * ####################
     def validate_csv(file_path)
@@ -79,7 +64,6 @@ module CrmFormatter
       end
       compile_results
     end
-    #################### * VALIDATE CSV * ####################
 
     #################### * VALIDATE HASHES * ####################
     def validate_hashes(orig_hashes)
@@ -120,12 +104,11 @@ module CrmFormatter
         @valid_rows << @data_hash
       end
     end
-    #################### * VALIDATE HASHES * ####################
 
     #################### * CHECK UTF * ####################
     def check_utf(text)
       return unless text.present?
-      text = pollute_seeds(text) if @pollute_seeds && @headers.any?
+      text = @seed.pollute_seeds(text) if @seed && @headers.any?
       results = { text: text, encoded: nil, wchar: nil, error: nil }
       begin
         if !text.valid_encoding?
@@ -143,7 +126,6 @@ module CrmFormatter
       end
       results
     end
-    #################### * CHECK UTF * ####################
 
     #################### * UTF FILTER * ####################
     def utf_filter(utf)
@@ -164,19 +146,8 @@ module CrmFormatter
       @data_hash = data_hash if @data_hash[:row_id] != @row_id
       line
     end
-    #################### * UTF FILTER * ####################
 
-    #################### !! HELPERS BELOW !! ####################
-    #############################################################
-    def pollute_seeds(text)
-      list = ['h∑', 'lÔ', "\x92", "\x98", "\x99", "\xC0", "\xC1", "\xC2", "\xCC", "\xDD", "\xE5", "\xF8"]
-      index = text.length / 2
-      var = "#{list.sample}_#{list.sample}"
-      text.insert(index, var)
-      text.insert(-1, "\r\n")
-      text
-    end
-
+    ############# !! HELPERS BELOW !! #############
     ############# KEY VALUE CONVERTERS #############
     def row_to_hsh(row)
       h = Hash[@headers.zip(row)]
@@ -193,131 +164,5 @@ module CrmFormatter
       array.each_with_object(Hash.new(0)) { |e, h| h[e] += 1; }
     end
 
-    #########################################################################################################
-    ### MIGHT NOT USE, BUT SAVE FOR LATER IN CASE NEEDED
-    #########################################################################################################
-    # def compare_diff(hsh)
-    #   res = []
-    #   hsh.to_a.reduce do |el, nxt|
-    #     res << nxt.first if el.last != nxt.last
-    #     el = nxt
-    #   end
-    #   res.compact!
-    # end
-    #########################################################################################################
-    ### SAMPLE OF HOW TO CONVERT HASH INTO DOT NOTATION, BUT ONLY IF THERE IS A MODEL.:
-    #########################################################################################################
-    # # getter
-    #     ['row_id', 'type_id', 'status'].each do |key|
-    #       define_method key do
-    #         data_hash[key]
-    #       end
-    #     end
-    #
-    #
-    # # setter
-    #     ['row_id', 'type_id', 'status'].each do |key|
-    #       define_method key do |val|
-    #         data_hash[key] = val
-    #       end
-    #     end
-    #     # data_hash.row_id
-    #     # data_hash.row_id = 'gh'
-    #########################################################################################################
-    ###  CAN RUN BELOW TO GRAB A BUNCH OF NON-UTF8 STRINGS TO TEST check_utf METHOD.
-    #########################################################################################################
-
-    def grab_seed_file_path
-      # "./lib/crm_formatter/csv/seeds_clean.csv"
-      # "./lib/crm_formatter/csv/seeds_dirty.csv"
-      # "./lib/crm_formatter/csv/seeds_mega.csv"
-      # "./lib/crm_formatter/csv/seeds_mini.csv"
-      # "./lib/crm_formatter/csv/seeds_mini_10.csv"
-      './lib/crm_formatter/csv/seeds_mini_2_bug.csv'
-    end
-
-    ### Sample Hashes for validate_data
-    def grab_seed_hashes
-      [{ row_id: 1,
-         url: 'stanleykaufman.com',
-         act_name: 'Stanley Chevrolet Kaufman',
-         street: '825 E Fair St',
-         city: 'Kaufman',
-         state: 'TX',
-         zip: '75142',
-         phone: '(888) 457-4391' },
-       { row_id: 2,
-         url: 'leepartyka',
-         act_name: 'Lee Partyka Chevrolet Mazda Isuzu Truck',
-         street: '200 Skiff St',
-         city: 'Hamden',
-         state: 'CT',
-         zip: '6518',
-         phone: '(203) 288-7761' },
-       { row_id: 3,
-         url: 'burienhonda.fake.not.net.com',
-         act_name: 'Honda of Burien 15026 1st Avenue South, Burien, WA 98148',
-         street: '15026 1st Avenue South',
-         city: 'Burien',
-         state: 'WA',
-         zip: '98148',
-         phone: '(206) 246-9700' },
-       { row_id: 4,
-         url: 'cortlandchryslerdodgejeep.com',
-         act_name: 'Cortland Chrysler Dodge Jeep RAM',
-         street: '3878 West Rd',
-         city: 'Cortland',
-         state: 'NY',
-         zip: '13045',
-         phone: '(877) 279-3113' },
-       { row_id: 5,
-         url: 'imperialmotors.net',
-         act_name: 'Imperial Motors',
-         street: '4839 Virginia Beach Blvd',
-         city: 'Virginia Beach',
-         state: 'VA',
-         zip: '23462',
-         phone: '(757) 490-3651' },
-       { row_id: 6,
-         url: 'liatoyotaofnorthampton.com',
-         act_name: 'Lia Toyota of Northampton 280 King St. Northampton, MA 01060 Phone 413-341-5299',
-         street: '280 King St',
-         city: 'Northampton',
-         state: 'MA',
-         zip: '1060',
-         phone: '(413) 341-5299' },
-       { row_id: 7,
-         url: 'nelsonhallchevrolet.com',
-         act_name: 'Nelson Hall Chevrolet',
-         street: '1811 S Frontage Rd',
-         city: 'Meridian',
-         state: 'MS',
-         zip: '39301',
-         phone: '(601) 621-4593' },
-       { row_id: 8,
-         url: 'marshallfordco.com',
-         act_name: 'Marshall Ford Co Inc.',
-         street: '14843 MS-16',
-         city: 'Philadelphia',
-         state: 'MS',
-         zip: '39350',
-         phone: '(888) 461-7643' },
-       { row_id: 9,
-         url: 'warrentontoyota.com',
-         act_name: 'Warrenton Toyota',
-         street: '6449 Lee Hwy',
-         city: 'Warrenton',
-         state: 'VA',
-         zip: '20187',
-         phone: '(540) 878-4100' },
-       { row_id: 10,
-         url: 'toyotacertifiedatcentralcity.com',
-         act_name: 'Toyota Certified Central City',
-         street: '4800 Chestnut St',
-         city: 'Philadelphia',
-         state: 'PA',
-         zip: '19139',
-         phone: '(888) 379-1155' }]
-    end
   end
 end

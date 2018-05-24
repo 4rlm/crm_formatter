@@ -11,7 +11,7 @@ module CrmFormatter
       # Args get passed to tools for scrubbing list.
       # Args List: pos_urls, neg_urls, pos_links, neg_links, pos_hrefs, neg_hrefs, pos_exts, neg_exts
       @tools = CrmFormatter::Tools.new(args)
-      @empty_args = args.empty?
+      @empty_args = args.blank?
       @min_length = args.fetch(:min_length, 2)
       @max_length = args.fetch(:max_length, 100)
     end
@@ -118,7 +118,7 @@ module CrmFormatter
         url_hash[:web_neg] << err_msg
         url = nil
         url_hash[:url_crmf] = nil
-        { url_hash: url_hash, url: url }
+        return { url_hash: url_hash, url: url }
       end
 
       ### Only Non-Errors Get Here ###

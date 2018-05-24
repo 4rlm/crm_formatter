@@ -733,14 +733,14 @@ lib/crm_formatter/web_wrap.rb:40:25: C: Surrounding space missing in default val
     def import_data(args={})
                         ^
 lib/crm_formatter/web_wrap.rb:41:14: C: Space inside { missing.
-      args = {file_path: @utf.grab_seed_file_path}
+      args = {file_path: @utf.grab_seed_csv}
              ^
 lib/crm_formatter/web_wrap.rb:41:49: C: Space inside } missing.
-      args = {file_path: @utf.grab_seed_file_path}
+      args = {file_path: @utf.grab_seed_csv}
                                                 ^
 lib/crm_formatter/web_wrap.rb:46:1: C: Extra blank line detected.
 lib/crm_formatter/web_wrap.rb:47:9: C: Do not prefix reader method names with get_.
-    def get_web_args
+    def grab_seed_web_criteria
         ^^^^^^^^^^^^
 lib/crm_formatter/web_wrap.rb:48:81: C: Line is too long. [267/80]
       neg_urls = %w(approv avis budget collis eat enterprise facebook financ food google gourmet hertz hotel hyatt insur invest loan lube mobility motel motorola parts quick rent repair restaur rv ryder service softwar travel twitter webhost yellowpages yelp youtube)

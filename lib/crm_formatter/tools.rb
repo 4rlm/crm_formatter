@@ -4,12 +4,12 @@ module CrmFormatter
   class Tools
     def initialize(args={})
       @args = args
-      @empty_args = args.empty?
+      @empty_args = args.blank?
       @global_hash = grab_global_hash
     end
 
     def grab_global_hash
-      keys = %i[row_id act_name street city state zip phone url url_crmf url_path web_status web_neg web_pos utf_status]
+      keys = %i[row_id act_name street city state zip phone phone_crmf phone_status url url_crmf url_path web_status web_neg web_pos utf_status]
       @global_hash = Hash[keys.map { |a| [a, nil] }]
     end
 
@@ -78,7 +78,9 @@ module CrmFormatter
       str = str.split(' ')&.each { |el| el.capitalize! if el.gsub(/[^ A-Za-z]/, '')&.strip&.length > 2 }&.join(' ')
     end
 
-    ### These two methods can set instance vars from args. Save for later.
+    ### Save for later. ###
+
+    ### These two methods can set instance vars from args.
     # def set(name, value)
     #   var_name = "@#{name}"  # the '@' is required
     #   self.instance_variable_set(var_name, value)
@@ -91,5 +93,15 @@ module CrmFormatter
     #   args.slice!(*keys_to_slice)
     #   args
     # end
+
+    # def compare_diff(hsh)
+    #   res = []
+    #   hsh.to_a.reduce do |el, nxt|
+    #     res << nxt.first if el.last != nxt.last
+    #     el = nxt
+    #   end
+    #   res.compact!
+    # end
+
   end
 end
