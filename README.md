@@ -263,7 +263,7 @@ def self.format_all_phone_in_my_db
 
 end
 
-phone_hash = { phone: 555-123-4567, phone_crmf: (555) 123-4567, phone_status: true }
+phone_hash = { phone: 555-123-4567, phone_f: (555) 123-4567, phone_status: true }
 ```
 
 #### 3. Web Examples

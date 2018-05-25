@@ -17,7 +17,7 @@ module CrmFormatter
       text
     end
 
-    def grab_seed_csv
+    def grab_seed_file_path
       # "./lib/crm_formatter/csv/seeds_clean.csv"
       # "./lib/crm_formatter/csv/seeds_dirty.csv"
       # "./lib/crm_formatter/csv/seeds_mega.csv"

@@ -1,4 +1,4 @@
-# frozen_string_literal: true
+# frozen_string_literal: false
 
 module CrmFormatter
   class Phone
@@ -6,13 +6,13 @@ module CrmFormatter
 
     # Call: Formatter.new.validate_phone(phone)
     def validate_phone(phone)
-      phone_hsh = { phone: phone, phone_crmf: nil, phone_status: false }
+      phone_hsh = { phone: phone, phone_f: nil, phone_status: false }
       return phone_hsh unless phone.present?
       phone = phone&.gsub(/\s/, ' ')&.strip
       reg = Regexp.new('[(]?[0-9]{3}[ ]?[)-.]?[ ]?[0-9]{3}[ ]?[-. ][ ]?[0-9]{4}')
       return phone_hsh if phone.first == '0' || phone.include?('(0') || !reg.match(phone)
-      phone_hsh[:phone_crmf] = format_phone(phone)
-      phone_hsh[:phone_status] = phone_hsh[:phone] != phone_hsh[:phone_crmf]
+      phone_hsh[:phone_f] = format_phone(phone)
+      phone_hsh[:phone_status] = phone_hsh[:phone] != phone_hsh[:phone_f]
       phone_hsh
     end
 

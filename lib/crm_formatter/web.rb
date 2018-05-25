@@ -1,4 +1,4 @@
-# frozen_string_literal: true
+# frozen_string_literal: false
 
 # require 'rubygems'
 # require 'active_support'
@@ -10,7 +10,7 @@ module CrmFormatter
     def initialize(args={})
       # Args get passed to tools for scrubbing list.
       # Args List: pos_urls, neg_urls, pos_links, neg_links, pos_hrefs, neg_hrefs, pos_exts, neg_exts
-      @tools = CrmFormatter::Tools.new(args)
+      @tools = CrmFormatter::Tools.new(args={})
       @empty_args = args.blank?
       @min_length = args.fetch(:min_length, 2)
       @max_length = args.fetch(:max_length, 100)
@@ -35,13 +35,13 @@ module CrmFormatter
         (url = nil if errors?(url_hash)) if url.present?
       end
 
-      url_hash[:url_crmf] = url
+      url_hash[:url_f] = url
       url_hash = check_reformatted_status(url_hash) if url.present?
       url_hash
     end
 
     def check_reformatted_status(url_hash)
-      formatted = url_hash[:url_crmf]
+      formatted = url_hash[:url_f]
       url_hash[:web_status] = url_hash[:url_path] != formatted if formatted.present?
       url_hash
     end
@@ -53,7 +53,7 @@ module CrmFormatter
 
     # StartCrm.run_webs
     def prep_for_uri(url)
-      url_hash = { web_status: false, url_path: url, url_crmf: nil, web_neg: [], web_pos: [] }
+      url_hash = { web_status: false, url_path: url, url_f: nil, web_neg: [], web_pos: [] }
       begin
         url = url&.split('|')&.first
         url = url&.split('\\')&.first
@@ -72,7 +72,7 @@ module CrmFormatter
         url = nil if url.present? && banned_symbols.any? { |symb| url&.include?(symb) }
         unless url.present?
           url_hash[:web_neg] << 'error: syntax'
-          url_hash[:url_crmf] = url
+          url_hash[:url_f] = url
         end
       rescue StandardError => error
         url_hash[:web_neg] << "error: #{error}"
@@ -117,7 +117,7 @@ module CrmFormatter
       if err_msg
         url_hash[:web_neg] << err_msg
         url = nil
-        url_hash[:url_crmf] = nil
+        url_hash[:url_f] = nil
         return { url_hash: url_hash, url: url }
       end
 
@@ -144,7 +144,7 @@ module CrmFormatter
 
     def extract_link(url_path)
       url_hash = format_url(url_path)
-      url = url_hash[:url_crmf]
+      url = url_hash[:url_f]
       link = url_path
       link_hsh = { url_path: url_path, url: url, link: nil }
       return link_hsh unless url.present? && link.present? && link.length > @min_length

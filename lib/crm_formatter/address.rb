@@ -1,36 +1,37 @@
-# frozen_string_literal: true
+# frozen_string_literal: false
 
 module CrmFormatter
   class Address
     def format_full_address(adr={})
-      formatted = {
-        street: format_street(adr[:street]),
-        city: format_city(adr[:city]),
-        state: format_state(adr[:state]),
-        zip: format_zip(adr[:zip])
+      crmf_hash = {
+        street_f: format_street(adr[:street]),
+        city_f: format_city(adr[:city]),
+        state_f: format_state(adr[:state]),
+        zip_f: format_zip(adr[:zip])
       }
 
-      formatted[:full_address] = get_full_address(formatted)
-      formatted[:changed] = compare_versions(adr, formatted)
-      formatted
+      crmf_hash[:full_addr_f] = make_full_addr_f(crmf_hash)
+      crmf_hash[:address_status] = compare_versions(adr, crmf_hash)
+      crmf_hash
     end
 
     ####### COMPARE ORIGINAL AND FORMATTED ADR ######
-    def compare_versions(original, formatted)
-      original = get_full_address(original)
-      formatted = formatted[:full_address]
-      original != formatted
+    def compare_versions(original, crmf_hash)
+      original = make_full_address_original(original)
+      crmf = crmf_hash[:full_addr_f]
+      original != crmf
     end
 
     ######### FORMAT FULL ADDRESS ##########
-
-    def get_full_address(hsh)
+    def make_full_address_original(hsh)
       [hsh[:street], hsh[:city], hsh[:state], hsh[:zip]].compact.join(', ')
     end
 
-    ######### FORMAT STREET ##########
+    def make_full_addr_f(hsh)
+      [hsh[:street_f], hsh[:city_f], hsh[:state_f], hsh[:zip_f]].compact.join(', ')
+    end
 
-    # CALL: Formatter.new.format_street(street)
+    ######### FORMAT STREET ##########
     def format_street(street)
       street = street&.gsub(/\s/, ' ')&.strip
       return unless street.present?

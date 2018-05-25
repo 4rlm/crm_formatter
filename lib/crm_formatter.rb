@@ -1,4 +1,4 @@
-# frozen_string_literal: true
+# frozen_string_literal: false
 
 require 'crm_formatter/version'
 require 'crm_formatter/dictionary'
@@ -14,15 +14,15 @@ require 'pry'
 
 module CrmFormatter
 
-  def self.run
-    run_web_wrap
-    # dicts
-    # format_urls
-  end
+  # def self.run
+  #   run_web_wrap
+  #   # dicts
+  #   # format_urls
+  # end
 
-  def self.run_web_wrap
+  def self.run_wrap
     wrap = self::Wrap.new
-    wrap.wrap ## returns formatted urls.
+    wrap.run_wrap ## returns formatted urls.
   end
 
   def self.dicts

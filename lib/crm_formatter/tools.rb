@@ -1,4 +1,4 @@
-# frozen_string_literal: true
+# frozen_string_literal: false
 
 module CrmFormatter
   class Tools
@@ -9,7 +9,7 @@ module CrmFormatter
     end
 
     def grab_global_hash
-      keys = %i[row_id act_name street city state zip phone phone_crmf phone_status url url_crmf url_path web_status web_neg web_pos utf_status]
+      keys = %i[row_id act_name street city state zip phone url url_path street_f city_f state_f zip_f full_addr_f phone_f url_f web_neg web_pos address_status web_status phone_status utf_status]
       @global_hash = Hash[keys.map { |a| [a, nil] }]
     end
 
@@ -64,8 +64,7 @@ module CrmFormatter
       hash
     end
 
-    # CALL: Formatter.new.letter_case_check(street)
-    def self.letter_case_check(str)
+    def letter_case_check(str)
       return unless str.present?
       flashes = str&.gsub(/[^ A-Za-z]/, '')&.strip&.split(' ')
       flash = flashes&.reject { |e| e.length < 3 }&.join(' ')

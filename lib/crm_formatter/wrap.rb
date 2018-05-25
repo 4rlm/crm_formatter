@@ -1,19 +1,18 @@
-# frozen_string_literal: true
+# frozen_string_literal: false
 require 'csv'
 
 module CrmFormatter
   class Wrap
     def initialize
-      @crm_data = []
+      @crm_data = {}
       @tools = CrmFormatter::Tools.new
       @global_hash = @tools.grab_global_hash
     end
 
-    ## Starting point of class. Can call wrap method to run.
-    def wrap(args={})
-      import_data(args={})
-      format_urls
-      format_phones
+    ## Starting point of class. Can call run_wrap method to run.
+    def run_wrap(args={})
+      import_crm_data(args={})
+      format_crm_data
       binding.pry
       puts @crm_data.inspect
       @crm_data
@@ -21,31 +20,45 @@ module CrmFormatter
     end
 
 
-    def import_data(args={})
-      file_path = args.fetch(:file_path, nil)
-      data = args.fetch(:data, nil)
-      args = { file_path: file_path, data: data }
+    def import_crm_data(args={})
+      @crm_data = { stats: nil, data: nil, file_path: nil, criteria: nil }
+      @crm_data.merge!(args)
+      keys = args.compact.keys
 
-      unless args.values.any?
-        # args = { file_path: Seed.new.grab_seed_csv, pollute_seeds: true }
-        args = { data: Seed.new.grab_seed_hashes, pollute_seeds: true }
+      unless (keys & [:data, :file_path]).any?
+        @crm_data[:file_path] = Seed.new.grab_seed_file_path
+        # @crm_data[:data] = Seed.new.grab_seed_hashes
+        @crm_data[:pollute_seeds] = true
+        unless keys.include?(:criteria)
+          @crm_data[:criteria] = Seed.new.grab_seed_web_criteria
+        end
       end
 
-      @crm_data = CrmFormatter::UTF.new.validate_data(args)
+      utf_result = CrmFormatter::UTF.new.validate_data(@crm_data)
+      @crm_data.merge!(utf_result)
     end
 
 
-    def format_urls(args={})
-      # import_data(args = {}) ## data sent to @crm_data
+    def format_crm_data
       return unless @crm_data[:data][:valid_data].any?
-      args = Seed.new.grab_seed_web_criteria if args.blank?
+      args = @crm_data[:criteria]
       web = CrmFormatter::Web.new(args)
+      phone = CrmFormatter::Phone.new
+      address = CrmFormatter::Address.new
 
       @crm_data[:data][:valid_data].map! do |valid_hash|
-        formatted_hash = web.format_url(valid_hash[:url])
-        local = @global_hash
-        local = local.merge(valid_hash)
-        local = local.merge(formatted_hash)
+        local_hash = @global_hash
+        crmf_url_hsh = web.format_url(valid_hash[:url])
+        crmf_phone_hsh = phone.validate_phone(valid_hash[:phone])
+        adr_hsh = valid_hash.slice(:street, :city, :state, :zip)
+        crmf_adr_hsh = address.format_full_address(adr_hsh)
+
+        local_hash = local_hash.merge(valid_hash)
+        local_hash = local_hash.merge(crmf_url_hsh)
+        local_hash = local_hash.merge(crmf_phone_hsh)
+        local_hash = local_hash.merge(crmf_adr_hsh)
+        # binding.pry
+        local_hash
       end
     end
 

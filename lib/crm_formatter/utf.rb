@@ -1,4 +1,4 @@
-# frozen_string_literal: true
+# frozen_string_literal: false
 # require 'csv'
 
 module CrmFormatter
@@ -16,8 +16,10 @@ module CrmFormatter
 
     #################### * VALIDATE DATA * ####################
     def validate_data(args={})
-      @seed = Seed.new if args.fetch(:pollute_seeds)
+      args = args.slice(:file_path, :data, :pollute_seeds)
+      args = args.compact
 
+      @seed = Seed.new if args.fetch(:pollute_seeds)
       file_path = args[:file_path]
       data = args[:data]
 

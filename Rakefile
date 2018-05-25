@@ -1,4 +1,4 @@
-# frozen_string_literal: true
+# frozen_string_literal: false
 
 require "bundler/gem_tasks"
 require "rspec/core/rake_task"
@@ -19,7 +19,7 @@ task :console do
   require 'crm_formatter' # You know what to do.
   require "active_support/all"
   ARGV.clear
-  CrmFormatter.run
+  CrmFormatter.run_wrap
   IRB.start
 end
 

@@ -733,10 +733,10 @@ lib/crm_formatter/wrap.rb:40:25: C: Surrounding space missing in default value a
     def import_data(args={})
                         ^
 lib/crm_formatter/wrap.rb:41:14: C: Space inside { missing.
-      args = {file_path: @utf.grab_seed_csv}
+      args = {file_path: @utf.grab_seed_file_path}
              ^
 lib/crm_formatter/wrap.rb:41:49: C: Space inside } missing.
-      args = {file_path: @utf.grab_seed_csv}
+      args = {file_path: @utf.grab_seed_file_path}
                                                 ^
 lib/crm_formatter/wrap.rb:46:1: C: Extra blank line detected.
 lib/crm_formatter/wrap.rb:47:9: C: Do not prefix reader method names with get_.
