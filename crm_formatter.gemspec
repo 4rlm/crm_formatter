@@ -31,43 +31,35 @@ Gem::Specification.new do |spec|
   spec.bindir        = 'exe'
   spec.executables   = spec.files.grep(%r{^exe/}) { |f| File.basename(f) }
   spec.require_paths = ['lib']
-  # spec.post_install_message = "Thanks for installing!"
+  spec.post_install_message = "Thanks for installing utf8_sanitizer!"
 
   spec.required_ruby_version = '~> 2.5.1'
-  spec.add_dependency 'activesupport', '~> 5.2.0'
+  spec.add_dependency 'activesupport', '~> 5.2', '>= 5.2.0'
   # spec.add_dependency "activesupport-inflector", ['~> 0.1.0']
-  # spec.executables << 'rake', '~> 10.4.2'
-  # spec.extra_rdoc_files = ['README', 'doc/user-guide.txt']
+  spec.add_development_dependency 'bundler', '~> 1.16', '>= 1.16.2'
+  spec.add_development_dependency 'byebug', '~> 10.0', '>= 10.0.2'
+  spec.add_development_dependency 'class_indexer', '~> 0.3.0'
+  spec.add_development_dependency 'irbtools', '~> 2.2', '>= 2.2.1'
+  spec.add_development_dependency 'rake', '~> 12.3', '>= 12.3.1'
+  spec.add_development_dependency 'rspec', '~> 3.7'
+  spec.add_development_dependency 'rubocop', '~> 0.56.0'
+  spec.add_development_dependency 'ruby-beautify', '~> 0.97.4'
+  spec.add_development_dependency "pry", "~> 0.11.3"
+  spec.add_development_dependency "utf8_sanitizer", "~> 1.1"
 
   # spec.add_runtime_dependency 'library', '~> 2.2'
-  # spec.add_dependency "activesupport-inflector", ['~> 0.1.0']
-  # spec.add_dependency 'activesupport', '>= 3.0'
   # spec.add_dependency 'activerecord', '>= 3.0'
-  # spec.required_ruby_version = ">= 2.3.0"
   # spec.add_dependency 'actionpack', '>= 3.0'
   # spec.add_dependency 'i18n'
   # spec.add_dependency 'polyamorous', '~> 1.3.2'
-  # spec.add_development_dependency 'rspec', '~> 3'
   # spec.add_development_dependency 'machinist', '~> 1.0.6'
   # spec.add_development_dependency 'faker', '~> 0.9.5'
   # spec.add_development_dependency 'sqlite3', '~> 1.3.3'
   # spec.add_development_dependency 'pg', '~> 0.21'
   # spec.add_development_dependency 'mysql2', '0.3.20'
-  # spec.add_development_dependency 'pry', '0.10'
-
-  spec.add_development_dependency 'bundler', '>= 1.14.0'
-  spec.add_development_dependency 'byebug', '~> 10.0', '>= 10.0.2'
-  spec.add_development_dependency 'class_indexer', '~> 0.2.0'
-  spec.add_development_dependency 'irbtools'
-  spec.add_development_dependency 'rake', '>= 11.5.1'
-  spec.add_development_dependency 'rspec', '>= 3.0.0'
-  spec.add_development_dependency 'rubocop', '~> 0.56.0'
-  spec.add_development_dependency 'ruby-beautify', '~> 0.97.4'
-  # spec.add_development_dependency "pry", "~> 0.11.3"
 
   # spec.requirements << 'libmagick, v6.0'
   # spec.requirements << 'A good graphics card'
-
   # # This gem will work with 1.8.6 or greater...
   # spec.required_ruby_version = '>= 1.8.6'
   #

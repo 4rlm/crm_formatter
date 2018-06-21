@@ -10,16 +10,24 @@ module CrmFormatter
         zip_f: format_zip(adr[:zip])
       }
 
+      crmf_hash[:full_addr] = make_full_address_original(adr)
       crmf_hash[:full_addr_f] = make_full_addr_f(crmf_hash)
-      crmf_hash[:address_status] = compare_versions(adr, crmf_hash)
+      crmf_hash = check_addr_status(crmf_hash)
       crmf_hash
     end
 
     ####### COMPARE ORIGINAL AND FORMATTED ADR ######
-    def compare_versions(original, crmf_hash)
-      original = make_full_address_original(original)
-      crmf = crmf_hash[:full_addr_f]
-      original != crmf
+    def check_addr_status(hsh)
+      full_addr = hsh[:full_addr]
+      full_addr_f = hsh[:full_addr_f]
+      status = nil
+
+      if full_addr && full_addr_f
+        full_addr != full_addr_f ? status = 'formatted' : status = 'unchanged'
+      end
+
+      hsh[:address_status] = status
+      hsh
     end
 
     ######### FORMAT FULL ADDRESS ##########

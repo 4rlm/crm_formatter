@@ -7,11 +7,9 @@ require 'crm_formatter'
 # require 'activesupport'
 # require "active_support/all"
 
-
 RSpec::Core::RakeTask.new(:spec)
 task :default => :spec
 task :test => :spec
-
 
 task :console do
   require 'irb'
@@ -19,6 +17,8 @@ task :console do
   require 'crm_formatter' # You know what to do.
   require "active_support/all"
   ARGV.clear
+  binding.pry
+
   CrmFormatter.run_wrap
   IRB.start
 end

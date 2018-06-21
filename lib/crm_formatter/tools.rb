@@ -9,7 +9,7 @@ module CrmFormatter
     end
 
     def grab_global_hash
-      keys = %i[row_id act_name street city state zip phone url url_path street_f city_f state_f zip_f full_addr_f phone_f url_f web_neg web_pos address_status web_status phone_status utf_status]
+      keys = %i[row_id act_name street city state zip full_addr phone url url_path street_f city_f state_f zip_f full_addr_f phone_f url_f web_neg web_pos address_status phone_status web_status utf_status]
       @global_hash = Hash[keys.map { |a| [a, nil] }]
     end
 

@@ -12,8 +12,22 @@ module CrmFormatter
       reg = Regexp.new('[(]?[0-9]{3}[ ]?[)-.]?[ ]?[0-9]{3}[ ]?[-. ][ ]?[0-9]{4}')
       return phone_hsh if phone.first == '0' || phone.include?('(0') || !reg.match(phone)
       phone_hsh[:phone_f] = format_phone(phone)
-      phone_hsh[:phone_status] = phone_hsh[:phone] != phone_hsh[:phone_f]
+      phone_hsh = check_phone_status(phone_hsh)
       phone_hsh
+    end
+
+    ####### COMPARE ORIGINAL AND FORMATTED PHONE ######
+    def check_phone_status(hsh)
+      phone = hsh[:phone]
+      phone_f = hsh[:phone_f]
+      status = nil
+
+      if phone && phone_f
+        phone != phone_f ? status = 'formatted' : status = 'unchanged'
+      end
+
+      hsh[:phone_status] = status
+      hsh
     end
 
     #################################

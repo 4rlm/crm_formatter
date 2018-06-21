@@ -35,15 +35,33 @@ module CrmFormatter
         (url = nil if errors?(url_hash)) if url.present?
       end
 
+      url_hash = consolidate_neg_pos(url_hash)
       url_hash[:url_f] = url
-      url_hash = check_reformatted_status(url_hash) if url.present?
+      # url_hash = check_web_status(url_hash) if url.present?
+      url_hash = check_web_status(url_hash)
       url_hash
     end
 
-    def check_reformatted_status(url_hash)
-      formatted = url_hash[:url_f]
-      url_hash[:web_status] = url_hash[:url_path] != formatted if formatted.present?
-      url_hash
+    ####### COMPARE ORIGINAL AND FORMATTED URL ######
+    def check_web_status(hsh)
+      url_path = hsh[:url_path]
+      url_f = hsh[:url_f]
+      hsh[:web_neg].include?('error') ? status = 'error' : status = nil
+
+      if url_path && url_f && status.nil?
+        url_path != url_f ? status = 'formatted' : status = 'unchanged'
+      end
+
+      hsh[:web_status] = status
+      hsh
+    end
+
+    def consolidate_neg_pos(hsh)
+      neg = hsh[:web_neg].join(', ')
+      pos = hsh[:web_pos].join(', ')
+      neg.present? ? hsh[:web_neg] = neg : hsh[:web_neg] = nil
+      pos.present? ? hsh[:web_pos] = pos : hsh[:web_pos] = nil
+      hsh
     end
 
     def errors?(url_hash)

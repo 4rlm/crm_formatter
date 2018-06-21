@@ -11,6 +11,23 @@ module CrmFormatter
 
     ## Starting point of class. Can call run_wrap method to run.
     def run_wrap(args={})
+      binding.pry
+
+      sanitized_data = Utf8Sanitizer.sanitize
+      puts sanitized_data.inspect
+      binding.pry
+
+      orig_hashes = [{ :row_id=>"1", :url=>"stanleykaufman.com", :act_name=>"Stanley Chevrolet Kaufman\x99_\xCC", :street=>"825 E Fair St", :city=>"Kaufman", :state=>"TX", :zip=>"75142", :phone=>"(888) 457-4391\r\n" }]
+
+      # sanitized_data = Utf8Sanitizer.sanitize(data: orig_hashes)
+      sanitized_data = Utf8Sanitizer.sanitize(file_path: './lib/csv/seeds_dirty_1.csv')
+
+      sanitized_hashes = sanitized_data[:data][:valid_data]
+      binding.pry
+
+      return "Stop Here for Now!"
+      ### Integrate with Below after above working well. ###
+
       import_crm_data(args={})
       format_crm_data
       binding.pry
@@ -41,8 +58,7 @@ module CrmFormatter
 
     def format_crm_data
       return unless @crm_data[:data][:valid_data].any?
-      args = @crm_data[:criteria]
-      web = CrmFormatter::Web.new(args)
+      web = CrmFormatter::Web.new(@crm_data[:criteria])
       phone = CrmFormatter::Phone.new
       address = CrmFormatter::Address.new
 
@@ -57,7 +73,8 @@ module CrmFormatter
         local_hash = local_hash.merge(crmf_url_hsh)
         local_hash = local_hash.merge(crmf_phone_hsh)
         local_hash = local_hash.merge(crmf_adr_hsh)
-        # binding.pry
+        puts "NEED to work on 'status' for each."
+        binding.pry
         local_hash
       end
     end
