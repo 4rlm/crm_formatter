@@ -10,7 +10,7 @@ require 'crm_formatter/tools'
 require 'crm_formatter/utf'
 require 'crm_formatter/seed'
 
-require 'pry'
+# require 'pry'
 
 module CrmFormatter
 
