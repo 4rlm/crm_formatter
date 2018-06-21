@@ -9,8 +9,8 @@ require 'crm_formatter/phone'
 require 'crm_formatter/tools'
 require 'crm_formatter/utf'
 require 'crm_formatter/seed'
-
-# require 'pry'
+require 'pry'
+require 'utf8_sanitizer'
 
 module CrmFormatter
 
