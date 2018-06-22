@@ -46,7 +46,7 @@ module CrmFormatter
     def check_web_status(hsh)
       url_path = hsh[:url_path]
       url_f = hsh[:url_f]
-      hsh[:web_neg].include?('error') ? status = 'error' : status = nil
+      hsh[:web_neg]&.include?('error') ? status = 'error' : status = nil
 
       if url_path && url_f && status.nil?
         url_path != url_f ? status = 'formatted' : status = 'unchanged'

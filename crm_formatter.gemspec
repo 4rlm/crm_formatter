@@ -45,7 +45,7 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'rubocop', '~> 0.56.0'
   spec.add_development_dependency 'ruby-beautify', '~> 0.97.4'
   spec.add_development_dependency "pry", "~> 0.11.3"
-  spec.add_development_dependency "utf8_sanitizer", "~> 1.1"
+  spec.add_development_dependency "utf8_sanitizer", "~> 2.0"
 
   # spec.add_runtime_dependency 'library', '~> 2.2'
   # spec.add_dependency 'activerecord', '>= 3.0'

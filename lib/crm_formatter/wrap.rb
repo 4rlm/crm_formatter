@@ -11,19 +11,10 @@ module CrmFormatter
 
     ## Starting point of class. Can call run_wrap method to run.
     def run_wrap(args={})
-      # sanitized_data = Utf8Sanitizer.sanitize
       orig_hashes = [{ :row_id=>"1", :url=>"stanleykaufman.com", :act_name=>"Stanley Chevrolet Kaufman\x99_\xCC", :street=>"825 E Fair St", :city=>"Kaufman", :state=>"TX", :zip=>"75142", :phone=>"(888) 457-4391\r\n" }]
 
-      # sanitized_data = Utf8Sanitizer.sanitize(data: orig_hashes)
-      sanitized_data = Utf8Sanitizer.sanitize(file_path: './lib/crm_formatter/csv/seeds_dirty_1.csv')
-
-      sanitized_hashes = sanitized_data[:data][:valid_data]
-      binding.pry
-
-      return "Stop Here for Now!"
-      ### Integrate with Below after above working well. ###
-
-      import_crm_data(args={})
+      import_crm_data(data: orig_hashes)
+      # import_crm_data({file_path: './lib/crm_formatter/csv/seeds_dirty_1.csv'})
       format_crm_data
       puts @crm_data.inspect
       @crm_data
@@ -34,18 +25,7 @@ module CrmFormatter
     def import_crm_data(args={})
       @crm_data = { stats: nil, data: nil, file_path: nil, criteria: nil }
       @crm_data.merge!(args)
-      keys = args.compact.keys
-
-      unless (keys & [:data, :file_path]).any?
-        @crm_data[:file_path] = Seed.new.grab_seed_file_path
-        # @crm_data[:data] = Seed.new.grab_seed_hashes
-        @crm_data[:pollute_seeds] = true
-        unless keys.include?(:criteria)
-          @crm_data[:criteria] = Seed.new.grab_seed_web_criteria
-        end
-      end
-
-      utf_result = CrmFormatter::UTF.new.validate_data(@crm_data)
+      utf_result = Utf8Sanitizer.sanitize(@crm_data)
       @crm_data.merge!(utf_result)
     end
 
@@ -62,12 +42,14 @@ module CrmFormatter
         crmf_phone_hsh = phone.validate_phone(valid_hash[:phone])
         adr_hsh = valid_hash.slice(:street, :city, :state, :zip)
         crmf_adr_hsh = address.format_full_address(adr_hsh)
-
+        
         local_hash = local_hash.merge(valid_hash)
         local_hash = local_hash.merge(crmf_url_hsh)
         local_hash = local_hash.merge(crmf_phone_hsh)
         local_hash = local_hash.merge(crmf_adr_hsh)
+        binding.pry
         puts "NEED to work on 'status' for each."
+        binding.pry
         local_hash
       end
     end
