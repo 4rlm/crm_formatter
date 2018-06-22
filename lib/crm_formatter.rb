@@ -11,9 +11,10 @@ require 'utf8_sanitizer'
 
 module CrmFormatter
 
-  def self.run_wrap
-    wrap = self::Wrap.new
-    wrap.run_wrap ## returns formatted urls.
+  def self.format(args={})
+    formatted_data = self::Wrap.new.run(args)
+    binding.pry
+    formatted_data
   end
 
 end

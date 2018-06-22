@@ -43,7 +43,7 @@ module CrmFormatter
     def format_street(street)
       street = street&.gsub(/\s/, ' ')&.strip
       return unless street.present?
-      # street = Formatter.new.letter_case_check(street)
+      # street = Wrap.new.letter_case_check(street)
       return unless street.present?
       street = CrmFormatter::Tools.new.letter_case_check(street)
       street = " #{street} " # Adds white space, to match below, then strip.
@@ -154,7 +154,7 @@ module CrmFormatter
 
     ########### FORMAT ZIP ###########
 
-    # CALL: Formatter.new.format_zip(zip)
+    # CALL: Wrap.new.format_zip(zip)
     def format_zip(zip)
       zip = nil unless zip.scan(/[0-9]/).length.in?([4, 5, 8, 9])
       zip = zip&.gsub(/\s/, ' ')&.strip

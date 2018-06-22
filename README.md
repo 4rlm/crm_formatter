@@ -1,15 +1,15 @@
 
-# CRM Formatter
+# CRM Wrap
 #### Efficiently Reformat, Normalize, and Scrub CRM Contact Data, such as Addresses, Phones and URLs.
 
-CRM Formatter is perfect for curating high-volume enterprise-scale web scraping, and integrates well with Nokogiri, Mechanize, and asynchronous jobs via Delayed_job or SideKick, to name a few.  Web Scraping and Harvesting often gathers a lot of junk to sift through; presenting unexpected edge cases around each corner.  CRM Formatter has been developed and refined during the past few years to focus on improving that task.
+CRM Wrap is perfect for curating high-volume enterprise-scale web scraping, and integrates well with Nokogiri, Mechanize, and asynchronous jobs via Delayed_job or SideKick, to name a few.  Web Scraping and Harvesting often gathers a lot of junk to sift through; presenting unexpected edge cases around each corner.  CRM Wrap has been developed and refined during the past few years to focus on improving that task.
 
 It's also perfect for processing API data, Web Forms, and routine DB normalizing and scrubbing processes.  Not only does it reformat Address, Phone, and Web data, it can also accept lists to scrub against, then providing detailed reports about how each piece of data compares with your criteria lists.
 
-The CRM Formatter Gem is currently in '--pre versioning', or 'beta mode' as the process of reorganizing these proprietary, production environment processes from their native app environment into this newly created open source gem.  Formal tests in the gem environment are still on the way, as is the documentation.  But the processes themselves have been very reliable and an integral part of a very large app dedicated to such services.  
+The CRM Wrap Gem is currently in '--pre versioning', or 'beta mode' as the process of reorganizing these proprietary, production environment processes from their native app environment into this newly created open source gem.  Formal tests in the gem environment are still on the way, as is the documentation.  But the processes themselves have been very reliable and an integral part of a very large app dedicated to such services.  
 
 ## Getting Started
-CRM Formatter is compatible with Rails 4.2 and 5.0, 5.1 and 5.2 on Ruby 2.2 and later.
+CRM Wrap is compatible with Rails 4.2 and 5.0, 5.1 and 5.2 on Ruby 2.2 and later.
 
 In your Gemfile add:
 ```
@@ -20,7 +20,7 @@ Or to install locally:
 gem install crm_formatter --pre
 ```
 ## Usage
-Using CRM Formatter in your app is very simple, and could be accessed from your app's concerns, , helpers, lib, models, or services, but depends on the scope, location, and size of your application and server. For simple form submission validations the model callback is typically ideal.  For database normalizing tasks the concerns, helpers, or lib is typically ideal.  For long running processes like web scraping or high volume APIs calls, like Google Linkedin, or Twitter  the lib or services might be ideal (asynchronous multithreaded even better)
+Using CRM Wrap in your app is very simple, and could be accessed from your app's concerns, , helpers, lib, models, or services, but depends on the scope, location, and size of your application and server. For simple form submission validations the model callback is typically ideal.  For database normalizing tasks the concerns, helpers, or lib is typically ideal.  For long running processes like web scraping or high volume APIs calls, like Google Linkedin, or Twitter  the lib or services might be ideal (asynchronous multithreaded even better)
 
 ### Class Names
 CrmFormatter contains three classes, which can be accessed like below with local or instance variables; you can name them anything you like.
@@ -38,7 +38,7 @@ web_formatter = CrmFormatter::Web.new
 ### Available Methods in Each Class
 
 ## Address Methods
-These are the methods available to you.  You can use them a la cart, for example if you just wanted to format all your states, or you could combine the entire address into `get_full_address()` which will run each of the related methods for you.  It also adds an additional hash pair containing the full address as a single string.  There is also an indicator pair to report if there were any changes from the original version to the newly formatted.
+These are the methods available to you.  You can use them a la cart, for example if you just wanted to wrap all your states, or you could combine the entire address into `get_full_address()` which will run each of the related methods for you.  It also adds an additional hash pair containing the full address as a single string.  There is also an indicator pair to report if there were any changes from the original version to the newly formatted.
 ```
   addr_formatter = CrmFormatter::Address.new
   full_address_hash = {street: street, city: city, state: state, zip: zip}
@@ -52,7 +52,7 @@ These are the methods available to you.  You can use them a la cart, for example
 ```
 
 #### Phone Methods
-Phone only has two methods, with a subtle but important distinction between them.  For simply formatting a known phone, use `format_phone` to convert to the normalized (555) 123-4567 format.  Use `validate_phone` if either your phone data has a bunch of text and special characters to remove, or if you aren't even sure that it is a phone, as it will help determine if the phone number seem legitimate.  If so, it then passes it along to `format_phone`.
+Phone only has two methods, with a subtle but important distinction between them.  For simply formatting a known phone, use `format_phone` to convert to the normalized (555) 123-4567 wrap.  Use `validate_phone` if either your phone data has a bunch of text and special characters to remove, or if you aren't even sure that it is a phone, as it will help determine if the phone number seem legitimate.  If so, it then passes it along to `format_phone`.
 ```
   ph_formatter = CrmFormatter::Phone.new
   ph_formatter.validate_phone(phone)
@@ -179,7 +179,7 @@ end
 ```
 
 #### Data Response in a Hash
-CRM Formatter returns data as a hash, which includes your original unaltered data you submitted, the formatted data, a T/F boolean indicator regarding if the original and formatted data are different, and for some methods, negs and pos regarding your criteria to scrub against.  In the above example, the returned data from each submitted url would resemble the one below.
+CRM Wrap returns data as a hash, which includes your original unaltered data you submitted, the formatted data, a T/F boolean indicator regarding if the original and formatted data are different, and for some methods, negs and pos regarding your criteria to scrub against.  In the above example, the returned data from each submitted url would resemble the one below.
 ```
 # format_url method returns data like below this example...
 # url_hash = {:reformatted=>false,
@@ -250,7 +250,7 @@ end
 ```
 
 #### 2. Phone Examples
-In the phone example, format_all_phone_in_my_db could be a custom wrapper method, which when called by Rails C or from a front end GUI process, could grab all phones in db meeting certain criteria to be scrubbed. The results will always be in hash format, such as below.... phone_hash  
+In the phone example, format_all_phone_in_my_db could be a custom wrapper method, which when called by Rails C or from a front end GUI process, could grab all phones in db meeting certain criteria to be scrubbed. The results will always be in hash wrap, such as below.... phone_hash  
 ```
 @crm_phone = CrmFormatter::Phone.new
 

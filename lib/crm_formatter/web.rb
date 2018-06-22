@@ -107,7 +107,10 @@ module CrmFormatter
       host = uri&.host
       url = "#{scheme}://#{host}" if host.present? && scheme.present?
       url = "http://#{url}" if url[0..3] != 'http'
-      return url.gsub('//', '//www.') unless url.include?('www.')
+
+      return unless url.present?
+      url.gsub!('//', '//www.') unless url.include?('www.')
+      url
     end
 
     # Source: http://www.iana.org/domains/root/db
@@ -226,7 +229,7 @@ module CrmFormatter
       href_hsh
     end
 
-    # CALL: Formatter.new.remove_ww3(url)
+    # CALL: Wrap.new.remove_ww3(url)
     def remove_ww3(url)
       return unless url.present?
       url.split('.').map { |part| url.gsub!(part, 'www') if part.scan(/ww[0-9]/).any? }

@@ -9,13 +9,10 @@ module CrmFormatter
       @global_hash = @tools.grab_global_hash
     end
 
-    ## Starting point of class. Can call run_wrap method to run.
-    def run_wrap(args={})
-      orig_hashes = [{ :row_id=>"1", :url=>"stanleykaufman.com", :act_name=>"Stanley Chevrolet Kaufman\x99_\xCC", :street=>"825 E Fair St", :city=>"Kaufman", :state=>"TX", :zip=>"75142", :phone=>"(888) 457-4391\r\n" }]
-
-      import_crm_data(data: orig_hashes)
-      # import_crm_data({file_path: './lib/crm_formatter/csv/seeds_dirty_1.csv'})
-      format_crm_data
+    ## Starting point of class. Can call run method to run.
+    def run(args={})
+      import_crm_data(args)
+      format_data
       puts @crm_data.inspect
       @crm_data
       ## Exit point from this class. Should return @crm_data.
@@ -30,7 +27,7 @@ module CrmFormatter
     end
 
 
-    def format_crm_data
+    def format_data
       return unless @crm_data[:data][:valid_data].any?
       web = CrmFormatter::Web.new(@crm_data[:criteria])
       phone = CrmFormatter::Phone.new
@@ -42,31 +39,28 @@ module CrmFormatter
         crmf_phone_hsh = phone.validate_phone(valid_hash[:phone])
         adr_hsh = valid_hash.slice(:street, :city, :state, :zip)
         crmf_adr_hsh = address.format_full_address(adr_hsh)
-        
         local_hash = local_hash.merge(valid_hash)
         local_hash = local_hash.merge(crmf_url_hsh)
         local_hash = local_hash.merge(crmf_phone_hsh)
         local_hash = local_hash.merge(crmf_adr_hsh)
-        binding.pry
         puts "NEED to work on 'status' for each."
-        binding.pry
         local_hash
       end
     end
 
 
-    def format_phones(args={})
-      return unless @crm_data[:data][:valid_data].any?
-      phone = CrmFormatter::Phone.new
-
-      @crm_data[:data][:valid_data].map! do |valid_hash|
-        formatted_hash = phone.validate_phone(valid_hash[:phone])
-        local = @global_hash
-        local = local.merge(valid_hash)
-        local = local.merge(formatted_hash)
-        local
-      end
-    end
+    # def format_phones(args={})
+    #   return unless @crm_data[:data][:valid_data].any?
+    #   phone = CrmFormatter::Phone.new
+    #
+    #   @crm_data[:data][:valid_data].map! do |valid_hash|
+    #     formatted_hash = phone.validate_phone(valid_hash[:phone])
+    #     local = @global_hash
+    #     local = local.merge(valid_hash)
+    #     local = local.merge(formatted_hash)
+    #     local
+    #   end
+    # end
 
 
 

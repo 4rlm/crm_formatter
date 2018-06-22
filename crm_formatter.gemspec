@@ -35,6 +35,7 @@ Gem::Specification.new do |spec|
 
   spec.required_ruby_version = '~> 2.5.1'
   spec.add_dependency 'activesupport', '~> 5.2', '>= 5.2.0'
+  spec.add_dependency "utf8_sanitizer", "~> 2.0"
   # spec.add_dependency "activesupport-inflector", ['~> 0.1.0']
   spec.add_development_dependency 'bundler', '~> 1.16', '>= 1.16.2'
   spec.add_development_dependency 'byebug', '~> 10.0', '>= 10.0.2'
@@ -45,7 +46,6 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'rubocop', '~> 0.56.0'
   spec.add_development_dependency 'ruby-beautify', '~> 0.97.4'
   spec.add_development_dependency "pry", "~> 0.11.3"
-  spec.add_development_dependency "utf8_sanitizer", "~> 2.0"
 
   # spec.add_runtime_dependency 'library', '~> 2.2'
   # spec.add_dependency 'activerecord', '>= 3.0'

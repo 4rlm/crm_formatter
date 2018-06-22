@@ -2,9 +2,9 @@
 
 module CrmFormatter
   class Phone
-    ## Checks every phone number in table to verify that it meets phone criteria, then calls format_phone method to format Valid results.  Otherwise destroys Invalid phone fields and associations.
+    ## Checks every phone number in table to verify that it meets phone criteria, then calls format_phone method to wrap Valid results.  Otherwise destroys Invalid phone fields and associations.
 
-    # Call: Formatter.new.validate_phone(phone)
+    # Call: Wrap.new.validate_phone(phone)
     def validate_phone(phone)
       phone_hsh = { phone: phone, phone_f: nil, phone_status: false }
       return phone_hsh unless phone.present?
@@ -34,7 +34,7 @@ module CrmFormatter
     ## FORMATS PHONE AS: (000) 000-0000
     ## Assumes phone is legitimate, then formats.  Not designed to detect Valid phone number.
 
-    # Call: Formatter.new.format_phone(phone)
+    # Call: Wrap.new.format_phone(phone)
     def format_phone(phone)
       regex = Regexp.new('[A-Z]+[a-z]+')
       if !phone.blank? && (phone != 'N/A' || phone != '0') && !regex.match(phone)

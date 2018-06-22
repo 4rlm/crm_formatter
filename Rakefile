@@ -7,6 +7,7 @@ require 'crm_formatter'
 # require 'activesupport'
 # require "active_support/all"
 
+
 RSpec::Core::RakeTask.new(:spec)
 task :default => :spec
 task :test => :spec
@@ -18,7 +19,11 @@ task :console do
   require "active_support/all"
   ARGV.clear
 
-  CrmFormatter.run_wrap
+  # args = {data: [{ :row_id=>"1", :url=>"stanleykaufman.com", :act_name=>"Stanley Chevrolet Kaufman\x99_\xCC", :street=>"825 E Fair St", :city=>"Kaufman", :state=>"TX", :zip=>"75142", :phone=>"(888) 457-4391\r\n" }]}
+
+  args = {file_path: './lib/crm_formatter/csv/seeds_dirty_1.csv'}
+
+  formatted_data = CrmFormatter.format(args)
   IRB.start
 end
 
