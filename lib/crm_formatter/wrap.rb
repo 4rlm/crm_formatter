@@ -5,17 +5,14 @@ module CrmFormatter
   class Wrap
     def initialize
       @crm_data = {}
-      @tools = CrmFormatter::Tools.new
-      @global_hash = @tools.grab_global_hash
+      @global_hash = CrmFormatter::Tools.new.grab_global_hash
     end
 
-    ## Starting point of class. Can call run method to run.
     def run(args={})
       import_crm_data(args)
       format_data
       puts @crm_data.inspect
       @crm_data
-      ## Exit point from this class. Should return @crm_data.
     end
 
 
@@ -29,64 +26,24 @@ module CrmFormatter
 
     def format_data
       return unless @crm_data[:data][:valid_data].any?
-      web = CrmFormatter::Web.new(@crm_data[:criteria])
-      phone = CrmFormatter::Phone.new
       address = CrmFormatter::Address.new
+      phone = CrmFormatter::Phone.new
+      web = CrmFormatter::Web.new(@crm_data[:criteria])
 
       @crm_data[:data][:valid_data].map! do |valid_hash|
         local_hash = @global_hash
         crmf_url_hsh = web.format_url(valid_hash[:url])
         crmf_phone_hsh = phone.validate_phone(valid_hash[:phone])
+
         adr_hsh = valid_hash.slice(:street, :city, :state, :zip)
         crmf_adr_hsh = address.format_full_address(adr_hsh)
+        binding.pry
         local_hash = local_hash.merge(valid_hash)
         local_hash = local_hash.merge(crmf_url_hsh)
         local_hash = local_hash.merge(crmf_phone_hsh)
         local_hash = local_hash.merge(crmf_adr_hsh)
-        puts "NEED to work on 'status' for each."
         local_hash
       end
-    end
-
-
-    # def format_phones(args={})
-    #   return unless @crm_data[:data][:valid_data].any?
-    #   phone = CrmFormatter::Phone.new
-    #
-    #   @crm_data[:data][:valid_data].map! do |valid_hash|
-    #     formatted_hash = phone.validate_phone(valid_hash[:phone])
-    #     local = @global_hash
-    #     local = local.merge(valid_hash)
-    #     local = local.merge(formatted_hash)
-    #     local
-    #   end
-    # end
-
-
-
-
-
-
-
-
-
-
-    ###############################################
-    def self.export(hash)
-      # CSV.generate do |csv|
-      #   csv << @model.attribute_names
-      #   @model.all.each { |r| csv << r.attributes.values }
-      # end
-
-      ### LONGER EXAMPLE ###
-      # CSV.generate(options = {}) do |csv|
-      # csv.add_row(cont_cols + web_cols + brand_cols)
-      # conts.each do |cont|
-      #   values = cont.attribute_vals(cont_cols)
-      #   values += cont.web.attribute_vals(web_cols)
-      #   values << cont.web.brands_to_string
-      #   csv.add_row(values)
-      # end
     end
 
   end

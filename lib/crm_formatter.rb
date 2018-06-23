@@ -11,10 +11,43 @@ require 'utf8_sanitizer'
 
 module CrmFormatter
 
-  def self.format(args={})
-    formatted_data = self::Wrap.new.run(args)
+  def self.format_with_report(args={})
     binding.pry
+    formatted_data = self::Wrap.new.run(args)
     formatted_data
   end
 
+  ## Takes array of address hashes, returns array of address hashes.
+  def self.format_addresses(array_of_addresses)
+    address_obj = CrmFormatter::Address.new
+
+    formatted_address_hashes = array_of_addresses.map do |address_hsh|
+      crmf_adr_hsh = {address_status: nil, full_addr: nil, full_addr_f: nil}
+      crmf_adr_hsh.merge!(address_obj.format_full_address(address_hsh))
+      crmf_adr_hsh
+    end
+    formatted_address_hashes
+  end
+
+  ## Takes array of phone strings, returns array of phone hashes.
+  def self.format_phones(array_of_phones)
+    phone_obj = CrmFormatter::Phone.new
+
+    formatted_phone_hashes = array_of_phones.map do |phone|
+      crmf_phone_hsh = phone_obj.validate_phone(phone)
+    end
+    formatted_phone_hashes
+  end
+
+  ## Takes array of url strings, returns array of url hashes.
+  def self.format_urls(array_of_urls)
+    web_obj = CrmFormatter::Web.new(array_of_urls)
+
+    formatted_url_hashes = array_of_urls.map do |url|
+      crmf_url_hsh = {web_status: nil, url: url}
+      crmf_url_hsh.merge!(web_obj.format_url(url))
+      crmf_url_hsh
+    end
+    formatted_url_hashes
+  end
 end

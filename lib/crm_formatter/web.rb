@@ -72,6 +72,7 @@ module CrmFormatter
     # StartCrm.run_webs
     def prep_for_uri(url)
       url_hash = { web_status: false, url_path: url, url_f: nil, web_neg: [], web_pos: [] }
+
       begin
         url = url&.split('|')&.first
         url = url&.split('\\')&.first
