@@ -37,7 +37,6 @@ module CrmFormatter
 
         adr_hsh = valid_hash.slice(:street, :city, :state, :zip)
         crmf_adr_hsh = address.format_full_address(adr_hsh)
-        binding.pry
         local_hash = local_hash.merge(valid_hash)
         local_hash = local_hash.merge(crmf_url_hsh)
         local_hash = local_hash.merge(crmf_phone_hsh)
