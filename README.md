@@ -64,7 +64,7 @@ The examples on this README are from `format_url` method.  The others are for we
 ```
   web_formatter = CrmFormatter::Web.new
   web_formatter.format_url(url)
-  web_formatter.extract_link(url_path)
+  web_formatter.extract_path(url_path)
   web_formatter.remove_invalid_links(link)
   web_formatter.remove_invalid_hrefs(href)
   web_formatter.convert_to_scheme_host(url)

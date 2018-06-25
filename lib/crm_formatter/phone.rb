@@ -6,12 +6,12 @@ module CrmFormatter
 
     # Call: Wrap.new.validate_phone(phone)
     def validate_phone(phone)
-      phone_hsh = { phone: phone, phone_f: nil, phone_status: false }
+      phone_hsh = { phone_status: nil, phone: phone, phone_f: nil }
       return phone_hsh unless phone.present?
       phone = phone&.gsub(/\s/, ' ')&.strip
       reg = Regexp.new('[(]?[0-9]{3}[ ]?[)-.]?[ ]?[0-9]{3}[ ]?[-. ][ ]?[0-9]{4}')
-      return phone_hsh if phone.first == '0' || phone.include?('(0') || !reg.match(phone)
-      phone_hsh[:phone_f] = format_phone(phone)
+      phone = nil if phone.first == '0' || phone.include?('(0') || !reg.match(phone)
+      phone_hsh[:phone_f] = format_phone(phone) if phone.present?
       phone_hsh = check_phone_status(phone_hsh)
       phone_hsh
     end
@@ -20,13 +20,9 @@ module CrmFormatter
     def check_phone_status(hsh)
       phone = hsh[:phone]
       phone_f = hsh[:phone_f]
-      status = nil
-
-      if phone && phone_f
-        phone != phone_f ? status = 'formatted' : status = 'unchanged'
-      end
-
-      hsh[:phone_status] = status
+      status = 'invalid'
+      phone != phone_f ? status = 'formatted' : status = 'unchanged' if phone && phone_f
+      hsh[:phone_status] = status if status.present?
       hsh
     end
 

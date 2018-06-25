@@ -3,11 +3,13 @@
 require "bundler/gem_tasks"
 require "rspec/core/rake_task"
 require 'crm_formatter'
-require 'crm_formatter/seed_criteria'
+# require 'seed_criteria'
 
 # require 'rubygems'
 # require 'activesupport'
 # require "active_support/all"
+
+# gem build crm_formatter.gemspec
 
 RSpec::Core::RakeTask.new(:spec)
 task :default => :spec
@@ -24,26 +26,19 @@ task :console do
   # formatted_phones = format_phones
   # formatted_urls = format_urls
   # formatted_addresses = format_addresses
+  binding.pry
   IRB.start
 end
 
 
 def format_with_report
-  data = [{ :row_id=>"1", :url=>"stanleykaufman.com", :act_name=>"Stanley Chevrolet Kaufman\x99_\xCC", :street=>"825 E Fair St", :city=>"Kaufman", :state=>"TX", :zip=>"75142", :phone=>"555-457-4391\r\n" }]
+  data = [{ :row_id=>"1", :url=>"abcacura.com/twitter", :act_name=>"Stanley Chevrolet Kaufman\x99_\xCC", :street=>"825 East Fair Street", :city=>"Kaufman", :state=>"Texas", :zip=>"75142", :phone=>"555-457-4391\r\n" }]
 
   file_path = './lib/crm_formatter/csv/seeds_dirty_1.csv'
 
-  binding.pry
-  criteria = SeedCriteria.new.all_criteria
-  binding.pry
-
-
   args = {data: data}
-  args = {file_path: file_path}
-  binding.pry
-  args.merge!({criteria: criteria})
-  binding.pry
-
+  # args = {file_path: file_path}
+  # args.merge!({criteria: SeedCriteria.all_criteria})
   formatted_data = CrmFormatter.format_with_report(args)
 end
 
@@ -57,12 +52,12 @@ def format_addresses
 end
 
 def format_phones
-  array_of_phones = %w[555-457-4391 555-888-4391 555-457-4334]
+  array_of_phones = %w[555-457-4391 555-888-4391 555-457-4334 555-555 555.555.1234 not_a_number]
   formatted_phones = CrmFormatter.format_phones(array_of_phones)
 end
 
 def format_urls
-  array_of_urls = %w[sample1.com www.sample2.net http://sample3.net www.sample4.net.com www.sample5.sofake www.sample6.com.sofake example7.not.real]
+  array_of_urls = %w[www.sample01.net.com sample02.com http://www.sample3.net www.sample04.net/contact_us http://sample05.net www.sample06.sofake www.sample07.com.sofake example08.not.real www.sample09.net/staff/management www.www.sample10.com]
   formatted_urls = CrmFormatter.format_urls(array_of_urls)
 end
 

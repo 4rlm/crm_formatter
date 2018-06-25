@@ -78,7 +78,7 @@ RSpec.describe CrmFormatter do
           error_data: []
         },
         file_path: './lib/crm_formatter/csv/seeds_dirty_1.csv',
-        criteria: nil }
+      }
     end
 
     let(:formatted_data_hash_result) do
@@ -126,7 +126,7 @@ RSpec.describe CrmFormatter do
           error_data: []
         },
         file_path: nil,
-        criteria: nil }
+      }
     end
 
     context 'formats csv with report' do

@@ -6,7 +6,7 @@ require 'spec_helper'
 
 # consolidate_neg_pos
 # run_scrub
-# extract_link
+# extract_path
 # strip_down_url
 # remove_invalid_links
 # remove_invalid_hrefs

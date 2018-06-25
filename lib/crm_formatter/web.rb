@@ -7,20 +7,7 @@ require 'csv'
 # StartCrm.run_webs
 module CrmFormatter
   class Web
-    def initialize(args={})
-      # Args get passed to tools for scrubbing list.
-      # Args List: pos_urls, neg_urls, pos_links, neg_links, pos_hrefs, neg_hrefs, pos_exts, neg_exts
-      @tools = CrmFormatter::Tools.new(args={})
-      @empty_args = args.blank?
-      @min_length = args.fetch(:min_length, 2)
-      @max_length = args.fetch(:max_length, 100)
-    end
 
-    def banned_symbols
-      ['!', '$', '%', "'", '(', ')', '*', '+', ',', '<', '>', '@', '[', ']', '^', '{', '}', '~']
-    end
-
-    # StartCrm.run_webs
     def format_url(url)
       prep_result = prep_for_uri(url)
       url_hash = prep_result[:url_hash]
@@ -35,32 +22,28 @@ module CrmFormatter
         (url = nil if errors?(url_hash)) if url.present?
       end
 
-      url_hash = consolidate_neg_pos(url_hash)
+      url_hash = consolidate_negs(url_hash)
       url_hash[:url_f] = url
-      # url_hash = check_web_status(url_hash) if url.present?
+      url_hash = extract_path(url_hash) if url.present?
       url_hash = check_web_status(url_hash)
       url_hash
     end
 
-    ####### COMPARE ORIGINAL AND FORMATTED URL ######
+    ### COMPARE ORIGINAL AND FORMATTED URL ###
     def check_web_status(hsh)
-      url_path = hsh[:url_path]
-      url_f = hsh[:url_f]
-      hsh[:web_neg]&.include?('error') ? status = 'error' : status = nil
+      status = 'invalid' if hsh[:web_neg]&.include?('error')
 
-      if url_path && url_f && status.nil?
-        url_path != url_f ? status = 'formatted' : status = 'unchanged'
+      if hsh[:url] && hsh[:url_f] && status.nil?
+        hsh[:url] != hsh[:url_f] ? status = 'formatted' : status = 'unchanged'
       end
 
-      hsh[:web_status] = status
+      hsh[:web_status] = status if status.present?
       hsh
     end
 
-    def consolidate_neg_pos(hsh)
+    def consolidate_negs(hsh)
       neg = hsh[:web_neg].join(', ')
-      pos = hsh[:web_pos].join(', ')
       neg.present? ? hsh[:web_neg] = neg : hsh[:web_neg] = nil
-      pos.present? ? hsh[:web_pos] = pos : hsh[:web_pos] = nil
       hsh
     end
 
@@ -69,9 +52,8 @@ module CrmFormatter
       errors.any?
     end
 
-    # StartCrm.run_webs
     def prep_for_uri(url)
-      url_hash = { web_status: false, url_path: url, url_f: nil, web_neg: [], web_pos: [] }
+      url_hash = { web_status: nil, url: url, url_f: nil, url_path: nil, web_neg: [] }
 
       begin
         url = url&.split('|')&.first
@@ -88,6 +70,7 @@ module CrmFormatter
           url = url[0..-2] if url.present? && url[-1] == '/'
         end
 
+        banned_symbols = ['!', '$', '%', "'", '(', ')', '*', '+', ',', '<', '>', '@', '[', ']', '^', '{', '}', '~']
         url = nil if url.present? && banned_symbols.any? { |symb| url&.include?(symb) }
         unless url.present?
           url_hash[:web_neg] << 'error: syntax'
@@ -151,84 +134,24 @@ module CrmFormatter
         url = url.gsub(".#{inv_ext}", '')
       end
 
-      return { url_hash: url_hash, url: url } if @empty_args
-      run_scrub(url_hash, url, matched_exts)
-    end
+      ext_result = { url_hash: url_hash, url: url }
+      ext_result
 
-    def run_scrub(url_hash, url, matched_exts)
-      url_hash = @tools.scrub_oa(url_hash, matched_exts, 'pos_exts', 'equal')
-      url_hash = @tools.scrub_oa(url_hash, matched_exts, 'neg_exts', 'equal')
-      url_hash = @tools.scrub_oa(url_hash, url, 'pos_urls', 'include')
-      url_hash = @tools.scrub_oa(url_hash, url, 'neg_urls', 'include')
-      { url_hash: url_hash, url: url }
+      #### MOVE BELOW TO SEPARATE GEM ####
+      # return { url_hash: url_hash, url: url } if @empty_args
+      # run_scrub(url_hash, url, matched_exts)
     end
 
     ###### Supporting Methods Below #######
 
-    def extract_link(url_path)
-      url_hash = format_url(url_path)
-      url = url_hash[:url_f]
-      link = url_path
-      link_hsh = { url_path: url_path, url: url, link: nil }
-      return link_hsh unless url.present? && link.present? && link.length > @min_length
-      url = strip_down_url(url)
-      link = strip_down_url(link)
-      link&.gsub!(url, '')
-      link = link&.split('.net')&.last
-      link = link&.split('.com')&.last
-      link = link&.split('.org')&.last
-      link = "/#{link.split('/').reject(&:empty?).join('/')}" if link.present?
-      link_hsh[:link] = link if link.present? && link.length > @min_length
-      link_hsh
-    end
-
-    def strip_down_url(url)
-      return unless url.present?
-      url = url.downcase.strip
-      url = url.gsub('www.', '')
-      url = url.split('://')
-      url[-1]
-    end
-
-    def remove_invalid_links(link)
-      link_hsh = { link: link, valid_link: nil, flags: nil }
-      return link_hsh unless link.present?
-      @neg_links += get_symbs
-      flags = @neg_links.select { |red| link&.include?(red) }
-      flags << "below #{@min_length}" if link.length < @min_length
-      flags << "over #{@max_length}" if link.length > @max_length
-      flags = flags.flatten.compact
-      valid_link = flags.any? ? nil : link
-      link_hsh[:valid_link] = valid_link
-      link_hsh[:flags] = flags.join(', ')
-      link_hsh
-    end
-
-    def remove_invalid_hrefs(href)
-      href_hsh = { href: href, valid_href: nil, flags: nil }
-      return href_hsh unless href.present?
-      @neg_hrefs += get_symbs
-      href = href.split('|').join(' ')
-      href = href.split('/').join(' ')
-      href&.gsub!('(', ' ')
-      href&.gsub!(')', ' ')
-      href&.gsub!('[', ' ')
-      href&.gsub!(']', ' ')
-      href&.gsub!(',', ' ')
-      href&.gsub!("'", ' ')
-
-      flags = []
-      flags << "over #{@max_length}" if href.length > @max_length
-      invalid_text = Regexp.new(/[0-9]/)
-      flags << invalid_text&.match(href)
-      href = href&.downcase
-      href = href&.strip
-
-      flags << @neg_hrefs.select { |red| href&.include?(red) }
-      flags = flags.flatten.compact.uniq
-      href_hsh[:valid_href] = href unless flags.any?
-      href_hsh[:flags] = flags.join(', ')
-      href_hsh
+    def extract_path(url_hash)
+      path_parts = url_hash[:url_f].split('//').last.split('/')[1..-1]
+      path = "/#{path_parts.join('/')}"
+      if path&.length > 2
+        url_hash[:url_path] = path
+        url_hash[:url_f] = url_hash[:url_f].gsub(url_hash[:url_path], '')
+      end
+      url_hash
     end
 
     # CALL: Wrap.new.remove_ww3(url)
@@ -246,5 +169,71 @@ module CrmFormatter
       return parts[0..1].join if parts.length > 2
       url
     end
+
+    # def strip_down_url(url)
+    #   return unless url.present?
+    #   url = url.downcase.strip
+    #   url = url.gsub('www.', '')
+    #   url = url.split('://')
+    #   url[-1]
+    # end
+
+
+    ####################################################
+    ### MOVE THESE TO SEPARATE GEM ###
+    ####################################################
+
+    # def run_scrub(url_hash, url, matched_exts)
+    #   url_hash = @tools.scrub_oa(url_hash, matched_exts, 'pos_exts', 'equal')
+    #   url_hash = @tools.scrub_oa(url_hash, matched_exts, 'neg_exts', 'equal')
+    #   url_hash = @tools.scrub_oa(url_hash, url, 'pos_urls', 'include')
+    #   url_hash = @tools.scrub_oa(url_hash, url, 'neg_urls', 'include')
+    #   { url_hash: url_hash, url: url }
+    # end
+
+    # def remove_invalid_links(link)
+    #   link_hsh = { link: link, valid_link: nil, flags: nil }
+    #   return link_hsh unless link.present?
+    #   @neg_links += get_symbs
+    #   flags = @neg_links.select { |red| link&.include?(red) }
+    #   flags << "below #{2}" if link.length < 2
+    #   flags << "over #{100}" if link.length > 100
+    #   flags = flags.flatten.compact
+    #   valid_link = flags.any? ? nil : link
+    #   link_hsh[:valid_link] = valid_link
+    #   link_hsh[:flags] = flags.join(', ')
+    #   link_hsh
+    # end
+
+    # def remove_invalid_hrefs(href)
+    #   href_hsh = { href: href, valid_href: nil, flags: nil }
+    #   return href_hsh unless href.present?
+    #   @neg_hrefs += get_symbs
+    #   href = href.split('|').join(' ')
+    #   href = href.split('/').join(' ')
+    #   href&.gsub!('(', ' ')
+    #   href&.gsub!(')', ' ')
+    #   href&.gsub!('[', ' ')
+    #   href&.gsub!(']', ' ')
+    #   href&.gsub!(',', ' ')
+    #   href&.gsub!("'", ' ')
+    #
+    #   flags = []
+    #   flags << "over #{100}" if href.length > 100
+    #   invalid_text = Regexp.new(/[0-9]/)
+    #   flags << invalid_text&.match(href)
+    #   href = href&.downcase
+    #   href = href&.strip
+    #
+    #   flags << @neg_hrefs.select { |red| href&.include?(red) }
+    #   flags = flags.flatten.compact.uniq
+    #   href_hsh[:valid_href] = href unless flags.any?
+    #   href_hsh[:flags] = flags.join(', ')
+    #   href_hsh
+    # end
+
+    ####################################################
+    ####################################################
+
   end
 end

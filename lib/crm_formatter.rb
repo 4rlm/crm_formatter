@@ -6,15 +6,13 @@ require 'crm_formatter/web'
 require 'crm_formatter/wrap'
 require 'crm_formatter/phone'
 require 'crm_formatter/tools'
+# require 'crm_formatter/seed_criteria'
 require 'pry'
 require 'utf8_sanitizer'
 
 module CrmFormatter
 
   def self.format_with_report(args={})
-    ## merge criteria with args ##
-    binding.pry
-
     formatted_data = self::Wrap.new.run(args)
     formatted_data
   end
@@ -43,7 +41,7 @@ module CrmFormatter
 
   ## Takes array of url strings, returns array of url hashes.
   def self.format_urls(array_of_urls)
-    web_obj = CrmFormatter::Web.new(array_of_urls)
+    web_obj = CrmFormatter::Web.new
 
     formatted_url_hashes = array_of_urls.map do |url|
       crmf_url_hsh = {web_status: nil, url: url}

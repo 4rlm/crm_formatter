@@ -45,7 +45,9 @@ module CrmFormatter
       return unless street.present?
       # street = Wrap.new.letter_case_check(street)
       return unless street.present?
-      street = CrmFormatter::Tools.new.letter_case_check(street)
+      # street = CrmFormatter::Tools.new.letter_case_check(street)
+      street = letter_case_check(street)
+      
       street = " #{street} " # Adds white space, to match below, then strip.
       street&.gsub!('.', ' ')
       street&.gsub!(',', ' ')
@@ -166,5 +168,20 @@ module CrmFormatter
       zip&.squeeze!(' ')
       zip
     end
+
+
+    def letter_case_check(str)
+      return unless str.present?
+      flashes = str&.gsub(/[^ A-Za-z]/, '')&.strip&.split(' ')
+      flash = flashes&.reject { |e| e.length < 3 }&.join(' ')
+
+      return str unless flash.present?
+      has_caps = flash.scan(/[A-Z]/).any?
+      has_lows = flash.scan(/[a-z]/).any?
+
+      return str unless !has_caps || !has_lows
+      str = str.split(' ')&.each { |el| el.capitalize! if el.gsub(/[^ A-Za-z]/, '')&.strip&.length > 2 }&.join(' ')
+    end
+
   end
 end
