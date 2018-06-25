@@ -98,7 +98,8 @@ module CrmFormatter
         url = nil
         url_hash
       end
-      { url_hash: url_hash, url: url }
+      hsh = { url_hash: url_hash, url: url }
+      hsh
     end
 
     def normalize_url(url)
@@ -235,6 +236,7 @@ module CrmFormatter
       return unless url.present?
       url.split('.').map { |part| url.gsub!(part, 'www') if part.scan(/ww[0-9]/).any? }
       url&.gsub!('www.www', 'www')
+      url
     end
 
     # For rare cases w/ urls with mistaken double slash twice.

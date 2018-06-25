@@ -12,6 +12,9 @@ require 'utf8_sanitizer'
 module CrmFormatter
 
   def self.format_with_report(args={})
+    ## merge criteria with args ##
+    binding.pry
+
     formatted_data = self::Wrap.new.run(args)
     formatted_data
   end

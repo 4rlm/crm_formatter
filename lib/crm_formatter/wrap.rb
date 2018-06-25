@@ -9,6 +9,9 @@ module CrmFormatter
     end
 
     def run(args={})
+      ### Check for Criteria. ###
+      binding.pry
+
       import_crm_data(args)
       format_data
       puts @crm_data.inspect
@@ -17,6 +20,9 @@ module CrmFormatter
 
 
     def import_crm_data(args={})
+      ### Check for criteria. ###
+      binding.pry
+
       @crm_data = { stats: nil, data: nil, file_path: nil, criteria: nil }
       @crm_data.merge!(args)
       utf_result = Utf8Sanitizer.sanitize(@crm_data)
