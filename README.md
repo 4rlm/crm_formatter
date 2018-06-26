@@ -32,9 +32,11 @@ Or install it yourself as:
 1. Format Array of Phone Numbers:
 ```
 array_of_phones = %w[
-  555-457-4391 555-888-4391
+  555-457-4391
+  555-888-4391
   555-457-4334
-  555-555 555.555.1234
+  555-555
+  555.555.1234
   not_a_number
 ]
 
