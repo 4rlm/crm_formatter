@@ -14,8 +14,8 @@ Gem::Specification.new do |spec|
   spec.homepage      = 'https://github.com/4rlm/crm_formatter'
   spec.license       = 'MIT'
 
-  spec.summary       = 'Reformat, Normalize, and Scrub CRM Contact Data, Addresses, Phones and URLs'
-  spec.description   = "Reformat, Normalize, and Scrub CRM Contact Data, Addresses, Phones and URLs. Originally developed for proprietary use in an enterprise software suite.  Recently decided to make them open source in a gem.  It's a work in progress as there are additional features being added in near future.  Also creating additonal gems with similar CRM office efficiency objectives.  Please contact me if you have any questions or comments."
+  spec.summary       = 'Reformat and Normalize CRM Contact Data, Addresses, Phones and URLs.'
+  spec.description   = "CrmFormatter is perfect for curating high-volume enterprise-scale web scraping, and integrates well with Nokogiri, Mechanize, and asynchronous jobs via Delayed_job or SideKick, to name a few.  Web Scraping and Harvesting often gathers a lot of junk to sift through; presenting unexpected edge cases around each corner.  CrmFormatter has been developed and refined during the past few years to focus on improving that task.\n It's also perfect for processing API data, Web Forms, and routine DB normalizing and scrubbing processes.  Not only does it reformat Address, Phone, and Web data, it can also accept lists to scrub against, then providing detailed reports about how each piece of data compares with your criteria lists."
 
   if spec.respond_to?(:metadata)
     spec.metadata['allowed_push_host'] = 'https://rubygems.org'
