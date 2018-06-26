@@ -6,351 +6,334 @@ CRM Wrap is perfect for curating high-volume enterprise-scale web scraping, and 
 
 It's also perfect for processing API data, Web Forms, and routine DB normalizing and scrubbing processes.  Not only does it reformat Address, Phone, and Web data, it can also accept lists to scrub against, then providing detailed reports about how each piece of data compares with your criteria lists.
 
-The CRM Wrap Gem is currently in '--pre versioning', or 'beta mode' as the process of reorganizing these proprietary, production environment processes from their native app environment into this newly created open source gem.  Formal tests in the gem environment are still on the way, as is the documentation.  But the processes themselves have been very reliable and an integral part of a very large app dedicated to such services.  
-
 ## Getting Started
 CRM Wrap is compatible with Rails 4.2 and 5.0, 5.1 and 5.2 on Ruby 2.2 and later.
 
 In your Gemfile add:
 ```
-gem 'crm_formatter', '~> 1.0.8.pre.rc.1'
+gem 'crm_formatter'
 ```
 Or to install locally:
 ```
-gem install crm_formatter --pre
+gem install crm_formatter
 ```
 ## Usage
-Using CRM Wrap in your app is very simple, and could be accessed from your app's concerns, , helpers, lib, models, or services, but depends on the scope, location, and size of your application and server. For simple form submission validations the model callback is typically ideal.  For database normalizing tasks the concerns, helpers, or lib is typically ideal.  For long running processes like web scraping or high volume APIs calls, like Google Linkedin, or Twitter  the lib or services might be ideal (asynchronous multithreaded even better)
 
-### Class Names
-CrmFormatter contains three classes, which can be accessed like below with local or instance variables; you can name them anything you like.
+
+### I. Basic Usage
+
+1. Format Array of Phone Numbers:
 ```
-adr_formatter = CrmFormatter::Address.new
-@adr_formatter = CrmFormatter::Address.new
+array_of_phones = %w[
+  555-457-4391 555-888-4391
+  555-457-4334
+  555-555 555.555.1234
+  not_a_number
+]
 
-ph_formatter = CrmFormatter::Phone.new
-@ph_formatter = CrmFormatter::Phone.new
-
-web_formatter = CrmFormatter::Web.new
-@web_formatter = CrmFormatter::Web.new
-```
-
-### Available Methods in Each Class
-
-## Address Methods
-These are the methods available to you.  You can use them a la cart, for example if you just wanted to wrap all your states, or you could combine the entire address into `get_full_address()` which will run each of the related methods for you.  It also adds an additional hash pair containing the full address as a single string.  There is also an indicator pair to report if there were any changes from the original version to the newly formatted.
-```
-  addr_formatter = CrmFormatter::Address.new
-  full_address_hash = {street: street, city: city, state: state, zip: zip}
-  addr_formatter.get_full_address(full_address_hash)
-  addr_formatter.format_street(street_string)
-  addr_formatter.format_city(city_string)
-  addr_formatter.format_state(state_string)
-  addr_formatter.format_zip(zip)
-  addr_formatter.format_full_address(adr = {})
-  addr_formatter.compare_versions(original, formatted)
+formatted_phone_hashes = CrmFormatter.format_phones(array_of_phones)
 ```
 
-#### Phone Methods
-Phone only has two methods, with a subtle but important distinction between them.  For simply formatting a known phone, use `format_phone` to convert to the normalized (555) 123-4567 wrap.  Use `validate_phone` if either your phone data has a bunch of text and special characters to remove, or if you aren't even sure that it is a phone, as it will help determine if the phone number seem legitimate.  If so, it then passes it along to `format_phone`.
+Formatted Phone Numbers:
 ```
-  ph_formatter = CrmFormatter::Phone.new
-  ph_formatter.validate_phone(phone)
-  ph_formatter.format_phone(phone)
-```
-
-#### Web Methods
-The examples on this README are from `format_url` method.  The others are for web scraping, which will be documented in the near future.
-```
-  web_formatter = CrmFormatter::Web.new
-  web_formatter.format_url(url)
-  web_formatter.extract_path(url_path)
-  web_formatter.remove_invalid_links(link)
-  web_formatter.remove_invalid_hrefs(href)
-  web_formatter.convert_to_scheme_host(url)
-```
-
-## Examples
-#### Below are two examples using the Web `format_url(url)` method:
-
-### Example 1: 6 Example URLs Submitted:
-Custom Method to Query URLs
-```
-def self.get_urls
-  urls = %w(website.com website.business.site website website.fake website.fake.com website.com.fake)
-end
-```
-Custom Wrapper Method
-```
-def self.run_webs
-  web = CrmFormatter::Web.new
-  formatted_url_hashes = get_urls.map do |url|
-    url_hash = web.format_url(url)
-  end
-end
-```
-Results as Hash: 3/6 Reformatted due to invalid or no url extensions. 3 Reformatted and Normalized with `http://www.`  
-URL Extensions, **.com, .net, .fake** cross referenced with official IANA list.
-```
-[ {:reformatted=>true, :url_path=>"website.com", :formatted_url=>"http://www.website.com", :neg=>[], :pos=>[]},
-  {:reformatted=>false, :url_path=>"website.business.site", :formatted_url=>nil, :neg=>["error: ext.valid > 1 [business, site]"], :pos=>[]}, {:reformatted=>false, :url_path=>"website", :formatted_url=>nil, :neg=>["error: ext.none"], :pos=>[]},
-  {:reformatted=>false, :url_path=>"website.fake", :formatted_url=>nil, :neg=>["error: ext.invalid [fake]"], :pos=>[]},
-  {:reformatted=>true, :url_path=>"website.fake.com", :formatted_url=>"http://www.website.com", :neg=>[], :pos=>[]},
-  {:reformatted=>true, :url_path=>"website.com.fake", :formatted_url=>"http://www.website.com", :neg=>[], :pos=>[]}
+formatted_phone_hashes = [
+  {
+    phone_status: 'formatted',
+    phone: '555-457-4391',
+    phone_f: '(555) 457-4391'
+  },
+  {
+    phone_status: 'formatted',
+    phone: '555-888-4391',
+    phone_f: '(555) 888-4391'
+  },
+  {
+    phone_status: 'formatted',
+    phone: '555-457-4334',
+    phone_f: '(555) 457-4334'
+  },
+  {
+    phone_status: 'invalid',
+    phone: '555-555',
+    phone_f: nil
+  },
+  {
+    phone_status: 'formatted',
+    phone: '555.555.1234',
+    phone_f: '(555) 555-1234'
+  },
+  {
+    phone_status: 'invalid',
+    phone: 'not_a_number',
+    phone_f: nil
+  }
 ]
 ```
 
-### Example 2: 6 Real URLs with Scrubbing Feature, but same configuration as above:
-**Intentionally partially obfuscated**
+2. Format Array of URLs:
 ```
-urls = %w(approvXXXutosales.org autXXXartfinance.com leXXXummitautorepair.net melXXXtoyota.com norXXXastacura.com XXXmazda.com)
-```
-These results list 'neg' and 'pos', which are the criteria I was scrubbing against.  I wanted to find the URLs of franchise auto dealers and exclude ancillary URLs.
-```
-[{:reformatted=>true, :url_path=>"approvXXXutosales.org", :formatted_url=>"http://www.approvXXXutosales.org", :neg=>["neg_urls: approv"], :pos=>[]},
- {:reformatted=>true, :url_path=>"autXXXartfinance.com", :formatted_url=>"http://www.autXXXartfinance.com", :neg=>["neg_urls: financ"], :pos=>["pos_urls: smart"]},
- {:reformatted=>true, :url_path=>"leXXXummitautorepair.net", :formatted_url=>"http://www.leXXXummitautorepair.net", :neg=>["neg_urls: repair"], :pos=>[]},
- {:reformatted=>true, :url_path=>"melXXXtoyota.com", :formatted_url=>"http://www.melXXXtoyota.com", :neg=>[], :pos=>["pos_urls: toyota"]},
- {:reformatted=>true, :url_path=>"norXXXastacura.com", :formatted_url=>"http://www.norXXXastacura.com", :neg=>[], :pos=>["pos_urls: acura"]},
- {:reformatted=>true, :url_path=>"XXXmazda.com", :formatted_url=>"http://www.XXXmazda.com", :neg=>[], :pos=>["pos_urls: mazda"]}
- ]
+array_of_urls = %w[
+  sample01.com/staff
+  www.sample02.net.com
+  http://www.sample3.net
+  www.sample04.net/contact_us
+  http://sample05.net
+  www.sample06.sofake
+  www.sample07.com.sofake
+  example08.not.real
+  www.sample09.net/staff/management
+  www.www.sample10.com
+]
+
+formatted_url_hashes = CrmFormatter.format_urls(array_of_urls)
 ```
 
-## Quick Setup Guide
+Formatted URLs:
+```
+formatted_url_hashes = [
+  {
+    web_status: 'invalid',
+    url: 'www.sample01.net.com',
+    url_f: nil,
+    url_path: nil,
+    web_neg: 'error: ext.valid > 1 [com, net]'
+  },
+  {
+    web_status: 'formatted',
+    url: 'sample02.com',
+    url_f: 'http://www.sample02.com',
+    url_path: nil,
+    web_neg: nil
+  },
+  {
+    web_status: 'unchanged',
+    url: 'http://www.sample3.net',
+    url_f: 'http://www.sample3.net',
+    url_path: nil,
+    web_neg: nil
+  },
+  {
+    web_status: 'formatted',
+    url: 'www.sample04.net/contact_us',
+    url_f: 'http://www.sample04.net',
+    url_path: '/contact_us',
+    web_neg: nil
+  },
+  {
+    web_status: 'formatted',
+    url: 'http://sample05.net',
+    url_f: 'http://www.sample05.net',
+    url_path: nil,
+    web_neg: nil
+  },
+  {
+    web_status: 'invalid',
+    url: 'www.sample06.sofake',
+    url_f: nil,
+    url_path: nil,
+    web_neg: 'error: ext.invalid [sofake]'
+  },
+  {
+    web_status: 'formatted',
+    url: 'www.sample07.com.sofake',
+    url_f: 'http://www.sample07.com',
+    url_path: nil,
+    web_neg: nil
+  },
+  {
+    web_status: 'invalid',
+    url: 'example08.not.real',
+    url_f: nil,
+    url_path: nil,
+    web_neg: 'error: ext.invalid [not, real]'
+  },
+  {
+    web_status: 'formatted',
+    url: 'www.sample09.net/staff/management',
+    url_f: 'http://www.sample09.net',
+    url_path: '/staff/management',
+    web_neg: nil
+  },
+  {
+    web_status: 'formatted',
+    url: 'www.www.sample10.com',
+    url_f: 'http://www.sample10.com',
+    url_path: nil,
+    web_neg: nil
+  }
+]
+```
 
-#### Create a Wrapper with a custom Class and Method(s)
-This is just one of several ways to configure.  If you only need the gem for formatting form data, you could just create a callback method in your model, but to scrub a database or process API and Harvested data, you'll want a dedicated process so you can manage the queue, criteria, and results.  If you don't already have one, this example will show you how. Concerns, Helpers and Models might be fine for smaller tasks, but for heavier tasks Lib and Services are ideal, but depends on your specifications.
+3. Format Array of Addresses (each as a hash):
 ```
-# /app/lib/start_crm.rb
-```
-```
-class StartCrm
-  def initialize
-    @web = CrmFormatter::Web.new
-  end
-
-  def run_webs
-    formatted_url_hashes = urls.map do |url|
-      url_hash = @web.format_url(url)
-    end
-  end
-end
-```
-You may need to edit your application config file to recognize your new class.
-```
-#/app/config/application.rb
-
-config.eager_load_paths << Rails.root.join('lib/**')
-config.eager_load_paths += Dir["#{config.root}/lib/**/"]
-```
-#### Run in Rails Console
-In this example, we'll run it in Rails Console like below, but you could also create a Rake Task and integrate it with a scheduled Cron Job.  You could also run the process through your contoller actions in a GUI. If accessing through the front end, you might want to do it asynchronously with gems like Delayed_job or SideKick so you can free-up your controllers and prevent your front end from freezing while waiting for the job to complete; if running very large tasks.
-```
-2.5.1 :001 > StartCrm.new.run_webs
-```
-#### Instance vs Class Methods in your Wrapper
-In the above example, `run_webs` is an instance method, but a class method `self.run_webs` could work well too, like the example below.  At lease in the early stages, this is a little easier if you keep running it in Rails C, because not requiring initializing means less to type to call it.  Next you could setup your class with various methods to assist your process, like so:
-```
-class StartCrm
-  def self.run_webs
-    web = CrmFormatter::Web.new
-
-    formatted_url_hashes = query_accounts.map do |act|
-      url_hsh = web.format_url(act.url)
-
-      if url_hash[:reformatted]
-
-        act_hsh = { url: url_hsh[:formatted_url],
-                    url_sts: url_hsh[:formatted_url],
-                    scrub_date: Time.now
-                  }
-      else
-        act_hsh = { scrub_date: Time.now }
-      end
-
-      act.update(act_hsh)
-    end
-  end
-
-  def self.query_accounts
-    accounts = Account.where(url_sts: 'Invalid').limit(50)
-  end
-end
+array_of_addresses = [
+  { street: '1234 EAST FAIR BOULEVARD', city: 'AUSTIN', state: 'TEXAS', zip: '78734' },
+  { street: '5678 North Lake Shore Drive', city: '555-123-4567', state: 'Illinois', zip: '610' },
+  { street: '9123 West Flagler Street', city: '1233144', state: 'NotAState', zip: 'Miami' }
+]
+formatted_address_hashes = CrmFormatter.format_addresses(array_of_addresses)
 ```
 
-#### Data Response in a Hash
-CRM Wrap returns data as a hash, which includes your original unaltered data you submitted, the formatted data, a T/F boolean indicator regarding if the original and formatted data are different, and for some methods, negs and pos regarding your criteria to scrub against.  In the above example, the returned data from each submitted url would resemble the one below.
+Formatted Addresses:
 ```
-# format_url method returns data like below this example...
-# url_hash = {:reformatted=>false,
-    :url_path=>"https://www.steXXXXXXmitsubishiserviceandpartscenter.com",
-    :formatted_url=>"https://www.steXXXXXXmitsubishiserviceandpartscenter.com",
-    :neg=>["neg_urls: parts, rv, service"],
-    :pos=>["pos_urls: mitsubishi"]
+formatted_address_hashes = [
+  {
+    address_status: 'formatted',
+    full_addr: '1234 East Fair Boulevard, Austin, Texas, 78734',
+    full_addr_f: '1234 E Fair Blvd, Austin, TX, 78734',
+    street_f: '1234 E Fair Blvd',
+    city_f: 'Austin',
+    state_f: 'TX',
+    zip_f: '78734'
+  },
+  {
+    address_status: 'formatted',
+    full_addr: '5678 North Lake Shore Drive, 555-123-4567, Illinois, 610',
+    full_addr_f: '5678 N Lake Shore Dr, IL',
+    street_f: '5678 N Lake Shore Dr',
+    city_f: nil,
+    state_f: 'IL',
+    zip_f: nil
+  },
+  {
+    address_status: 'formatted',
+    full_addr: '9123 West Flagler Street, 1233144, NotAState, Miami',
+    full_addr_f: '9123 W Flagler St',
+    street_f: '9123 W Flagler St',
+    city_f: nil,
+    state_f: nil,
+    zip_f: nil
+  }
+]
+```
+
+### II. Advanced Usage
+Advanced usage has ability to parse a CSV file or pass large data sets.  It also leverages the Utf8Sanitizer gem to check for and remove any non-UTF8 characters and extra whitespace (double spaces, new line, new paragraph, carriage returns, etc.).  The results will include a detailed report including the line numbers of altered data, along with the before and after for comparison.  Then, it passes that data to the CrmFormatter gem's advanced usage to format all parts of the CRM data together (Address, Phone, Web)
+
+Access advanced usage via `format_with_report(args)` method and pass a csv file_path or data hashes.
+
+1. Parse and Format CSV via File Path (Must be absolute path to root and follow the syntax as below)
+```
+formatted_csv_results = CrmFormatter.format_with_report(file_path: './path/to/your/csv.csv')
+```
+
+Parsed & Formatted CSV Results:
+```
+formatted_csv_results = {
+  stats:
+  {
+    total_rows: 2,
+    header_row: 1,
+    valid_rows: 1,
+    error_rows: 0,
+    defective_rows: 0,
+    perfect_rows: 0,
+    encoded_rows: 1,
+    wchar_rows: 0
+  },
+  data:
+  {
+    valid_data:
+    [
+      {
+        row_id: 1,
+        act_name: 'Courtesy Ford',
+        street: '1410 West Pine Street Hattiesburg',
+        city: 'Wexford',
+        state: 'MS',
+        zip: '39401',
+        full_addr: '1410 West Pine Street Hattiesburg, Wexford, MS, 39401',
+        phone: '512-555-1212',
+        url: 'http://www.courtesyfordsales.com',
+        street_f: '1410 W Pine St Hattiesburg',
+        city_f: 'Wexford',
+        state_f: 'MS',
+        zip_f: '39401',
+        full_addr_f: '1410 W Pine St Hattiesburg, Wexford, MS, 39401',
+        phone_f: '(512) 555-1212',
+        url_f: 'http://www.courtesyfordsales.com',
+        url_path: nil,
+        web_neg: nil,
+        address_status: 'formatted',
+        phone_status: 'formatted',
+        web_status: 'unchanged',
+        utf_status: 'encoded'
+      }
+    ],
+    encoded_data:
+    [
+      { row_id: 1,
+        text: "http://www.courtesyfordsales.com,Courtesy Ford,__\xD5\xCB\xEB\x8F\xEB__\xD5\xCB\xEB\x8F\xEB____1410 West Pine Street Hattiesburg,Wexford,MS,39401,512-555-1212" }
+    ],
+    defective_data: [],
+    error_data: []
+    },
+    file_path: './path/to/your/csv.csv'
   }
 ```
 
-#### Optional Arguments OA
-A class can be instantiated with optional arguments 'OA', to load your criteria to scrub against. Only list the OA K-V Pairs you're using.  No need to list empty values.  It's not all or nothing. These are empty to illustrate the expected datatypes.
-**OA is currently only available for the Web class, but will soon be available in the Address & Phone classes.**
-
-Below is how the OA are received in the Web class at initialization.
+2. Format Data Hashes
 ```
-def initialize(args={})
-  @empty_oa = args.empty?
-  @pos_urls = args.fetch(:pos_urls, [])
-  @neg_urls = args.fetch(:neg_urls, [])
-  @pos_links = args.fetch(:pos_links, [])
-  @neg_links = args.fetch(:neg_links, [])
-  @pos_hrefs = args.fetch(:pos_hrefs, [])
-  @neg_hrefs = args.fetch(:neg_hrefs, [])
-  @pos_exts = args.fetch(:pos_exts, [])
-  @neg_exts = args.fetch(:neg_exts, [])
-  @min_length = args.fetch(:min_length, 2)
-  @max_length = args.fetch(:max_length, 100)
-end
+data_hashes_array = [{ row_id: '1', url: 'abcacura.com/twitter', act_name: "Stanley Chevrolet Kaufman\x99_\xCC", street: '825 East Fair Street', city: 'Kaufman', state: 'Texas', zip: '75142', phone: "555-457-4391\r\n" }]
+
+formatted_data_hash_results = CrmFormatter.format_with_report(data: data_hashes_array)
 ```
 
-Below is the syntax for how to use OA. Positive and Negative options available, and essentially function the same, but allow additional options for scrubbing data.
+Formatted Data Hashes Results:
 ```
-oa_args = { neg_urls: %w(approv insur invest loan quick rent repair),
-            neg_links: %w(buy call cash cheap click gas insta),
-            neg_hrefs: %w(after anounc apply approved blog buy call click),
-            neg_exts: %w(au ca edu es gov in ru uk us),
-            min_length: 0,
-            max_length: 30
+formatted_data_hash_results = { stats:
+  {
+    total_rows: '1',
+    header_row: 1,
+    valid_rows: 1,
+    error_rows: 0,
+    defective_rows: 0,
+    perfect_rows: 0,
+    encoded_rows: 1,
+    wchar_rows: 1
+  },
+  data:
+  {
+    valid_data:
+    [
+      {
+        row_id: '1',
+        act_name: 'Stanley Chevrolet Kaufman',
+        street: '825 East Fair Street',
+        city: 'Kaufman',
+        state: 'Texas',
+        zip: '75142',
+        full_addr: '825 East Fair Street, Kaufman, Texas, 75142',
+        phone: '555-457-4391',
+        url: 'abcacura.com/twitter',
+        street_f: '825 E Fair St',
+        city_f: 'Kaufman',
+        state_f: 'TX',
+        zip_f: '75142',
+        full_addr_f: '825 E Fair St, Kaufman, TX, 75142',
+        phone_f: '(555) 457-4391',
+        url_f: 'http://www.abcacura.com',
+        url_path: '/twitter',
+        web_neg: nil,
+        address_status: 'formatted',
+        phone_status: 'formatted',
+        web_status: 'formatted',
+        utf_status: 'encoded, wchar'
+      }
+    ],
+    encoded_data:
+        [
+          {
+            row_id: '1',
+            text: "1,abcacura.com/twitter,Stanley Chevrolet Kaufman\x99_\xCC,825 East Fair Street,Kaufman,Texas,75142,555-457-4391\r\n"
           }
-@web_formatter = CrmFormatter::Web.new(oa_args)
+        ],
+    defective_data: [],
+    error_data: []
+  },
+  file_path: nil
+}
 ```
-
-### III. Detailed Examples
-Some of the examples are excessively verbose to help illustrate the datatypes and processes.  Here are a few guidelines and tips:
-
-*These are just examples, not strict usage guides ...*
-
-#### 1. Address Examples
-```
-def self.run_adrs
-
-  crm_address_formatter = CrmFormatter::Address.new
-
-  contacts = Contact.where.not(full_address: nil)
-
-  contacts.each do |contact|
-
-    cont_adr_hsh = { street: contact.street, city: contact.city,
-                    state: contact.state, zip: contact.zip }
-
-    formatted_address_hsh = crm_address_formatter.format_full_address(cont_adr_hsh)
-
-  end
-
-end
-
-```
-
-#### 2. Phone Examples
-In the phone example, format_all_phone_in_my_db could be a custom wrapper method, which when called by Rails C or from a front end GUI process, could grab all phones in db meeting certain criteria to be scrubbed. The results will always be in hash wrap, such as below.... phone_hash  
-```
-@crm_phone = CrmFormatter::Phone.new
-
-def self.format_all_phone_in_my_db
-  phones_from_contacts = Contacts.where.not(phone: nil)
-
-  phones_from_contacts.each do |contact|
-    phone_hash = @crm_phone.validate_phone(contact.phone)  
-  end
-
-end
-
-phone_hash = { phone: 555-123-4567, phone_f: (555) 123-4567, phone_status: true }
-```
-
-#### 3. Web Examples
-The steps below will show you an option for how you could integrate larger processes in your app.  Create a wrapper method you can call from an action or Rails C. In this example, a new class was also created in Lib for that purpose, as there could be related methods to create.  
-```
-# /app/lib/start_crm.rb
-
-class StartCrm
-
-  ##Rails C: StartCrm.run_webs
-  def self.run_webs
-    oa_args = get_args
-    web = CrmFormatter::Web.new(oa_args)
-
-    formatted_url_hashes = get_urls.map do |url|
-      url_hash = web.format_url(url)
-    end
-
-    formatted_url_hashes
-  end
-
-end
-```
-Application Config
-```
-#/app/config/application.rb
-
-config.eager_load_paths << Rails.root.join('lib/**')
-config.eager_load_paths += Dir["#{config.root}/lib/**/"]
-```
-Create your db query or put together a list of URLs to process, along with any OA to include.  The below example is very verbose, but designed to be helpful. In reality, you might have various criteria saved in the db rather than writing it out.
-In this example, we have auto dealer URLs.  In this process, we're focusing on franchise dealers.
-```
-def self.get_args
-  neg_urls = %w(approv avis budget collis eat enterprise facebook financ food google gourmet hertz hotel hyatt insur invest loan lube mobility motel motorola parts quick rent repair restaur rv ryder service softwar travel twitter webhost yellowpages yelp youtube)
-
-  pos_urls = ["acura", "alfa romeo", "aston martin", "audi", "bmw", "bentley", "bugatti", "buick", "cdjr", "cadillac", "chevrolet", "chrysler", "dodge", "ferrari", "fiat", "ford", "gmc", "group", "group", "honda", "hummer", "hyundai", "infiniti", "isuzu", "jaguar", "jeep", "kia", "lamborghini", "lexus", "lincoln", "lotus", "mini", "maserati", "mazda", "mclaren", "mercedes-benz", "mitsubishi", "nissan", "porsche", "ram", "rolls-royce", "saab", "scion", "smart", "subaru", "suzuki", "toyota", "volkswagen", "volvo"]
-
-  neg_exts = %w(au ca edu es gov in ru uk us)
-  oa_args = {neg_urls: neg_urls, pos_urls: pos_urls, neg_exts: neg_exts}
-end
-
-def self.get_urls
-  urls = ["https://www.stevXXXXXXmitsubishiserviceandpartscenter.com", "https://www.perXXXXXXchryslerjeepcenterville.com", "http://www.peXXXXXXchryslerjeepcenterville.com", "http://www.colXXXXXXchryslerdodgejeepram.com"]
-end
-```
-Run your class and wrapper method in Rails C.  By creating the wrapper method, you have set up the entire process to run like a runner.  In reality, you might have several different criteria accessible from a GUI or even running in Cron Jobs.
-```
-2.5.1 :001 > StartCrm.run_webs
-```
-Results are always in a Hash, like below.  The URLs are slightly obfuscated out of respect (it's not a bug).  These are examples from a large DB that runs on a loop 24/7 and gets to each organization about once a week, so it's already pretty well up to date, so there aren't any big changes below, but there are still a few things to point out below the code example.
-```
-[ {:reformatted=>false,
-    :url_path=>"https://www.steXXXXXXmitsubishiserviceandpartscenter.com",
-    :formatted_url=>"https://www.steXXXXXXmitsubishiserviceandpartscenter.com",
-    :neg=>["neg_urls: parts, rv, service"],
-    :pos=>["pos_urls: mitsubishi"]},
-
-   {:reformatted=>false,
-    :url_path=>"https://www.perXXXXXXchryslerjeepcenterville.com",
-    :formatted_url=>"https://www.perXXXXXXchryslerjeepcenterville.com",
-    :neg=>["neg_urls: rv"],
-    :pos=>["pos_urls: chrysler, jeep"]},
-
-   {:reformatted=>false,
-    :url_path=>"http://www.pXXXXXXchryslerjeepcenterville.com",
-    :formatted_url=>"http://www.XXXXXXechryslerjeepcenterville.com",
-    :neg=>["neg_urls: rv"],
-    :pos=>["pos_urls: chrysler, jeep"]},
-
-   {:reformatted=>false,
-    :url_path=>"http://www.colXXXXXXchryslerdodgejeepram.com",
-    :formatted_url=>"http://www.colXXXXXXchryslerdodgejeepram.com",
-    :neg=>["neg_urls: rv"],
-    :pos=>["pos_urls: chrysler, dodge, jeep, ram"]}
-  ]
-```
-`:reformatted` indicates T/F if url_path and `:formatted_url` differ.  If False, then it means they are the same, or the `:url_path` had significant errors which prevented it from being formatted, thus `:formatted_url` would be nil in such a case.  The reality is that you might have some URLs that are so far off that, that they can't be reliably reformatted, so better to only let them pass if we are confident that they are reliable.
-
-`:url_path` is the url originally submitted by the client.  It can include directory links on the end too, '/careers/, '/about-us/', etc.
-
-`:formatted_url` is the formatted version of `:url_path`.  It will be stripped of additional paths, '/deals/', '/staff/', etc.  Also, often times people ommit 'http://:' and 'www' in CRMs.  This can sometimes cause errors for users or Mechanized Web Scrapers.  So, those will always be included to ensure consistency.  In our production app we follow up the formatting with url redirect following, which our configurations require the entire path, so it will always be included.  The redirect following gem is already being worked on and will be released as an additional gem shortly.
-
-`:neg` is an array of all the errors and negative, undesirable criteria to scrub against.  If you include the criteria in OA `neg_urls:`, like above, it will automatically scrub and report.  Regardless, any errors will also be included in there.  So, if the url was not ultimately formatted, there will be details regarding why in `:neg`.
-
-`:pos` is the opposite, which highlights positive criteria you might be looking for.  It too is available in OA via `pos_urls:`, like above.
-
 
 ## Author
 

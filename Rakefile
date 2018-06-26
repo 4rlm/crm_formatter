@@ -15,11 +15,10 @@ task :console do
   require 'active_support/all'
   ARGV.clear
 
-  formatted_data = format_with_report
-  # formatted_phones = format_phones
+  # formatted_data = format_with_report
+  formatted_phones = format_phones
   # formatted_urls = format_urls
   # formatted_addresses = format_addresses
-  binding.pry
   IRB.start
 end
 
@@ -43,36 +42,29 @@ def format_addresses
 end
 
 def format_phones
-  array_of_phones = %w[555-457-4391 555-888-4391 555-457-4334 555-555 555.555.1234 not_a_number]
+  array_of_phones = %w[
+    555-457-4391 555-888-4391
+    555-457-4334
+    555-555 555.555.1234
+    not_a_number
+  ]
   formatted_phones = CrmFormatter.format_phones(array_of_phones)
 end
 
 def format_urls
+  array_of_urls = %w[
+    sample01.com/staff
+    www.sample02.net.com
+    http://www.sample3.net
+    www.sample04.net/contact_us
+    http://sample05.net
+    www.sample06.sofake
+    www.sample07.com.sofake
+    example08.not.real
+    www.sample09.net/staff/management
+    www.www.sample10.com
+  ]
+
   array_of_urls = %w[sample01.com/staff www.sample02.net.com http://www.sample3.net www.sample04.net/contact_us http://sample05.net www.sample06.sofake www.sample07.com.sofake example08.not.real www.sample09.net/staff/management www.www.sample10.com]
   formatted_urls = CrmFormatter.format_urls(array_of_urls)
 end
-
-# gem install activesupport -v 5.0.0
-# gem install activesupport
-
-##################################################################
-####### !ORIGINAL! SAVE #######
-# Perfect!
-# 1. 'cd-crm' ||crm_formatter/lib
-# 2. Load runner at bottom before start.
-# 3. Allows for Active Record & Binding.pry.
-# task :console do
-#   require 'irb'
-#   require 'irb/completion'
-#   require 'crm_formatter' # You know what to do.
-#   ARGV.clear
-#   CrmFormatter.run
-#   IRB.start
-# end
-#############################
-# alias xx='exit exit'
-# alias ss='rake console'
-# alias cd-crm="cd ~/Desktop/gemdev/crm_formatter"
-# alias cd-gem.app="cd ~/Desktop/gemdev/gem_tester"
-# alias cd-lib="cd ~/Desktop/gemdev/crm_formatter/lib"
-#############################
