@@ -12,6 +12,3 @@ crm_formatter-*.gem
 .idea/
 .xlsx
 .txt
-.csv
-!extensions.csv
-!seed.csv
