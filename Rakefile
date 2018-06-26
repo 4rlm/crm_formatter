@@ -15,10 +15,10 @@ task :console do
   require "active_support/all"
   ARGV.clear
 
-  # formatted_data = format_with_report
+  formatted_data = format_with_report
   # formatted_phones = format_phones
   # formatted_urls = format_urls
-  formatted_addresses = format_addresses
+  # formatted_addresses = format_addresses
   binding.pry
   IRB.start
 end
@@ -27,7 +27,7 @@ end
 def format_with_report
   data = [{ :row_id=>"1", :url=>"abcacura.com/twitter", :act_name=>"Stanley Chevrolet Kaufman\x99_\xCC", :street=>"825 East Fair Street", :city=>"Kaufman", :state=>"Texas", :zip=>"75142", :phone=>"555-457-4391\r\n" }]
 
-  file_path = './lib/crm_formatter/csv/seeds_dirty_1.csv'
+  file_path = './lib/crm_formatter/csv/seed.csv'
 
   args = {data: data}
   # args = {file_path: file_path}

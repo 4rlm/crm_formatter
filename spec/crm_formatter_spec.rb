@@ -5,20 +5,21 @@ require 'crm_formatter'
 require 'spec_helper'
 
 RSpec.describe CrmFormatter do
-  it 'has a version number' do
-    expect(CrmFormatter::VERSION).not_to be nil
-  end
+  # it 'has a version number' do
+  #   expect(CrmFormatter::VERSION).not_to be nil
+  # end
+  #
+  # it 'does something useful' do
+  #   expect(true).to eq(true)
+  # end
+  #
+  # #### Examples Above ####
 
-  it 'does something useful' do
-    expect(true).to eq(true)
-  end
-
-  #### Examples Above ####
   let(:crmf_obj) { CrmFormatter }
 
   describe '#format_with_report' do
     let(:file_path) do
-      { file_path: './lib/crm_formatter/csv/seeds_dirty_1.csv' }
+      { file_path: './lib/crm_formatter/csv/seed.csv' }
     end
 
     let(:data) do
@@ -77,7 +78,7 @@ RSpec.describe CrmFormatter do
           defective_data: [],
           error_data: []
         },
-        file_path: './lib/crm_formatter/csv/seeds_dirty_1.csv',
+        file_path: './lib/crm_formatter/csv/seed.csv',
       }
     end
 

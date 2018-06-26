@@ -14,3 +14,4 @@ crm_formatter-*.gem
 .txt
 .csv
 !extensions.csv
+!seed.csv
