@@ -16,13 +16,14 @@ gem 'crm_formatter'
 ```
 
 And then execute:
-
+```
   $ bundle
+```
 
 Or install it yourself as:
-
+```
   $ gem install crm_formatter
-
+```
 
 ## Usage
 
