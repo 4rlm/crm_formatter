@@ -1,11 +1,13 @@
 # frozen_string_literal: false
+
 require 'csv'
 
 module CrmFormatter
   class Wrap
+    attr_accessor :crm_data, :global_hash
+
     def initialize
       @crm_data = {}
-      # @global_hash = CrmFormatter::Tools.new.grab_global_hash
       @global_hash = grab_global_hash
     end
 
@@ -21,15 +23,12 @@ module CrmFormatter
       @crm_data
     end
 
-
     def import_crm_data(args={})
-      # @crm_data = { stats: nil, data: nil, file_path: nil, criteria: nil }
       @crm_data = { stats: nil, data: nil, file_path: nil }
       @crm_data.merge!(args)
       utf_result = Utf8Sanitizer.sanitize(@crm_data)
       @crm_data.merge!(utf_result)
     end
-
 
     def format_data
       return unless @crm_data[:data][:valid_data].any?
@@ -51,6 +50,5 @@ module CrmFormatter
         local_hash
       end
     end
-
   end
 end

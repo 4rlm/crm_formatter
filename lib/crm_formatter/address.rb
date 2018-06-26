@@ -23,7 +23,7 @@ module CrmFormatter
       status = nil
 
       if full_addr && full_addr_f
-        full_addr != full_addr_f ? status = 'formatted' : status = 'unchanged'
+        status = full_addr != full_addr_f ? 'formatted' : 'unchanged'
       end
 
       hsh[:address_status] = status
@@ -32,11 +32,19 @@ module CrmFormatter
 
     ######### FORMAT FULL ADDRESS ##########
     def make_full_address_original(hsh)
-      [hsh[:street], hsh[:city], hsh[:state], hsh[:zip]].compact.join(', ')
+      full_adr = [hsh[:street],
+                  hsh[:city],
+                  hsh[:state],
+                  hsh[:zip]].compact.join(', ')
+      full_adr
     end
 
     def make_full_addr_f(hsh)
-      [hsh[:street_f], hsh[:city_f], hsh[:state_f], hsh[:zip_f]].compact.join(', ')
+      full_adr = [hsh[:street_f],
+                  hsh[:city_f],
+                  hsh[:state_f],
+                  hsh[:zip_f]].compact.join(', ')
+      full_adr
     end
 
     ######### FORMAT STREET ##########
@@ -47,7 +55,7 @@ module CrmFormatter
       return unless street.present?
       # street = CrmFormatter::Tools.new.letter_case_check(street)
       street = letter_case_check(street)
-      
+
       street = " #{street} " # Adds white space, to match below, then strip.
       street&.gsub!('.', ' ')
       street&.gsub!(',', ' ')
@@ -130,6 +138,7 @@ module CrmFormatter
       city = nil if city.present? && city.length > 50
       city = nil if city.present? && city.length < 4
       city = city&.split(' ')&.map(&:capitalize)&.join(' ')
+      city
     end
 
     ########## FORMAT STATE ##########
@@ -169,7 +178,6 @@ module CrmFormatter
       zip
     end
 
-
     def letter_case_check(str)
       return unless str.present?
       flashes = str&.gsub(/[^ A-Za-z]/, '')&.strip&.split(' ')
@@ -181,7 +189,7 @@ module CrmFormatter
 
       return str unless !has_caps || !has_lows
       str = str.split(' ')&.each { |el| el.capitalize! if el.gsub(/[^ A-Za-z]/, '')&.strip&.length > 2 }&.join(' ')
+      str
     end
-
   end
 end

@@ -7,7 +7,6 @@ require 'csv'
 # StartCrm.run_webs
 module CrmFormatter
   class Web
-
     def format_url(url)
       prep_result = prep_for_uri(url)
       url_hash = prep_result[:url_hash]
@@ -34,7 +33,7 @@ module CrmFormatter
       status = 'invalid' if hsh[:web_neg]&.include?('error')
 
       if hsh[:url] && hsh[:url_f] && status.nil?
-        hsh[:url] != hsh[:url_f] ? status = 'formatted' : status = 'unchanged'
+        status = hsh[:url] != hsh[:url_f] ? 'formatted' : 'unchanged'
       end
 
       hsh[:web_status] = status if status.present?
@@ -43,7 +42,7 @@ module CrmFormatter
 
     def consolidate_negs(hsh)
       neg = hsh[:web_neg].join(', ')
-      neg.present? ? hsh[:web_neg] = neg : hsh[:web_neg] = nil
+      hsh[:web_neg] = neg.present? ? neg : nil
       hsh
     end
 
@@ -173,6 +172,5 @@ module CrmFormatter
     #   url = url.split('://')
     #   url[-1]
     # end
-
   end
 end

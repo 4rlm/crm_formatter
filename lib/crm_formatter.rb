@@ -11,7 +11,6 @@ require 'pry'
 require 'utf8_sanitizer'
 
 module CrmFormatter
-
   def self.format_with_report(args={})
     formatted_data = self::Wrap.new.run(args)
     formatted_data
@@ -22,7 +21,7 @@ module CrmFormatter
     address_obj = CrmFormatter::Address.new
 
     formatted_address_hashes = array_of_addresses.map do |address_hsh|
-      crmf_adr_hsh = {address_status: nil, full_addr: nil, full_addr_f: nil}
+      crmf_adr_hsh = { address_status: nil, full_addr: nil, full_addr_f: nil }
       crmf_adr_hsh.merge!(address_obj.format_full_address(address_hsh))
       crmf_adr_hsh
     end
@@ -44,7 +43,7 @@ module CrmFormatter
     web_obj = CrmFormatter::Web.new
 
     formatted_url_hashes = array_of_urls.map do |url|
-      crmf_url_hsh = {web_status: nil, url: url}
+      crmf_url_hsh = { web_status: nil, url: url }
       crmf_url_hsh.merge!(web_obj.format_url(url))
       crmf_url_hsh
     end

@@ -21,7 +21,7 @@ module CrmFormatter
       phone = hsh[:phone]
       phone_f = hsh[:phone_f]
       status = 'invalid'
-      phone != phone_f ? status = 'formatted' : status = 'unchanged' if phone && phone_f
+      status = phone != phone_f ? 'formatted' : 'unchanged' if phone && phone_f
       hsh[:phone_status] = status if status.present?
       hsh
     end
