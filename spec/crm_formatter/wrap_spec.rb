@@ -47,33 +47,52 @@ describe 'Wrap' do
       let(:file_path) { { file_path: './lib/crm_formatter/csv/seed.csv' } }
       let(:crm_data_out) do
         {
-          stats: { total_rows: 2, header_row: 1, valid_rows: 1, error_rows: 0, defective_rows: 0, perfect_rows: 0, encoded_rows: 1, wchar_rows: 0 },
-          data:           { valid_data:             [{ row_id: 1,
-                                                       act_name: 'Courtesy Ford',
-                                                       street: '1410 West Pine Street Hattiesburg',
-                                                       city: 'Wexford',
-                                                       state: 'MS',
-                                                       zip: '39401',
-                                                       full_addr: '1410 West Pine Street Hattiesburg, Wexford, MS, 39401',
-                                                       phone: '512-555-1212',
-                                                       url: 'http://www.courtesyfordsales.com',
-                                                       street_f: '1410 W Pine St Hattiesburg',
-                                                       city_f: 'Wexford',
-                                                       state_f: 'MS',
-                                                       zip_f: '39401',
-                                                       full_addr_f: '1410 W Pine St Hattiesburg, Wexford, MS, 39401',
-                                                       phone_f: '(512) 555-1212',
-                                                       url_f: 'http://www.courtesyfordsales.com',
-                                                       url_path: nil,
-                                                       web_neg: nil,
-                                                       address_status: 'formatted',
-                                                       phone_status: 'formatted',
-                                                       web_status: 'unchanged',
-                                                       utf_status: 'encoded' }],
-                            encoded_data:             [{ row_id: 1,
-                                                         text:                "http://www.courtesyfordsales.com,Courtesy Ford,__\xD5\xCB\xEB\x8F\xEB__\xD5\xCB\xEB\x8F\xEB____1410 West Pine Street Hattiesburg,Wexford,MS,39401,512-555-1212" }],
-                            defective_data: [],
-                            error_data: [] },
+          stats:
+            {
+              total_rows: 2,
+              header_row: 1,
+              valid_rows: 1,
+              error_rows: 0,
+              defective_rows: 0,
+              perfect_rows: 0,
+              encoded_rows: 1,
+              wchar_rows: 0
+            },
+          data:
+            { valid_data:
+              [
+                {
+                  row_id: 1,
+                  act_name: 'Courtesy Ford',
+                  street: '1410 West Pine Street Hattiesburg',
+                  city: 'Wexford',
+                  state: 'MS',
+                  zip: '39401',
+                  full_addr: '1410 West Pine Street Hattiesburg, Wexford, MS, 39401',
+                  phone: '512-555-1212',
+                  url: 'http://www.courtesyfordsales.com',
+                  street_f: '1410 W Pine St Hattiesburg',
+                  city_f: 'Wexford',
+                  state_f: 'MS',
+                  zip_f: '39401',
+                  full_addr_f: '1410 W Pine St Hattiesburg, Wexford, MS, 39401',
+                  phone_f: '(512) 555-1212',
+                  url_f: 'http://www.courtesyfordsales.com',
+                  url_path: nil,
+                  web_neg: nil,
+                  address_status: 'formatted',
+                  phone_status: 'formatted',
+                  web_status: 'unchanged',
+                  utf_status: 'encoded'
+                }
+              ],
+              encoded_data:
+        [
+          { row_id: 1,
+            text: "http://www.courtesyfordsales.com,Courtesy Ford,__\xD5\xCB\xEB\x8F\xEB__\xD5\xCB\xEB\x8F\xEB____1410 West Pine Street Hattiesburg,Wexford,MS,39401,512-555-1212" }
+        ],
+              defective_data: [],
+              error_data: [] },
           file_path: './lib/crm_formatter/csv/seed.csv'
         }
       end
@@ -102,32 +121,56 @@ describe 'Wrap' do
 
       let(:crm_data_out) do
         {
-          stats: { total_rows: '1', header_row: 1, valid_rows: 1, error_rows: 0, defective_rows: 0, perfect_rows: 0, encoded_rows: 1, wchar_rows: 1 },
-          data:             { valid_data:               [{ row_id: '1',
-                                                           act_name: 'Stanley Chevrolet Kaufman',
-                                                           street: '825 East Fair Street',
-                                                           city: 'Kaufman',
-                                                           state: 'Texas',
-                                                           zip: '75142',
-                                                           full_addr: '825 East Fair Street, Kaufman, Texas, 75142',
-                                                           phone: '555-457-4391',
-                                                           url: 'abcacura.com/twitter',
-                                                           street_f: '825 E Fair St',
-                                                           city_f: 'Kaufman',
-                                                           state_f: 'TX',
-                                                           zip_f: '75142',
-                                                           full_addr_f: '825 E Fair St, Kaufman, TX, 75142',
-                                                           phone_f: '(555) 457-4391',
-                                                           url_f: 'http://www.abcacura.com',
-                                                           url_path: '/twitter',
-                                                           web_neg: nil,
-                                                           address_status: 'formatted',
-                                                           phone_status: 'formatted',
-                                                           web_status: 'formatted',
-                                                           utf_status: 'encoded, wchar' }],
-                              encoded_data:               [{ row_id: '1', text: "1,abcacura.com/twitter,Stanley Chevrolet Kaufman\x99_\xCC,825 East Fair Street,Kaufman,Texas,75142,555-457-4391\r\n" }],
-                              defective_data: [],
-                              error_data: [] },
+          stats:
+          {
+            total_rows: '1',
+            header_row: 1,
+            valid_rows: 1,
+            error_rows: 0,
+            defective_rows: 0,
+            perfect_rows: 0,
+            encoded_rows: 1,
+            wchar_rows: 1
+          },
+          data:
+            {
+              valid_data:
+                [
+                  {
+                    row_id: '1',
+                    act_name: 'Stanley Chevrolet Kaufman',
+                    street: '825 East Fair Street',
+                    city: 'Kaufman',
+                    state: 'Texas',
+                    zip: '75142',
+                    full_addr: '825 East Fair Street, Kaufman, Texas, 75142',
+                    phone: '555-457-4391',
+                    url: 'abcacura.com/twitter',
+                    street_f: '825 E Fair St',
+                    city_f: 'Kaufman',
+                    state_f: 'TX',
+                    zip_f: '75142',
+                    full_addr_f: '825 E Fair St, Kaufman, TX, 75142',
+                    phone_f: '(555) 457-4391',
+                    url_f: 'http://www.abcacura.com',
+                    url_path: '/twitter',
+                    web_neg: nil,
+                    address_status: 'formatted',
+                    phone_status: 'formatted',
+                    web_status: 'formatted',
+                    utf_status: 'encoded, wchar'
+                  }
+                ],
+              encoded_data:
+              [
+                {
+                  row_id: '1',
+                  text: "1,abcacura.com/twitter,Stanley Chevrolet Kaufman\x99_\xCC,825 East Fair Street,Kaufman,Texas,75142,555-457-4391\r\n"
+                }
+              ],
+              defective_data: [],
+              error_data: []
+            },
           file_path: nil
         }
       end
@@ -143,20 +186,37 @@ describe 'Wrap' do
       let(:file_path) { { file_path: './lib/crm_formatter/csv/seed.csv' } }
       let(:crm_data_out) do
         {
-          stats: { total_rows: 2, header_row: 1, valid_rows: 1, error_rows: 0, defective_rows: 0, perfect_rows: 0, encoded_rows: 1, wchar_rows: 0 },
-          data:           { valid_data:             [{ row_id: 1,
-                                                       utf_status: 'encoded',
-                                                       url: 'http://www.courtesyfordsales.com',
-                                                       act_name: 'Courtesy Ford',
-                                                       street: '1410 West Pine Street Hattiesburg',
-                                                       city: 'Wexford',
-                                                       state: 'MS',
-                                                       zip: '39401',
-                                                       phone: '512-555-1212' }],
-                            encoded_data:             [{ row_id: 1,
-                                                         text:                "http://www.courtesyfordsales.com,Courtesy Ford,__\xD5\xCB\xEB\x8F\xEB__\xD5\xCB\xEB\x8F\xEB____1410 West Pine Street Hattiesburg,Wexford,MS,39401,512-555-1212" }],
-                            defective_data: [],
-                            error_data: [] },
+          stats:
+            { total_rows: 2,
+              header_row: 1,
+              valid_rows: 1,
+              error_rows: 0,
+              defective_rows: 0,
+              perfect_rows: 0,
+              encoded_rows: 1,
+              wchar_rows: 0 },
+          data:
+            { valid_data:
+              [
+                {
+                  row_id: 1,
+                  utf_status: 'encoded',
+                  url: 'http://www.courtesyfordsales.com',
+                  act_name: 'Courtesy Ford',
+                  street: '1410 West Pine Street Hattiesburg',
+                  city: 'Wexford',
+                  state: 'MS',
+                  zip: '39401',
+                  phone: '512-555-1212'
+                }
+              ],
+              encoded_data:
+          [
+            { row_id: 1,
+              text: "http://www.courtesyfordsales.com,Courtesy Ford,__\xD5\xCB\xEB\x8F\xEB__\xD5\xCB\xEB\x8F\xEB____1410 West Pine Street Hattiesburg,Wexford,MS,39401,512-555-1212" }
+          ],
+              defective_data: [],
+              error_data: [] },
           file_path: './lib/crm_formatter/csv/seed.csv'
         }
       end
@@ -185,19 +245,39 @@ describe 'Wrap' do
 
       let(:crm_data_out) do
         {
-          stats: { total_rows: '1', header_row: 1, valid_rows: 1, error_rows: 0, defective_rows: 0, perfect_rows: 0, encoded_rows: 1, wchar_rows: 1 },
-          data:           { valid_data:             [{ row_id: '1',
-                                                       utf_status: 'encoded, wchar',
-                                                       url: 'abcacura.com/twitter',
-                                                       act_name: 'Stanley Chevrolet Kaufman',
-                                                       street: '825 East Fair Street',
-                                                       city: 'Kaufman',
-                                                       state: 'Texas',
-                                                       zip: '75142',
-                                                       phone: '555-457-4391' }],
-                            encoded_data:             [{ row_id: '1', text: "1,abcacura.com/twitter,Stanley Chevrolet Kaufman\x99_\xCC,825 East Fair Street,Kaufman,Texas,75142,555-457-4391\r\n" }],
-                            defective_data: [],
-                            error_data: [] },
+          stats:
+          {
+            total_rows: '1',
+            header_row: 1,
+            valid_rows: 1,
+            error_rows: 0,
+            defective_rows: 0,
+            perfect_rows: 0,
+            encoded_rows: 1,
+            wchar_rows: 1
+          },
+          data:
+            { valid_data:
+              [
+                { row_id: '1',
+                  utf_status: 'encoded, wchar',
+                  url: 'abcacura.com/twitter',
+                  act_name: 'Stanley Chevrolet Kaufman',
+                  street: '825 East Fair Street',
+                  city: 'Kaufman',
+                  state: 'Texas',
+                  zip: '75142',
+                  phone: '555-457-4391' }
+              ],
+              encoded_data:
+          [
+            {
+              row_id: '1',
+              text: "1,abcacura.com/twitter,Stanley Chevrolet Kaufman\x99_\xCC,825 East Fair Street,Kaufman,Texas,75142,555-457-4391\r\n"
+            }
+          ],
+              defective_data: [],
+              error_data: [] },
           file_path: nil
         }
       end
@@ -211,20 +291,41 @@ describe 'Wrap' do
   describe '#format_data' do
     let(:crm_data) do
       {
-        stats: { total_rows: 2, header_row: 1, valid_rows: 1, error_rows: 0, defective_rows: 0, perfect_rows: 0, encoded_rows: 1, wchar_rows: 0 },
-        data:         { valid_data:           [{ row_id: 1,
-                                                 utf_status: 'encoded',
-                                                 url: 'http://www.courtesyfordsales.com',
-                                                 act_name: 'Courtesy Ford',
-                                                 street: '1410 West Pine Street Hattiesburg',
-                                                 city: 'Wexford',
-                                                 state: 'MS',
-                                                 zip: '39401',
-                                                 phone: '512-555-1212' }],
-                        encoded_data:           [{ row_id: 1,
-                                                   text:              "http://www.courtesyfordsales.com,Courtesy Ford,__\xD5\xCB\xEB\x8F\xEB__\xD5\xCB\xEB\x8F\xEB____1410 West Pine Street Hattiesburg,Wexford,MS,39401,512-555-1212" }],
-                        defective_data: [],
-                        error_data: [] },
+        stats:
+        {
+          total_rows: 2,
+          header_row: 1,
+          valid_rows: 1,
+          error_rows: 0,
+          defective_rows: 0,
+          perfect_rows: 0,
+          encoded_rows: 1,
+          wchar_rows: 0
+        },
+        data:
+        {
+          valid_data:
+          [
+            {
+              row_id: 1,
+              utf_status: 'encoded',
+              url: 'http://www.courtesyfordsales.com',
+              act_name: 'Courtesy Ford',
+              street: '1410 West Pine Street Hattiesburg',
+              city: 'Wexford',
+              state: 'MS',
+              zip: '39401',
+              phone: '512-555-1212'
+            }
+          ],
+          encoded_data:
+          [
+            { row_id: 1,
+              text: "http://www.courtesyfordsales.com,Courtesy Ford,__\xD5\xCB\xEB\x8F\xEB__\xD5\xCB\xEB\x8F\xEB____1410 West Pine Street Hattiesburg,Wexford,MS,39401,512-555-1212" }
+          ],
+          defective_data: [],
+          error_data: []
+        },
         file_path: './lib/crm_formatter/csv/seed.csv'
       }
     end
