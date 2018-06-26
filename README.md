@@ -1,24 +1,30 @@
 
-# CRM Wrap
+# CrmFormatter
 #### Efficiently Reformat, Normalize, and Scrub CRM Contact Data, such as Addresses, Phones and URLs.
 
 CRM Wrap is perfect for curating high-volume enterprise-scale web scraping, and integrates well with Nokogiri, Mechanize, and asynchronous jobs via Delayed_job or SideKick, to name a few.  Web Scraping and Harvesting often gathers a lot of junk to sift through; presenting unexpected edge cases around each corner.  CRM Wrap has been developed and refined during the past few years to focus on improving that task.
 
 It's also perfect for processing API data, Web Forms, and routine DB normalizing and scrubbing processes.  Not only does it reformat Address, Phone, and Web data, it can also accept lists to scrub against, then providing detailed reports about how each piece of data compares with your criteria lists.
 
-## Getting Started
-CRM Wrap is compatible with Rails 4.2 and 5.0, 5.1 and 5.2 on Ruby 2.2 and later.
 
-In your Gemfile add:
-```
+## Installation
+
+Add this line to your application's Gemfile:
+
+```ruby
 gem 'crm_formatter'
 ```
-Or to install locally:
-```
-gem install crm_formatter
-```
-## Usage
 
+And then execute:
+
+  $ bundle
+
+Or install it yourself as:
+
+  $ gem install crm_formatter
+
+
+## Usage
 
 ### I. Basic Usage
 
@@ -339,6 +345,20 @@ formatted_data_hash_results = { stats:
 
 Adam J Booth  - [4rlm](https://github.com/4rlm)
 
+## Development
+
+After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake spec` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
+
+To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and tags, and push the `.gem` file to [rubygems.org](https://rubygems.org).
+
+## Contributing
+
+Bug reports and pull requests are welcome on GitHub at https://github.com/4rlm/crm_formatter. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [Contributor Covenant](http://contributor-covenant.org) code of conduct.
+
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
+The gem is available as open source under the terms of the [MIT License](https://opensource.org/licenses/MIT).
+
+## Code of Conduct
+
+Everyone interacting in the CrmFormatter project’s codebases, issue trackers, chat rooms and mailing lists is expected to follow the [code of conduct](https://github.com/4rlm/crm_formatter/blob/master/CODE_OF_CONDUCT.md).
