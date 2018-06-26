@@ -15,9 +15,9 @@ task :console do
   require "active_support/all"
   ARGV.clear
 
-  formatted_data = format_with_report
+  # formatted_data = format_with_report
   # formatted_phones = format_phones
-  # formatted_urls = format_urls
+  formatted_urls = format_urls
   # formatted_addresses = format_addresses
   binding.pry
   IRB.start
@@ -29,8 +29,8 @@ def format_with_report
 
   file_path = './lib/crm_formatter/csv/seed.csv'
 
-  args = {data: data}
-  # args = {file_path: file_path}
+  # args = {data: data}
+  args = {file_path: file_path}
   formatted_data = CrmFormatter.format_with_report(args)
 end
 
