@@ -2,7 +2,6 @@
 
 # require 'rubygems'
 # require 'active_support'
-require 'csv'
 
 # StartCrm.run_webs
 module CrmFormatter
@@ -108,8 +107,7 @@ module CrmFormatter
       if url_exts.empty? ## Missing ext.
         err_msg = 'error: ext.none'
       else ## Has ext(s), but need to verify validity and count.
-        file_path = './lib/crm_formatter/csv/extensions.csv'
-        iana_list = CSV.read(file_path).flatten
+        iana_list = CrmFormatter::Extensions.list
         matched_exts = iana_list & url_exts
 
         if matched_exts.empty? ## Has ext, but not valid.

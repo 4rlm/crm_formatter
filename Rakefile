@@ -16,8 +16,8 @@ task :console do
   ARGV.clear
 
   # formatted_data = format_with_report
-  formatted_phones = format_phones
-  # formatted_urls = format_urls
+  # formatted_phones = format_phones
+  formatted_urls = format_urls
   # formatted_addresses = format_addresses
   IRB.start
 end

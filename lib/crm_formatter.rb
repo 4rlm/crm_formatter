@@ -1,10 +1,12 @@
 # frozen_string_literal: false
 
-require 'crm_formatter/version'
 require 'crm_formatter/address'
+require 'crm_formatter/extensions'
+require 'crm_formatter/phone'
+require 'crm_formatter/version'
 require 'crm_formatter/web'
 require 'crm_formatter/wrap'
-require 'crm_formatter/phone'
+
 # require 'crm_formatter/tools'
 # require 'crm_formatter/seed_criteria'
 require 'pry'
