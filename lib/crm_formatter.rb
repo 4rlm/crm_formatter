@@ -23,16 +23,12 @@ module CrmFormatter
 
   ## Takes array of proper strings, returns array of proper hashes.
   def self.format_propers(array_of_propers)
-    binding.pry
     proper_obj = CrmFormatter::Proper.new
 
     formatted_proper_hashes = array_of_propers.map do |string|
-      binding.pry
       crmf_proper_hsh = proper_obj.format_proper(string)
-      binding.pry
     end
 
-    binding.pry
     formatted_proper_hashes
   end
 
