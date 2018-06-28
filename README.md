@@ -37,6 +37,7 @@ format_urls(array_of_urls)
 ```
 
 1. Format Array of Proper Strings:
+
 Use `format_propers` to format strings with proper nouns, such as (but not limited to):
 
 Business Account Names (123 bmw-world => 123 BMW-World),
