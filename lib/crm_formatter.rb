@@ -10,8 +10,8 @@ require 'crm_formatter/wrap'
 
 # require 'crm_formatter/tools'
 # require 'crm_formatter/seed_criteria'
-require 'pry'
 require 'utf8_sanitizer'
+require 'pry'
 
 module CrmFormatter
   def self.format_with_report(args={})
