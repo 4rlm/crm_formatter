@@ -28,8 +28,125 @@ Or install it yourself as:
 ## Usage
 
 ### I. Basic Usage
+Basic methods available are:
+```
+format_addresses(array_of_addresses)
+format_phones(array_of_phones)
+format_propers(array_of_propers)
+format_urls(array_of_urls)
+```
 
-1. Format Array of Phone Numbers:
+1. Format Array of Proper Strings:
+Use `format_propers` to format strings with proper nouns, such as (but not limited to):
+
+Business Account Names (123 bmw-world => 123 BMW-World),
+
+Proper Names (adam john booth => Adam John Booth),
+
+Job Titles (marketing director => Marketing Director),
+
+Article Titles (the 15 most useful ruby methods => The 15 Most Useful Ruby Methods)
+
+```
+array_of_propers = [
+  '123 bmw-world',
+  'Car-world Kia',
+  'BUDGET - AUTOMOTORES ZONA & FRANCA, INC',
+  'DOWNTOWN CAR REPAIR, INC',
+  'Young Gmc Trucks',
+  'TEXAS TRAVEL, CO',
+  'youmans Chevrolet',
+  'Hot-Deal auto Insurance',
+  'quick auto approval, inc',
+  'yazell chevy',
+  'quick cAr LUBE',
+  'yAtEs AuTo maLL',
+  'YADKIN VALLEY COLLISION CO',
+  'XIT FORD INC'
+]
+
+formatted_proper_hashes = CrmFormatter.format_propers(array_of_propers)
+```
+
+Formatted Proper Strings:
+
+```
+formatted_proper_hashes = [
+  {
+    :proper_status=>"formatted",
+    :proper=>"123 bmw-world",
+    :proper_f=>"123 BMW-World"
+  },
+   {
+     :proper_status=>"formatted",
+     :proper=>"Car-world Kia",
+     :proper_f=>"Car-World Kia"
+   },
+   {
+     :proper_status=>"formatted",
+     :proper=>"BUDGET - AUTOMOTORES ZONA & FRANCA, INC",
+     :proper_f=>"Budget - Automotores Zona & Franca, Inc"
+   },
+
+   {:proper_status=>"formatted",
+     :proper=>"DOWNTOWN CAR REPAIR, INC",
+     :proper_f=>"Downtown Car Repair, Inc"
+   },
+   {
+     :proper_status=>"formatted",
+     :proper=>"Young Gmc Trucks",
+     :proper_f=>"Young GMC Trucks"
+   },
+   {
+     :proper_status=>"formatted",
+     :proper=>"TEXAS TRAVEL, CO",
+     :proper_f=>"Texas Travel, Co"
+   },
+   {
+     :proper_status=>"formatted",
+     :proper=>"youmans Chevrolet",
+     :proper_f=>"Youmans Chevrolet"
+   },
+   {
+     :proper_status=>"formatted",
+     :proper=>"Hot-Deal auto Insurance",
+     :proper_f=>"Hot-Deal Auto Insurance"
+   },
+   {
+     :proper_status=>"formatted",
+     :proper=>"quick auto approval, inc",
+     :proper_f=>"Quick Auto Approval, Inc"
+   },
+   {
+     :proper_status=>"formatted",
+     :proper=>"yazell chevy",
+     :proper_f=>"Yazell Chevy"
+   },
+   {
+     :proper_status=>"formatted",
+     :proper=>"quick cAr LUBE",
+     :proper_f=>"Quick Car Lube"
+   },
+   {
+     :proper_status=>"formatted",
+     :proper=>"yAtEs AuTo maLL",
+     :proper_f=>"Yates Auto Mall"
+   },
+   {
+     :proper_status=>"formatted",
+     :proper=>"YADKIN VALLEY COLLISION CO",
+     :proper_f=>"Yadkin Valley Collision Co"
+   },
+   {
+     :proper_status=>"formatted",
+     :proper=>"XIT FORD INC",
+     :proper_f=>"Xit Ford Inc"
+   }
+]
+```
+
+2. Format Array of Phone Numbers:
+
 ```
 array_of_phones = %w[
   555-457-4391
@@ -44,6 +161,7 @@ formatted_phone_hashes = CrmFormatter.format_phones(array_of_phones)
 ```
 
 Formatted Phone Numbers:
+
 ```
 formatted_phone_hashes = [
   {
@@ -79,7 +197,8 @@ formatted_phone_hashes = [
 ]
 ```
 
-2. Format Array of URLs:
+3. Format Array of URLs:
+
 ```
 array_of_urls = %w[
   sample01.com/staff
@@ -98,6 +217,7 @@ formatted_url_hashes = CrmFormatter.format_urls(array_of_urls)
 ```
 
 Formatted URLs:
+
 ```
 formatted_url_hashes = [
   {
@@ -173,7 +293,8 @@ formatted_url_hashes = [
 ]
 ```
 
-3. Format Array of Addresses (each as a hash):
+4. Format Array of Addresses (each as a hash):
+
 ```
 array_of_addresses = [
   { street: '1234 EAST FAIR BOULEVARD', city: 'AUSTIN', state: 'TEXAS', zip: '78734' },
@@ -184,6 +305,7 @@ formatted_address_hashes = CrmFormatter.format_addresses(array_of_addresses)
 ```
 
 Formatted Addresses:
+
 ```
 formatted_address_hashes = [
   {
@@ -222,11 +344,13 @@ Advanced usage has ability to parse a CSV file or pass large data sets.  It also
 Access advanced usage via `format_with_report(args)` method and pass a csv file_path or data hashes.
 
 1. Parse and Format CSV via File Path (Must be absolute path to root and follow the syntax as below)
+
 ```
 formatted_csv_results = CrmFormatter.format_with_report(file_path: './path/to/your/csv.csv')
 ```
 
 Parsed & Formatted CSV Results:
+
 ```
 formatted_csv_results = {
   stats:
@@ -282,6 +406,7 @@ formatted_csv_results = {
 ```
 
 2. Format Data Hashes
+
 ```
 data_hashes_array = [{ row_id: '1', url: 'abcacura.com/twitter', act_name: "Stanley Chevrolet Kaufman\x99_\xCC", street: '825 East Fair Street', city: 'Kaufman', state: 'Texas', zip: '75142', phone: "555-457-4391\r\n" }]
 
@@ -289,6 +414,7 @@ formatted_data_hash_results = CrmFormatter.format_with_report(data: data_hashes_
 ```
 
 Formatted Data Hashes Results:
+
 ```
 formatted_data_hash_results = { stats:
   {
