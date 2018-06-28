@@ -17,20 +17,40 @@ task :console do
 
   # formatted_data = format_with_report
   # formatted_phones = format_phones
-  formatted_urls = format_urls
+  # formatted_urls = format_urls
+  formatted_propers = format_propers
+  binding.pry
   # formatted_addresses = format_addresses
   IRB.start
 end
 
-def format_with_report
-  data = [{ row_id: '1', url: 'abcacura.com/twitter', act_name: "Stanley Chevrolet Kaufman\x99_\xCC", street: '825 East Fair Street', city: 'Kaufman', state: 'Texas', zip: '75142', phone: "555-457-4391\r\n" }]
+#############################################
+def format_propers
+  binding.pry
 
-  file_path = './lib/crm_formatter/csv/seed.csv'
+  array_of_propers = [
+  'BUDGET AUTOMOTORES ZONA FRANCA',
+  'Car World Kia',
+  'DOWNTOWN CAR REPAIR INC',
+  'Young hyundai',
+  'TEXAS TRAVEL CO',
+  'youmans Chevrolet',
+  'Hot-Deal auto Insurance',
+  'quick auto approval, inc',
+  'yazell chevy',
+  'quick cAr LUBE',
+  'yAtEs AuTo maLL',
+  'YADKIN VALLEY COLLISION CO',
+  'XIT FORD INC'
+]
 
-  # args = {data: data}
-  args = { file_path: file_path }
-  formatted_data = CrmFormatter.format_with_report(args)
+  binding.pry
+  formatted_propers = CrmFormatter.format_propers(array_of_propers)
+  binding.pry
 end
+#############################################
+
+
 
 def format_addresses
   array_of_addresses = [
@@ -41,6 +61,7 @@ def format_addresses
   formatted_addresses = CrmFormatter.format_addresses(array_of_addresses)
 end
 
+
 def format_phones
   array_of_phones = %w[
     555-457-4391 555-888-4391
@@ -50,6 +71,8 @@ def format_phones
   ]
   formatted_phones = CrmFormatter.format_phones(array_of_phones)
 end
+
+
 
 def format_urls
   array_of_urls = %w[
@@ -67,4 +90,15 @@ def format_urls
 
   array_of_urls = %w[sample01.com/staff www.sample02.net.com http://www.sample3.net www.sample04.net/contact_us http://sample05.net www.sample06.sofake www.sample07.com.sofake example08.not.real www.sample09.net/staff/management www.www.sample10.com]
   formatted_urls = CrmFormatter.format_urls(array_of_urls)
+end
+
+
+def format_with_report
+  data = [{ row_id: '1', url: 'abcacura.com/twitter', act_name: "Stanley Chevrolet Kaufman\x99_\xCC", street: '825 East Fair Street', city: 'Kaufman', state: 'Texas', zip: '75142', phone: "555-457-4391\r\n" }]
+
+  file_path = './lib/crm_formatter/csv/seed.csv'
+
+  # args = {data: data}
+  args = { file_path: file_path }
+  formatted_data = CrmFormatter.format_with_report(args)
 end
