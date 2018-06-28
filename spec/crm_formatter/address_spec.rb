@@ -131,12 +131,12 @@ describe 'Address' do
     end
   end
 
-  describe '#letter_case_check' do
-    let(:str_in) { '1234 EAST FAIR BOULEVARD' }
-    let(:str_out) { '1234 East Fair Boulevard' }
-
-    it 'letter_case_check' do
-      expect(adr_obj.letter_case_check(str_in)).to eql(str_out)
-    end
-  end
+  # describe '#letter_case_check' do
+  #   let(:str_in) { '1234 EAST FAIR BOULEVARD' }
+  #   let(:str_out) { '1234 East Fair Boulevard' }
+  #
+  #   it 'letter_case_check' do
+  #     expect(adr_obj.letter_case_check(str_in)).to eql(str_out)
+  #   end
+  # end
 end

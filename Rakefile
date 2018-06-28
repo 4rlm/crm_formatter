@@ -19,21 +19,20 @@ task :console do
   # formatted_phones = format_phones
   # formatted_urls = format_urls
   formatted_propers = format_propers
-  binding.pry
   # formatted_addresses = format_addresses
+  binding.pry
   IRB.start
 end
 
 #############################################
 def format_propers
-  binding.pry
-
   array_of_propers = [
-  'BUDGET AUTOMOTORES ZONA FRANCA',
-  'Car World Kia',
-  'DOWNTOWN CAR REPAIR INC',
-  'Young hyundai',
-  'TEXAS TRAVEL CO',
+  '123 bmw-world',
+  'Car-world Kia',
+  'BUDGET - AUTOMOTORES ZONA & FRANCA, INC',
+  'DOWNTOWN CAR REPAIR, INC',
+  'Young Gmc Trucks',
+  'TEXAS TRAVEL, CO',
   'youmans Chevrolet',
   'Hot-Deal auto Insurance',
   'quick auto approval, inc',
@@ -44,9 +43,8 @@ def format_propers
   'XIT FORD INC'
 ]
 
-  binding.pry
   formatted_propers = CrmFormatter.format_propers(array_of_propers)
-  binding.pry
+  formatted_propers
 end
 #############################################
 
