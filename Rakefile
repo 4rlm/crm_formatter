@@ -27,21 +27,23 @@ end
 #############################################
 def format_propers
   array_of_propers = [
-  '123 bmw-world',
-  'Car-world Kia',
-  'BUDGET - AUTOMOTORES ZONA & FRANCA, INC',
-  'DOWNTOWN CAR REPAIR, INC',
-  'Young Gmc Trucks',
-  'TEXAS TRAVEL, CO',
-  'youmans Chevrolet',
-  'Hot-Deal auto Insurance',
-  'quick auto approval, inc',
-  'yazell chevy',
-  'quick cAr LUBE',
-  'yAtEs AuTo maLL',
-  'YADKIN VALLEY COLLISION CO',
-  'XIT FORD INC'
-]
+    'the gmc and bmw-world of AUSTIN tx',
+    '123 Car-world Kia OF CHICAGO IL',
+    'Main Street Ford in DALLAS tX',
+    'broad st fiat of houston',
+    'hot-deal auto insurance',
+    'BUDGET - AUTOMOTORES ZONA & FRANCA, INC',
+    'DOWNTOWN CAR REPAIR, INC',
+    'Young Gmc Trucks',
+    'TEXAS TRAVEL, CO',
+    'youmans Chevrolet',
+    'quick auto approval, inc',
+    'yazell chevy',
+    'quick cAr LUBE',
+    'yAtEs AuTo maLL',
+    'YADKIN VALLEY COLLISION CO',
+    'XIT FORD INC'
+  ]
 
   formatted_propers = CrmFormatter.format_propers(array_of_propers)
   formatted_propers
