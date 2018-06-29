@@ -50,14 +50,16 @@ Article Titles (the 15 most useful ruby methods => The 15 Most Useful Ruby Metho
 
 ```
 array_of_propers = [
-  '123 bmw-world',
-  'Car-world Kia',
+  'the gmc and bmw-world of AUSTIN tx',
+  '123 Car-world Kia OF CHICAGO IL',
+  'Main Street Ford in DALLAS tX',
+  'broad st fiat of houston',
+  'hot-deal auto insurance',
   'BUDGET - AUTOMOTORES ZONA & FRANCA, INC',
   'DOWNTOWN CAR REPAIR, INC',
   'Young Gmc Trucks',
   'TEXAS TRAVEL, CO',
   'youmans Chevrolet',
-  'Hot-Deal auto Insurance',
   'quick auto approval, inc',
   'yazell chevy',
   'quick cAr LUBE',
@@ -72,77 +74,88 @@ formatted_proper_hashes = CrmFormatter.format_propers(array_of_propers)
 Formatted Proper Strings:
 
 ```
-formatted_proper_hashes = [
+formatted_proper_hashes =
+[
   {
-    :proper_status=>"formatted",
-    :proper=>"123 bmw-world",
-    :proper_f=>"123 BMW-World"
+    proper_status: 'formatted',
+    proper: 'the gmc and bmw-world of AUSTIN tx',
+    proper_f: 'The GMC and BMW-World of Austin TX'
   },
-   {
-     :proper_status=>"formatted",
-     :proper=>"Car-world Kia",
-     :proper_f=>"Car-World Kia"
-   },
-   {
-     :proper_status=>"formatted",
-     :proper=>"BUDGET - AUTOMOTORES ZONA & FRANCA, INC",
-     :proper_f=>"Budget - Automotores Zona & Franca, Inc"
-   },
-
-   {:proper_status=>"formatted",
-     :proper=>"DOWNTOWN CAR REPAIR, INC",
-     :proper_f=>"Downtown Car Repair, Inc"
-   },
-   {
-     :proper_status=>"formatted",
-     :proper=>"Young Gmc Trucks",
-     :proper_f=>"Young GMC Trucks"
-   },
-   {
-     :proper_status=>"formatted",
-     :proper=>"TEXAS TRAVEL, CO",
-     :proper_f=>"Texas Travel, Co"
-   },
-   {
-     :proper_status=>"formatted",
-     :proper=>"youmans Chevrolet",
-     :proper_f=>"Youmans Chevrolet"
-   },
-   {
-     :proper_status=>"formatted",
-     :proper=>"Hot-Deal auto Insurance",
-     :proper_f=>"Hot-Deal Auto Insurance"
-   },
-   {
-     :proper_status=>"formatted",
-     :proper=>"quick auto approval, inc",
-     :proper_f=>"Quick Auto Approval, Inc"
-   },
-   {
-     :proper_status=>"formatted",
-     :proper=>"yazell chevy",
-     :proper_f=>"Yazell Chevy"
-   },
-   {
-     :proper_status=>"formatted",
-     :proper=>"quick cAr LUBE",
-     :proper_f=>"Quick Car Lube"
-   },
-   {
-     :proper_status=>"formatted",
-     :proper=>"yAtEs AuTo maLL",
-     :proper_f=>"Yates Auto Mall"
-   },
-   {
-     :proper_status=>"formatted",
-     :proper=>"YADKIN VALLEY COLLISION CO",
-     :proper_f=>"Yadkin Valley Collision Co"
-   },
-   {
-     :proper_status=>"formatted",
-     :proper=>"XIT FORD INC",
-     :proper_f=>"Xit Ford Inc"
-   }
+  {
+    proper_status: 'formatted',
+    proper: '123 Car-world Kia OF CHICAGO IL',
+    proper_f: '123 Car-World Kia of Chicago IL'
+  },
+  {
+    proper_status: 'formatted',
+    proper: 'Main Street Ford in DALLAS tX',
+    proper_f: 'Main Street Ford in Dallas TX'
+  },
+  {
+    proper_status: 'formatted',
+    proper: 'broad st fiat of houston',
+    proper_f: 'Broad St Fiat of Houston'
+  },
+  {
+    proper_status: 'formatted',
+    proper: 'hot-deal auto insurance',
+    proper_f: 'Hot-Deal Auto Insurance'
+  },
+  {
+    proper_status: 'formatted',
+    proper: 'BUDGET - AUTOMOTORES ZONA & FRANCA, INC',
+    proper_f: 'Budget - Automotores Zona & Franca, Inc'
+  },
+  {
+    proper_status: 'formatted',
+    proper: 'DOWNTOWN CAR REPAIR, INC',
+    proper_f: 'Downtown Car Repair, Inc'
+  },
+  {
+    proper_status: 'formatted',
+    proper: 'Young Gmc Trucks',
+    proper_f: 'Young GMC Trucks'
+  },
+  {
+    proper_status: 'formatted',
+    proper: 'TEXAS TRAVEL, CO',
+    proper_f: 'Texas Travel, Co'
+  },
+  {
+    proper_status: 'formatted',
+    proper: 'youmans Chevrolet',
+    proper_f: 'Youmans Chevrolet'
+  },
+  {
+    proper_status: 'formatted',
+    proper: 'quick auto approval, inc',
+    proper_f: 'Quick Auto Approval, Inc'
+  },
+  {
+    proper_status: 'formatted',
+    proper: 'yazell chevy',
+    proper_f: 'Yazell Chevy'
+  },
+  {
+    proper_status: 'formatted',
+    proper: 'quick cAr LUBE',
+    proper_f: 'Quick Car Lube'
+  },
+  {
+    proper_status: 'formatted',
+    proper: 'yAtEs AuTo maLL',
+    proper_f: 'Yates Auto Mall'
+  },
+  {
+    proper_status: 'formatted',
+    proper: 'YADKIN VALLEY COLLISION CO',
+    proper_f: 'Yadkin Valley Collision Co'
+  },
+  {
+    proper_status: 'formatted',
+    proper: 'XIT FORD INC',
+    proper_f: 'Xit Ford Inc'
+  }
 ]
 ```
 

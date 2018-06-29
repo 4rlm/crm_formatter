@@ -10,22 +10,15 @@ module CrmFormatter
       str = force_upcase(str)
       str = force_downcase(str)
       str = force_first_cap(str)
+      str
     end
 
-    def force_first_cap(str)
-      str = "#{str[0].upcase}#{str[1..-1]}"
-    end
-
-    def force_upcase(str)
+    def force_capitalize(str)
       return unless str.present?
-      str = add_space(str)
-
-      grab_ups.map do |up|
-        str = str.gsub(" #{up.capitalize} ", " #{up} ")
-        str = str.gsub(" #{up.capitalize}-", " #{up}-")
-        str = str.gsub("-#{up.capitalize} ", "-#{up} ")
+      str_parts = str.downcase.split(' ')&.each do |el|
+        el.capitalize! if el.gsub(/[^ A-Za-z]/, '')&.strip
       end
-      str = strip_squeeze(str)
+      str = str_parts&.join(' ')
     end
 
     def capitalize_dashes(str)
@@ -42,12 +35,16 @@ module CrmFormatter
       str
     end
 
-    def force_capitalize(str)
+    def force_upcase(str)
       return unless str.present?
-      str_parts = str.downcase.split(' ')&.each do |el|
-        el.capitalize! if el.gsub(/[^ A-Za-z]/, '')&.strip
+      str = add_space(str)
+
+      grab_ups.map do |up|
+        str = str.gsub(" #{up.capitalize} ", " #{up} ")
+        str = str.gsub(" #{up.capitalize}-", " #{up}-")
+        str = str.gsub("-#{up.capitalize} ", "-#{up} ")
       end
-      str = str_parts&.join(' ')
+      str = strip_squeeze(str)
     end
 
     def force_downcase(str)
@@ -58,6 +55,10 @@ module CrmFormatter
         str = str.gsub(" #{down.capitalize} ", " #{down} ")
       end
       str = strip_squeeze(str)
+    end
+
+    def force_first_cap(str)
+      str = "#{str[0].upcase}#{str[1..-1]}"
     end
 
     def add_space(str)
