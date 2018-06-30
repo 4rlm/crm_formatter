@@ -3,6 +3,11 @@
 
 [![Build Status](https://travis-ci.org/4rlm/crm_formatter.svg?branch=master)](https://travis-ci.org/4rlm/crm_formatter)
 [![Gem Version](https://badge.fury.io/rb/crm_formatter.svg)](https://badge.fury.io/rb/crm_formatter)
+[![MIT License](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
+
+<!-- The gem is available as open source under the terms of the [MIT License](https://opensource.org/licenses/MIT). -->
+
 
 #### Efficiently Reformat, Normalize, and Scrub CRM Contact Data, such as Addresses, Phones and URLs.
 
