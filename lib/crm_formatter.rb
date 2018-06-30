@@ -9,10 +9,10 @@ require 'crm_formatter/web'
 require 'crm_formatter/wrap'
 
 require 'utf8_sanitizer'
+# require 'pry'
 
 # require 'crm_formatter/tools'
 # require 'crm_formatter/seed_criteria'
-# require 'pry'
 
 module CrmFormatter
 
