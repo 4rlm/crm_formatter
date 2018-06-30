@@ -20,7 +20,7 @@ task :console do
   # formatted_urls = format_urls
   formatted_propers = format_propers
   # formatted_addresses = format_addresses
-  binding.pry
+  # binding.pry
   IRB.start
 end
 

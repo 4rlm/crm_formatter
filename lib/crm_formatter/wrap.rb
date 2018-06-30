@@ -19,7 +19,6 @@ module CrmFormatter
     def run(args={})
       import_crm_data(args)
       format_data
-      puts @crm_data.inspect
       @crm_data
     end
 
