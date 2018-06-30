@@ -33,10 +33,12 @@ Gem::Specification.new do |spec|
   spec.require_paths = ['lib']
 
   spec.required_ruby_version = '~> 2.5.1'
-  spec.add_dependency 'activesupport', '~> 5.0'
-  spec.add_dependency "utf8_sanitizer", "~> 2.12"
-  # spec.add_dependency "activesupport-inflector", ['~> 0.1.0']
+  # spec.add_dependency "utf8_sanitizer", "~> 2.13"
+  # spec.add_dependency "utf8_sanitizer"
+  # spec.add_dependency 'activesupport', '~> 5.0', '>= 5.2'
+  spec.add_dependency 'activesupport'
 
+  # spec.add_dependency "activesupport-inflector", ['~> 0.1.0']
   spec.add_development_dependency 'bundler', '~> 1.16', '>= 1.16.2'
   spec.add_development_dependency 'pry', '~> 0.11.3'
   spec.add_development_dependency 'rake', '~> 12.3', '>= 12.3.1'
@@ -49,7 +51,6 @@ Gem::Specification.new do |spec|
   # spec.add_runtime_dependency 'library', '~> 2.2'
   # spec.add_dependency 'activerecord', '>= 3.0'
   # spec.add_dependency 'actionpack', '>= 3.0'
-  # spec.add_dependency 'i18n'
   # spec.add_dependency 'polyamorous', '~> 1.3.2'
   # spec.add_development_dependency 'machinist', '~> 1.0.6'
   # spec.add_development_dependency 'faker', '~> 0.9.5'
