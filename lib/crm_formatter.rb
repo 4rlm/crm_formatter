@@ -11,7 +11,7 @@ require 'crm_formatter/wrap'
 # require 'crm_formatter/tools'
 # require 'crm_formatter/seed_criteria'
 require 'utf8_sanitizer'
-require 'pry'
+# require 'pry'
 
 module CrmFormatter
 
