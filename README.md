@@ -6,7 +6,7 @@
 [![MIT License](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 
-![AppVeyor tests](https://img.shields.io/4rlm/crm_formatter/NZSmartie/coap-net-iu0to.svg)
+[![Maintainability](https://api.codeclimate.com/v1/badges/a99a88d28ad37a79dbf6/maintainability)](https://codeclimate.com/github/codeclimate/codeclimate/maintainability)
 
 
 <!-- The gem is available as open source under the terms of the [MIT License](https://opensource.org/licenses/MIT). -->
