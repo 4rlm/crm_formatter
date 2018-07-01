@@ -9,7 +9,7 @@ require 'crm_formatter/web'
 require 'crm_formatter/wrap'
 
 require 'utf8_sanitizer'
-# require 'pry'
+require 'pry'
 
 # require 'crm_formatter/tools'
 # require 'crm_formatter/seed_criteria'
@@ -58,8 +58,9 @@ module CrmFormatter
       crmf_url_hsh.merge!(web_obj.format_url(url))
       crmf_url_hsh
     end
-    formatted_url_hashes
   end
+
+
 
   def self.format_with_report(args={})
     formatted_data = self::Wrap.new.run(args)

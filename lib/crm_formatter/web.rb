@@ -15,6 +15,7 @@ module CrmFormatter
       if url&.present?
         url = normalize_url(url)
         ext_result = validate_extension(url_hash, url)
+
         url_hash = ext_result[:url_hash]
         url = ext_result[:url]
         (url = nil if errors?(url_hash)) if url.present?
@@ -24,7 +25,6 @@ module CrmFormatter
       url_hash[:url_f] = url
       url_hash = extract_path(url_hash) if url.present?
       url_hash = check_web_status(url_hash)
-      url_hash
     end
 
     ### COMPARE ORIGINAL AND FORMATTED URL ###
@@ -127,8 +127,11 @@ module CrmFormatter
       ### Only Non-Errors Get Here ###
       ## Has one valid ext, but need to check if original url exts were > 1.  Replace if so.
       if url_exts.count > matched_exts.count
-        inv_ext = (url_exts - matched_exts).join
-        url = url.gsub(".#{inv_ext}", '')
+        matched_ext = matched_exts.first
+        u1 = url.split(matched_ext).first
+        url = "#{u1}#{matched_ext}"
+        # inv_ext = (url_exts - matched_exts).join
+        # url = url.gsub(".#{inv_ext}", '')
       end
 
       ext_result = { url_hash: url_hash, url: url }

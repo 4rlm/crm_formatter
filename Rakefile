@@ -18,8 +18,8 @@ task :console do
 
   # formatted_data = format_with_report
   # formatted_phones = format_phones
-  # formatted_urls = format_urls
-  formatted_propers = format_propers
+  formatted_urls = format_urls
+  # formatted_propers = format_propers
   # formatted_addresses = format_addresses
   # binding.pry
   IRB.start
@@ -89,7 +89,8 @@ def format_urls
     www.www.sample10.com
   ]
 
-  array_of_urls = %w[sample01.com/staff www.sample02.net.com http://www.sample3.net www.sample04.net/contact_us http://sample05.net www.sample06.sofake www.sample07.com.sofake example08.not.real www.sample09.net/staff/management www.www.sample10.com]
+  # array_of_urls = %w[texarkana.mercedesdealer.com.notreal minooka.subaru.com http://www.mccrea.subaru.com blackwellford.com www.bobilya.com https://www.century1chevy.com hammondautoplex.com www.harbinfordscottsboro.net http://www.lancaster.subaru.com loufusz.subaru.com www.mastro.subaru.com www.muller.subaru.com reinekefamilydealerships.com]
+
   formatted_urls = CrmFormatter.format_urls(array_of_urls)
 end
 
