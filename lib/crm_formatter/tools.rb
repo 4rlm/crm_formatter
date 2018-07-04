@@ -2,7 +2,6 @@
 
 module CrmFormatter
   class Tools
-
     def letter_case_check(str)
       return unless str.present?
       str = force_capitalize(str)
@@ -67,7 +66,7 @@ module CrmFormatter
     end
 
     def strip_squeeze(str)
-      str = str.squeeze(" ")
+      str = str.squeeze(' ')
       str = str.strip
     end
 
@@ -83,6 +82,5 @@ module CrmFormatter
       directions = %w[NE NW SE SW]
       ups = [brands, professional, states, directions].flatten.uniq
     end
-
   end
 end

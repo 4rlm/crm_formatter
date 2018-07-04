@@ -174,6 +174,5 @@ module CrmFormatter
       zip&.squeeze!(' ')
       zip
     end
-
   end
 end

@@ -77,5 +77,4 @@ describe 'Tools' do
       expect(tool_obj.strip_squeeze(str_in)).to eql(str_out)
     end
   end
-
 end

@@ -15,6 +15,9 @@ require 'pry'
 # require 'crm_formatter/seed_criteria'
 
 module CrmFormatter
+  def self.format_proper(string)
+    crmf_proper_hsh = CrmFormatter::Proper.new.format_proper(string)
+  end
 
   ## Takes array of proper strings, returns array of proper hashes.
   def self.format_propers(array_of_propers)
@@ -25,7 +28,6 @@ module CrmFormatter
     end
     formatted_proper_hashes
   end
-
 
   ## Takes array of address hashes, returns array of address hashes.
   def self.format_addresses(array_of_addresses)
@@ -60,11 +62,8 @@ module CrmFormatter
     end
   end
 
-
-
   def self.format_with_report(args={})
     formatted_data = self::Wrap.new.run(args)
     formatted_data
   end
-
 end

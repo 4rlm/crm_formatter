@@ -7,6 +7,21 @@ require 'spec_helper'
 RSpec.describe CrmFormatter do
   let(:crmf_obj) { CrmFormatter }
 
+  describe '#format_proper' do
+    let(:input) { 'the gmc and bmw-world of AUSTIN tx' }
+    let(:output) do
+      {
+        proper_status: 'formatted',
+        proper: 'the gmc and bmw-world of AUSTIN tx',
+        proper_f: 'The GMC and BMW-World of Austin TX'
+      }
+    end
+
+    it 'format_proper' do
+      expect(crmf_obj.format_proper(input)).to eql(output)
+    end
+  end
+
   describe '#format_propers' do
     let(:array_of_propers) do
       array_of_propers = [

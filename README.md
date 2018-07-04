@@ -42,17 +42,32 @@ format_propers(array_of_propers)
 format_urls(array_of_urls)
 ```
 
-1. Format Array of Proper Strings:
+1a. Format Proper String:
 
-Use `format_propers` to format strings with proper nouns, such as (but not limited to):
+Use `format_proper` to format a string with proper nouns, such as (but not limited to):
 
-Business Account Names (123 bmw-world => 123 BMW-World),
+* Business Account Name (123 bmw-world => 123 BMW-World),
+* Proper Name (adam john booth => Adam John Booth),
+* Job Title (marketing director => Marketing Director),
+* Article Title (the 15 most useful ruby methods => The 15 Most Useful Ruby Methods)
 
-Proper Names (adam john booth => Adam John Booth),
+```
+proper_string = 'the gmc and bmw-world of AUSTIN tx'
+formatted_proper = CrmFormatter.format_proper(proper_string)
+```
 
-Job Titles (marketing director => Marketing Director),
+Result in Hash Format:
+```
+formatted_proper = {
+  :proper_status=>"formatted",
+  :proper=>"the gmc and bmw-world of AUSTIN tx",
+  :proper_f=>"The GMC and BMW-World of Austin TX"
+}
+```
 
-Article Titles (the 15 most useful ruby methods => The 15 Most Useful Ruby Methods)
+1b. Format Array of Proper Strings:
+
+Use `format_propers` to format an array of proper strings with proper nouns:
 
 ```
 array_of_propers = [

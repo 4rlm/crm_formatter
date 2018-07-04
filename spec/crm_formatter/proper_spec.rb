@@ -10,9 +10,9 @@ describe 'Proper' do
     let(:str_in) { '123 bmw-world' }
     let(:hsh_out) do
       {
-        :proper_status=>"formatted",
-        :proper=>"123 bmw-world",
-        :proper_f=>"123 BMW-World"
+        proper_status: 'formatted',
+        proper: '123 bmw-world',
+        proper_f: '123 BMW-World'
       }
     end
 
@@ -24,17 +24,17 @@ describe 'Proper' do
   describe '#check_proper_status' do
     let(:hsh_in) do
       {
-        :proper_status=>nil,
-        :proper=>"123 bmw-world",
-        :proper_f=>"123 BMW-World"
+        proper_status: nil,
+        proper: '123 bmw-world',
+        proper_f: '123 BMW-World'
       }
     end
 
     let(:hsh_out) do
       {
-        :proper_status=>"formatted",
-        :proper=>"123 bmw-world",
-        :proper_f=>"123 BMW-World"
+        proper_status: 'formatted',
+        proper: '123 bmw-world',
+        proper_f: '123 BMW-World'
       }
     end
 
@@ -42,6 +42,4 @@ describe 'Proper' do
       expect(tool_obj.check_proper_status(hsh_in)).to eql(hsh_out)
     end
   end
-
-
 end
