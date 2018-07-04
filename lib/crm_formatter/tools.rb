@@ -39,6 +39,8 @@ module CrmFormatter
       str = add_space(str)
 
       grab_ups.map do |up|
+        str = str.gsub(" #{up.capitalize},", " #{up}")
+        str = str.gsub(" #{up.capitalize}.", " #{up}")
         str = str.gsub(" #{up.capitalize} ", " #{up} ")
         str = str.gsub(" #{up.capitalize}-", " #{up}-")
         str = str.gsub("-#{up.capitalize} ", "-#{up} ")
@@ -78,7 +80,7 @@ module CrmFormatter
       ups = %w[I]
       brands = %w[BMW CDJR CJDR GMC CJD I]
       professional = %w[BA BS MA JD DC PA MD VP SVP EVP CMO CFO CEO]
-      states = %w[AK AL AR AZ CA CT DC DE FL GA HI IA ID IL KS KY LA MA MD MI MN MO NC ND NE NH NJ NM NV NY OH OK PA RI SC SD TN TX UT VA VT WA WI WV WY]
+      states = %w[AK AL AR AZ CA CO CT DC DE FL GA HI IA ID IL KS KY LA MA MD MI MN MO NC ND NE NH NJ NM NV NY OH OK PA RI SC SD TN TX UT VA VT WA WI WV WY]
       directions = %w[NE NW SE SW]
       ups = [brands, professional, states, directions].flatten.uniq
     end

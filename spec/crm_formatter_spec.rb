@@ -25,7 +25,7 @@ RSpec.describe CrmFormatter do
   describe '#format_propers' do
     let(:array_of_propers) do
       array_of_propers = [
-        'the gmc and bmw-world of AUSTIN tx',
+        'quick auto-approval gmc and bmw-world of AUSTIN tx, INC',
         '123 Car-world Kia OF CHICAGO IL',
         'Main Street Ford in DALLAS tX',
         'broad st fiat of houston',

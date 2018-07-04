@@ -18,23 +18,23 @@ task :console do
   # formatted_data = format_with_report
   # formatted_phones = format_phones
   # formatted_urls = format_urls
-  formatted_proper = format_proper
-  # binding.pry
-  # formatted_propers = format_propers
+  # formatted_proper = format_proper
+  formatted_propers = format_propers
   # formatted_addresses = format_addresses
-  # binding.pry
+  binding.pry
+
   IRB.start
 end
 
 #############################################
 def format_proper
-  proper_string = 'the gmc and bmw-world of AUSTIN tx'
+  proper_string = 'quick auto-approval gmc and bmw-world of AUSTIN tx, INC'
   formatted_proper = CrmFormatter.format_proper(proper_string)
 end
 
 def format_propers
   array_of_propers = [
-    'the gmc and bmw-world of AUSTIN tx',
+    'quick auto-approval gmc and bmw-world of AUSTIN tx, INC',
     '123 Car-world Kia OF CHICAGO IL',
     'Main Street Ford in DALLAS tX',
     'broad st fiat of houston',
